@@ -1,0 +1,22 @@
+{
+  "id": "real_phone_home_tour",
+  "displayName": "真实手机探店模式",
+  "englishName": "Real Phone Home Tour Photography",
+  "isDefault": false,
+  "enabled": true,
+  "profilePrompt": "The photography should feel like a real smartphone home-tour or showroom-visit capture, natural and believable, but still aesthetically strong. The image should feel authentic, immediate, and highly relatable.",
+  "compositionPrompt": "Use natural handheld-style framing, realistic casual composition, and believable home-tour shooting angles while keeping the lamp clearly dominant in the image. The composition should feel spontaneous but still visually attractive.",
+  "lightingPrompt": "Use realistic residential lighting, natural daylight or ambient indoor light, believable shadows, and a true in-person feeling. The scene should feel honest and real, not overproduced.",
+  "cameraPrompt": "Shot on iPhone 17 Pro Max with authentic smartphone perspective, true-to-life scale, realistic auto-exposure feel, and a natural home-tour impression.",
+  "moodPrompt": "The mood should feel authentic, relatable, stylish, and engaging. The viewer should feel like they are personally visiting a beautiful interior space and discovering the lamp in real life.",
+  "avoidPrompt": [
+    "Overly polished luxury ad look",
+    "Artificial render feeling",
+    "Excessive staging",
+    "Flat dull documentation",
+    "Messy low-quality phone snapshot",
+    "Chaotic composition",
+    "Weak product focus"
+  ],
+  "sortOrder": 8
+}

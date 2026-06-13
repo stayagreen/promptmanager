@@ -1,0 +1,21 @@
+{
+  "id": "soft_wow",
+  "displayName": "轻微Wow感",
+  "englishName": "Soft Wow",
+  "isDefault": false,
+  "enabled": true,
+  "tonePrompt": "EMOTIONAL IMPACT REQUIREMENTS\n\nThe final image should create a subtle but immediate wow effect at first glance.\n\nThe result should feel visually memorable, emotionally engaging, elegant, fresh, and premium.\n\nThe lamp should immediately catch the viewer's eye through strong silhouette, beautiful material contrast, clean light, and refined atmosphere.\n\nThe image should feel surprising in a tasteful way, never loud, cheap, or exaggerated.",
+  "colorAddOn": "Use refined contrast, clean highlights, and elegant tonal separation to make the image visually striking without becoming flashy. Avoid flat grey monotony.",
+  "panel1AddOn": "The first panel should create a subtle wow effect at first glance. The lamp should immediately stand out as the visual hero while the background remains softly blurred and supportive.",
+  "panel4AddOn": "The illuminated view should feel emotionally memorable, warm, premium, and quietly dramatic. The light should reveal the unique design character of the lamp.",
+  "photographyAddOn": "The photography should feel premium, sharp, emotionally expressive, and visually striking, while still looking like a real iPhone 17 Pro Max product photograph.",
+  "avoidAddOn": [
+    "Emotionally neutral image",
+    "Flat product catalog feeling",
+    "Dull grey visual result",
+    "Cheap dramatic effects",
+    "Overexposed glow",
+    "Artificial fantasy lighting"
+  ],
+  "sortOrder": 2
+}

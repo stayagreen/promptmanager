@@ -1,0 +1,13 @@
+{
+  "id": "minimalism",
+  "displayName": "极简主义",
+  "englishName": "Minimalism",
+  "stylePrompt": "Create a completely original minimalist lighting product defined by visual silence, exact proportion, concealed engineering, and maximum functional clarity. Treat the lamp as part of a no-main-light architectural system: slim, glare-controlled, modular, and visually integrated. Every line and component must have a purpose. The final design should make the space feel cleaner and taller while delivering layered illumination without decorative noise.",
+  "inspirationSources": ["Shadow Gaps", "Magnetic Track Systems", "Architectural Reveals", "Handleless Cabinetry", "Linear Ceiling Slots", "Precision Extrusions", "Monolithic Planes", "Museum Lighting Details"],
+  "specificElements": ["A light source hidden inside a narrow slot", "A seamless magnetic connection", "A trimless cylindrical aperture", "A single continuous luminous line", "A flush-mounted geometric plate", "A glare-control baffle integrated into the body"],
+  "materials": ["Extruded Aluminum", "Anodized Aluminum", "Matte Steel", "Optical Acrylic", "Microprismatic Diffuser", "Opal Silicone", "Plaster-In Housing"],
+  "colors": ["Pure White", "Matte Black", "Warm Grey", "Graphite", "Soft Beige", "Champagne Aluminum"],
+  "avoid": ["Visible wiring", "Decorative flourishes", "Bulky shades", "Exposed bulbs", "Uncontrolled glare", "Redundant joints", "Complex color combinations"],
+  "sortOrder": 13,
+  "enabled": true
+}

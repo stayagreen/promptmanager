@@ -1,0 +1,8 @@
+{
+  "id": "ceiling_fixture",
+  "displayName": "吸顶灯",
+  "englishName": "Ceiling Fixture",
+  "typePrompt": "Create one original Ceiling Fixture. The product must function as a ceiling-mounted fixture for bedrooms, corridors, studies, tea rooms, compact apartments, and refined residential interiors. Emphasize low-profile elegance, ceiling integration, wide ambient diffusion, compact structure, clean geometry, soft downward illumination, easy installation, stable mounting, beautiful underside view, and commercial practicality. The ceiling fixture should feel decorative and refined, not like a generic flat panel light.",
+  "sortOrder": 8,
+  "enabled": true
+}

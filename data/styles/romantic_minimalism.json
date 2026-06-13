@@ -1,0 +1,13 @@
+{
+  "id": "romantic_minimalism",
+  "displayName": "浪漫极简主义",
+  "englishName": "Romantic Minimalism",
+  "stylePrompt": "Create a completely original Romantic Minimalist lighting product that balances a clean restrained base with one poetic, feminine, or delicately crafted gesture. Replace cold rectilinear minimalism with controlled folds, lace-like perforation, petal edges, or soft classical references. The design should feel emotionally warm and quietly dramatic, never cluttered, saccharine, or faux-antique. Preserve contemporary construction and practical light quality.",
+  "inspirationSources": ["French Lace", "Ruffled Fabric", "Flower Petal Edges", "Classical Chandeliers", "Sheer Curtains", "Poetic Manuscripts", "Soft Drapery", "Moonlit Interiors"],
+  "specificElements": ["A single ruffled edge around a pure diffuser", "A lace-like perforated metal shadow layer", "A classical chandelier proportion reduced to one line", "A folded fabric form translated into glass", "A delicate carved detail on an otherwise plain body", "A floating petal shade above a minimal stem"],
+  "materials": ["Pleated Glass", "Opal Glass", "Fine Ceramic", "Satin Brass", "Sheer Textile", "Perforated Metal", "Alabaster", "Matte Resin"],
+  "colors": ["Milk Tea Beige", "Powder Rose", "Warm Ivory", "Soft Black", "Muted Champagne", "Dusty Mauve", "Pale Grey"],
+  "avoid": ["Excessive frills", "Bridal decoration", "Cold severe geometry", "Antique reproduction", "Bright sugary pink", "Cheap lace patterns", "Visual clutter"],
+  "sortOrder": 24,
+  "enabled": true
+}

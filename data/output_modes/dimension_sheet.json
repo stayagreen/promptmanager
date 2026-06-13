@@ -1,0 +1,22 @@
+{
+  "id": "dimension_sheet",
+  "displayName": "尺寸图",
+  "englishName": "Dimension Sheet",
+  "category": "technical",
+  "isDefault": false,
+  "enabled": true,
+  "outputPrompt": "Generate a clean technical dimension sheet for the lamp. The image should clearly show the product's overall shape with accurate proportional representation. Include front view and side view when appropriate. Use clean white or light neutral background, technical drawing clarity, simple measurement arrows, and readable dimension annotation style. The drawing should be suitable for supplier communication, production discussion, customer confirmation, and e-commerce dimension explanation.",
+  "consistencyPrompt": "The dimension sheet must represent the selected lamp type accurately and proportionally. The design should match the style and structure described in the prompt.",
+  "layoutPrompt": "Use a clean technical layout. Prefer front view and side view. If useful, include a simple scale reference such as a table, wall, ceiling, or human-scale context. Keep the drawing clear, professional, and uncluttered.",
+  "avoidPrompt": [
+    "Photorealistic room scene",
+    "Lifestyle photography",
+    "Messy background",
+    "Decorative collage",
+    "Unclear measurements",
+    "Distorted proportions",
+    "Overly artistic rendering",
+    "Fake complex engineering details"
+  ],
+  "sortOrder": 5
+}

@@ -1,0 +1,21 @@
+{
+  "id": "bright_uplifting",
+  "displayName": "明亮积极感",
+  "englishName": "Bright Uplifting",
+  "isDefault": false,
+  "enabled": true,
+  "tonePrompt": "EMOTIONAL IMPACT REQUIREMENTS\n\nThe final image should feel bright, uplifting, optimistic, graceful, and emotionally positive.\n\nThe atmosphere should feel open, comfortable, warm, and inspiring.\n\nThe lighting product should bring a sense of freshness, confidence, and effortless elegance to the space.\n\nThe result should avoid heaviness, gloom, and emotional flatness.",
+  "colorAddOn": "Use a brighter tonal range, clean warm highlights, gentle contrast, and refined light colors. The palette should feel optimistic and premium rather than grey or muted.",
+  "panel1AddOn": "The first panel should feel open, bright, and uplifting. The lamp should be the emotional center of the space, supported by a softly blurred and elegant interior.",
+  "panel4AddOn": "The illuminated scene should feel warm, positive, and inspiring. The glow should create an uplifting residential atmosphere without excessive bloom.",
+  "photographyAddOn": "The photography should feel bright, optimistic, clean, and emotionally warm. Avoid low-energy lighting and grey shadows.",
+  "avoidAddOn": [
+    "Gloomy lighting",
+    "Heavy shadows",
+    "Flat grey tones",
+    "Low-energy atmosphere",
+    "Dark moody interiors",
+    "Overly muted color palette"
+  ],
+  "sortOrder": 3
+}

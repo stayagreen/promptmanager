@@ -1,0 +1,13 @@
+{
+  "id": "techno_minimalism",
+  "displayName": "德系工业极简",
+  "englishName": "Techno-Minimalism",
+  "stylePrompt": "Create a completely original Techno-Minimalist lighting product with Germanic precision, exposed high-quality mechanics, and uncompromising functional reduction. Make pivots, bearings, rails, heat sinks, and connectors visible only when they express genuine engineering. Use disciplined dark finishes and linear cool-neutral light to evoke laboratory and aerospace accuracy while preserving comfort, safety, and manufacturability.",
+  "inspirationSources": ["Precision Machine Tools", "Laboratory Instruments", "Aerospace Hinges", "Camera Rigs", "Linear Rail Systems", "CNC Components", "Electronic Heat Sinks", "Technical Measuring Devices"],
+  "specificElements": ["A finely machined exposed pivot", "A cable routed invisibly through an articulated rail", "A linear optical module embedded in a dark extrusion", "A numbered adjustment ring", "A precision knurled control", "A modular connector with exact flush alignment"],
+  "materials": ["CNC Aluminum", "Anodized Aluminum", "Blackened Stainless Steel", "Optical Glass", "Carbon Fiber Accent", "Technical Polymer", "Silicone Light Guide"],
+  "colors": ["Pure Black", "Deep Graphite", "Gunmetal", "Titanium", "Cold Silver", "Neutral White Light"],
+  "avoid": ["Decorative fake mechanics", "Visible loose cables", "Cyberpunk neon excess", "Crude industrial parts", "Warm rustic materials", "Redundant ornament", "Impractical complexity"],
+  "sortOrder": 21,
+  "enabled": true
+}

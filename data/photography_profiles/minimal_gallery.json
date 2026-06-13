@@ -1,0 +1,22 @@
+{
+  "id": "minimal_gallery",
+  "displayName": "极简艺术馆模式",
+  "englishName": "Minimal Gallery Photography",
+  "isDefault": false,
+  "enabled": true,
+  "profilePrompt": "The photography should feel like a minimal gallery or design museum presentation. The image should emphasize sculptural purity, quiet elegance, negative space, and the lamp as a collectible design object.",
+  "compositionPrompt": "Use minimal composition, strong subject isolation, generous negative space, disciplined framing, and quiet visual balance. The lamp should feel like an exhibited design piece in a refined gallery-like interior.",
+  "lightingPrompt": "Use soft controlled light, clean highlights, minimal distraction, and precise tonal balance. The scene should feel serene, elevated, and extremely refined.",
+  "cameraPrompt": "Shot on iPhone 17 Pro Max with realistic smartphone optics, but visually directed like a museum-quality design documentation shoot.",
+  "moodPrompt": "The mood should feel quiet, elevated, artistic, contemplative, and premium. The image should highlight the lamp as a sculptural object with strong design value.",
+  "avoidPrompt": [
+    "Cluttered home styling",
+    "Busy decorative background",
+    "Overly warm casual home-tour feel",
+    "Cheap showroom staging",
+    "Flat catalog look",
+    "Too much lifestyle noise",
+    "Overly dramatic mood effects"
+  ],
+  "sortOrder": 7
+}

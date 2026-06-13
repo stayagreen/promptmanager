@@ -1,0 +1,13 @@
+{
+  "id": "dopamine_decor",
+  "displayName": "多巴胺风",
+  "englishName": "Dopamine Decor",
+  "stylePrompt": "Create a completely original Dopamine Decor lighting product designed to trigger joy, optimism, and playful self-expression. Use confident high-saturation color blocking, friendly sculptural geometry, and optional color-changing ambient light while maintaining premium detailing and real manufacturing logic. The lamp should be energetic and photogenic, with a clear visual hierarchy rather than random rainbow decoration.",
+  "inspirationSources": ["Color Field Art", "Sunset Gradients", "Playground Geometry", "Candy Packaging", "Inflatable Sculpture", "Pop Furniture", "Festival Confetti", "Graphic Color Blocking"],
+  "specificElements": ["An electric-blue body with an orange diffuser", "Stacked rounded forms in contrasting colors", "A playful loop carrying concealed light", "A mint-green base with a coral accent", "Interchangeable colored light modules", "A bold silhouette readable from across a room"],
+  "materials": ["Powder-Coated Metal", "Colored Glass", "Translucent Resin", "Opal Acrylic", "Glossy Ceramic", "Recycled Plastic", "Silicone Diffuser"],
+  "colors": ["Electric Blue", "Sunset Orange", "Mint Green", "Hot Pink", "Lemon Yellow", "Cobalt", "Vivid Coral"],
+  "avoid": ["Random rainbow overload", "Cheap toy appearance", "Unreadable silhouette", "Too many competing patterns", "Uncontrolled RGB glare", "Childish character motifs", "Impractical novelty construction"],
+  "sortOrder": 14,
+  "enabled": true
+}

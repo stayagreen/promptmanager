@@ -1,0 +1,13 @@
+{
+  "id": "biophilic",
+  "displayName": "生物友好风",
+  "englishName": "Biophilic Design",
+  "stylePrompt": "Create a completely original biophilic lighting product that strengthens the emotional connection between people, natural systems, and daylight. Translate petals, leaves, branching structures, filtered forest light, and organic growth into a refined manufacturable lamp. Use renewable tactile materials and layered shadows without making a literal plant replica. The product should feel alive, restorative, breathable, and naturally integrated with interior greenery.",
+  "inspirationSources": ["Leaf Venation", "Flower Petals", "Tree Canopies", "Forest Dappled Light", "Seed Pods", "Branching Systems", "Shell Growth", "Water Ripples"],
+  "specificElements": ["A leaf-vein frame carrying concealed light", "Overlapping petal diffusers", "A branching support with efficient structural logic", "Perforations casting moving foliage-like shadows", "A seed-pod inspired pendant cluster", "A woven shade filtering light like a tree canopy"],
+  "materials": ["FSC-Certified Wood", "Bamboo", "Rattan", "Cork", "Recycled Aluminum", "Handmade Paper", "Textured Glass", "Natural Fiber Composite"],
+  "colors": ["Moss Green", "Bark Brown", "Leaf Green", "Warm Wood", "Stone Beige", "Forest Shadow", "Soft Sunlight White"],
+  "avoid": ["Literal fake flowers", "Plastic foliage", "Artificial tropical clichés", "Random organic blobs", "Unsustainable exotic materials", "Overly rustic craft", "Poorly controlled shadow patterns"],
+  "sortOrder": 17,
+  "enabled": true
+}

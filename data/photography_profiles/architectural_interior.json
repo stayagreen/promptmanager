@@ -1,0 +1,22 @@
+{
+  "id": "architectural_interior",
+  "displayName": "建筑空间摄影模式",
+  "englishName": "Architectural Interior Photography",
+  "isDefault": false,
+  "enabled": true,
+  "profilePrompt": "The photography should feel like a high-end architectural interior photography project. The image should emphasize spatial order, clean lines, proportion, and the relationship between the lighting product and the surrounding architecture.",
+  "compositionPrompt": "Use clean architectural composition, strong perspective control, carefully aligned verticals, balanced framing, and elegant spatial hierarchy. The lamp should remain the hero subject while the surrounding architecture enhances its presence.",
+  "lightingPrompt": "Use clear natural light, crisp tonal separation, soft but precise shadows, and realistic spatial brightness. The image should feel structured, premium, and architecturally refined.",
+  "cameraPrompt": "Shot on iPhone 17 Pro Max, but composed with the discipline of a professional interior and architecture photographer. Maintain realism, clean lens perspective, and true-to-life scale.",
+  "moodPrompt": "The mood should feel calm, elevated, sophisticated, and spatially intelligent. The image should communicate luxury architecture and thoughtful design.",
+  "avoidPrompt": [
+    "Messy perspective",
+    "Cluttered background",
+    "Crooked architectural lines",
+    "Overly casual framing",
+    "Flat marketplace product image",
+    "Chaotic home-tour feeling",
+    "Artificial CGI atmosphere"
+  ],
+  "sortOrder": 4
+}

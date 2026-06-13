@@ -1,0 +1,22 @@
+{
+  "id": "single_hero_shot",
+  "displayName": "单张产品主图",
+  "englishName": "Single Hero Product Shot",
+  "category": "photographic",
+  "isDefault": false,
+  "enabled": true,
+  "outputPrompt": "Generate one single hero product photography image of the lamp. The lamp must be the dominant visual subject and should create a strong first-glance impression. The image should clearly show the overall silhouette, structure, material combination, proportion, and design identity of the product. The background should be refined, slightly blurred, and supportive, never competing with the lamp.",
+  "consistencyPrompt": "Only one lamp design should appear. The product should be shown clearly and completely enough for commercial presentation.",
+  "layoutPrompt": "Single-image composition. No grid. No collage. No multi-panel layout. The lamp should occupy a strong central or editorial hero position.",
+  "avoidPrompt": [
+    "Multiple panels",
+    "Collage",
+    "Tiny product in the frame",
+    "Background overpowering the lamp",
+    "Text",
+    "Logo",
+    "Watermark",
+    "Overly generic product image"
+  ],
+  "sortOrder": 3
+}

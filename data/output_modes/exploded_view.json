@@ -1,0 +1,22 @@
+{
+  "id": "exploded_view",
+  "displayName": "爆炸图",
+  "englishName": "Exploded View",
+  "category": "technical",
+  "isDefault": false,
+  "enabled": true,
+  "outputPrompt": "Generate a clean exploded view of the lamp showing its main components separated along logical assembly directions. Show the canopy, suspension parts, central body, arms, lamp heads, shades, diffusers, connectors, decorative elements, and mounting parts when applicable. The image should help communicate structure, assembly logic, material separation, and production feasibility.",
+  "consistencyPrompt": "All exploded components must belong to the same lamp design. The exploded arrangement should be logical and manufacturable, not random or decorative.",
+  "layoutPrompt": "Use a clean technical presentation with parts separated clearly but still aligned to the original lamp structure. Prefer white or light neutral background. Keep component relationships easy to understand.",
+  "avoidPrompt": [
+    "Random floating parts",
+    "Unrealistic assembly",
+    "Too many tiny meaningless components",
+    "Different product parts mixed together",
+    "Messy background",
+    "Lifestyle photography",
+    "Unclear construction logic",
+    "Impossible manufacturing structure"
+  ],
+  "sortOrder": 7
+}

@@ -1,0 +1,13 @@
+{
+  "id": "modern_industrial",
+  "displayName": "极简工业风",
+  "englishName": "Modern Industrial",
+  "stylePrompt": "Create a completely original Modern Industrial lighting product with strong structural logic, exposed precision hardware, and a disciplined architectural silhouette. Combine blackened metal, concrete, and honest mechanical details with warmer diffused light and refined proportions to achieve a contemporary light-industrial character. The lamp should feel bold, urban, functional, and premium rather than rough, unfinished, or warehouse-themed.",
+  "inspirationSources": ["Factory Trusses", "Exposed Conduits", "Machined Joints", "Steel Window Frames", "Concrete Architecture", "Workshop Task Lamps", "Rail Systems", "Precision Clamps"],
+  "specificElements": ["An exposed pivot joint", "A slim black rail carrying light modules", "A concrete counterweight", "A cage reduced to essential lines", "A visible but orderly fastener rhythm", "A warm diffuser nested inside a steel frame"],
+  "materials": ["Blackened Steel", "Powder-Coated Aluminum", "Brushed Stainless Steel", "Cast Concrete", "Smoked Glass", "Opal Glass", "Reclaimed Wood Accent", "Perforated Metal"],
+  "colors": ["Matte Black", "Graphite", "Concrete Grey", "Gunmetal", "Rust Red Accent", "Warm Amber", "Dark Walnut"],
+  "avoid": ["Fake rust", "Messy exposed wiring", "Heavy steampunk ornament", "Crude welds", "Generic pipe lamps", "Overly cold atmosphere", "Unsafe sharp components"],
+  "sortOrder": 12,
+  "enabled": true
+}

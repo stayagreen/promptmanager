@@ -1,0 +1,21 @@
+{
+  "id": "premium_magazine",
+  "displayName": "高级杂志感",
+  "englishName": "Premium Magazine",
+  "isDefault": false,
+  "enabled": true,
+  "tonePrompt": "EMOTIONAL IMPACT REQUIREMENTS\n\nThe final image should feel like a premium interior design magazine feature.\n\nThe result should be visually polished, emotionally refined, fresh, elegant, and editorial-quality.\n\nThe lamp should appear as the hero product of a luxury home story, with a strong first-glance impression and tasteful visual drama.\n\nThe image should feel aspirational, collectible, and commercially powerful.",
+  "colorAddOn": "Use refined tonal separation, elegant highlights, controlled contrast, premium neutral colors, and clean material clarity. Avoid dull grey flatness.",
+  "panel1AddOn": "The first panel should feel like a luxury magazine cover image. The lamp must be the hero subject, sharply focused, with a softly blurred and tastefully styled background.",
+  "panel4AddOn": "The illuminated view should feel editorial, atmospheric, luxurious, and emotionally memorable, with realistic light diffusion and premium material interaction.",
+  "photographyAddOn": "The photography should feel like high-end editorial product photography, with premium composition, luminous clarity, refined contrast, and strong product focus.",
+  "avoidAddOn": [
+    "Flat catalog image",
+    "Cheap showroom feeling",
+    "Dull grey tones",
+    "Low-end marketplace image",
+    "Overly artificial render look",
+    "Messy interior styling"
+  ],
+  "sortOrder": 5
+}

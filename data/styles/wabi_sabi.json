@@ -1,0 +1,13 @@
+{
+  "id": "wabi_sabi",
+  "displayName": "侘寂风",
+  "englishName": "Wabi-Sabi",
+  "stylePrompt": "Create a completely original lighting product rooted in Wabi-Sabi: quiet imperfection, impermanence, restraint, and honest natural texture. Let asymmetry, hand-finished surfaces, softened irregular edges, and empty space create beauty. The lamp should feel meditative, elemental, tactile, and timeless while remaining structurally sound and manufacturable. Avoid literal Japanese symbols and decorative imitation; the design language must come from material truth and subtle proportion.",
+  "inspirationSources": ["Weathered Clay Vessels", "Eroded Limestone", "Cracked Earth", "River Stones", "Charred Timber", "Handmade Washi Paper", "Dried Branches", "Misty Landscapes"],
+  "specificElements": ["An irregular ceramic rim", "A softly eroded stone profile", "A deliberately off-center diffuser", "A narrow fissure releasing warm light", "A branch-like support with restrained asymmetry", "A hand-troweled plaster surface"],
+  "materials": ["Handmade Ceramic", "Microcement", "Lime Plaster", "Travertine", "Raw Oak", "Charred Wood", "Washi Paper", "Oxidized Bronze"],
+  "colors": ["Earth Beige", "Clay Brown", "Ash Grey", "Bone White", "Mushroom Taupe", "Charcoal", "Weathered Sand"],
+  "avoid": ["Perfect glossy surfaces", "Bright saturated colors", "Literal Zen symbols", "Artificial distressing", "Symmetrical ornament", "Luxury excess", "Fragile impractical forms"],
+  "sortOrder": 11,
+  "enabled": true
+}

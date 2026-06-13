@@ -1,0 +1,21 @@
+{
+  "id": "romantic_glow",
+  "displayName": "浪漫光感",
+  "englishName": "Romantic Glow",
+  "isDefault": false,
+  "enabled": true,
+  "tonePrompt": "EMOTIONAL IMPACT REQUIREMENTS\n\nThe final image should feel romantic, warm, graceful, poetic, and emotionally intimate.\n\nThe lamp should create a soft emotional glow, making the space feel elegant, inviting, and quietly luxurious.\n\nThe mood should feel like a beautifully lit evening in a refined designer residence.\n\nThe result should be emotional but not overly dramatic.",
+  "colorAddOn": "Use warm highlights, creamy whites, soft champagne tones, gentle shadows, and refined low-contrast warmth. Avoid cold grey or muddy beige.",
+  "panel1AddOn": "The first panel should feel elegant and emotionally inviting, with a soft romantic atmosphere and a slightly blurred luxury interior background.",
+  "panel4AddOn": "The illuminated view should feel warm, romantic, poetic, and emotionally rich. The light should softly wrap around the materials and create gentle shadows.",
+  "photographyAddOn": "The photography should feel warm, soft, premium, and emotionally expressive, with realistic but beautiful light behavior.",
+  "avoidAddOn": [
+    "Cold grey lighting",
+    "Harsh contrast",
+    "Overly dramatic theatrical lighting",
+    "Cheap romantic filter",
+    "Excessive bloom",
+    "Flat emotionless scene"
+  ],
+  "sortOrder": 4
+}

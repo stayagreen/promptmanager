@@ -1,0 +1,9 @@
+{
+  "id": "1_1",
+  "displayName": "1:1 方形",
+  "ratioValue": "1:1",
+  "isDefault": false,
+  "ratioPrompt": "Generate one square image. Aspect Ratio 1:1. The output must fill the entire square canvas. Suitable for e-commerce product listings, social media posts, marketplace thumbnails, and balanced product presentation.",
+  "enabled": true,
+  "sortOrder": 3
+}

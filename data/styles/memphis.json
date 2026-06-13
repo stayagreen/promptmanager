@@ -1,0 +1,13 @@
+{
+  "id": "memphis",
+  "displayName": "孟菲斯风",
+  "englishName": "Memphis Style",
+  "stylePrompt": "Create a completely original Memphis Style lighting product with rebellious geometry, unexpected proportion, graphic pattern, and bold color contrast. Compose cones, cylinders, spheres, zigzags, and asymmetrical planes like a functional three-dimensional collage. Preserve clear lighting performance, stable construction, and premium finishes so the result feels collectible and design-led rather than chaotic or toy-like.",
+  "inspirationSources": ["1980s Memphis Milano", "Geometric Collage", "Zigzag Graphics", "Building Blocks", "Postmodern Columns", "Polka Dot Patterns", "Totem Sculpture", "Comic Book Shapes"],
+  "specificElements": ["A cone balanced against a striped cylinder", "A zigzag arm supporting a spherical diffuser", "An asymmetrical totem of primary forms", "A patterned base paired with a solid shade", "A deliberately oversized geometric switch", "A floating disc intersected by a diagonal rod"],
+  "materials": ["Powder-Coated Metal", "Terrazzo", "Colored Laminate", "Opal Glass", "Glossy Ceramic", "Acrylic", "Molded Resin"],
+  "colors": ["Cobalt Blue", "Tomato Red", "Lemon Yellow", "Black and White", "Mint Green", "Lavender", "Bubblegum Pink"],
+  "avoid": ["Unstructured randomness", "Too many patterns at once", "Cheap plastic toy appearance", "Unsafe visual imbalance", "Historical reproduction", "Muted monochrome styling", "Decorative parts without function"],
+  "sortOrder": 16,
+  "enabled": true
+}

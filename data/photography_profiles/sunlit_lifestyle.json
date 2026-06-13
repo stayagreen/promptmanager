@@ -1,0 +1,22 @@
+{
+  "id": "sunlit_lifestyle",
+  "displayName": "阳光生活方式模式",
+  "englishName": "Sunlit Lifestyle Photography",
+  "isDefault": false,
+  "enabled": true,
+  "profilePrompt": "The photography should feel fresh, sunlit, airy, breathable, and emotionally uplifting. The image should feel like a beautiful morning in a refined home, full of clean air, natural light, and quiet optimism.",
+  "compositionPrompt": "Use open composition, soft background blur, natural home styling, and strong product focus. The lamp should feel integrated into a bright and inspiring living environment.",
+  "lightingPrompt": "Use soft sunlight, clean highlights, gentle shadows, warm reflections, and fresh tonal separation. The scene should avoid grey, dull, muddy, or lifeless tones.",
+  "cameraPrompt": "Shot on iPhone 17 Pro Max with realistic smartphone photography, natural HDR, clean exposure, and authentic light behavior.",
+  "moodPrompt": "The mood should feel like a breath of fresh air — luminous, clear, graceful, emotionally refreshing, and quietly joyful.",
+  "avoidPrompt": [
+    "Gloomy atmosphere",
+    "Heavy shadows",
+    "Flat grey color",
+    "Dull beige monotony",
+    "Overly dark interior",
+    "Artificial sunlight effect",
+    "CGI render feeling"
+  ],
+  "sortOrder": 3
+}

@@ -1,0 +1,23 @@
+{
+  "id": "patent_line_drawing",
+  "displayName": "专利线稿图",
+  "englishName": "Patent Line Drawing",
+  "category": "technical",
+  "isDefault": false,
+  "enabled": true,
+  "outputPrompt": "Generate a clean patent-style line drawing of the lamp. The drawing should emphasize the product's external appearance, silhouette, structural outline, proportions, and distinctive design features. Use black linework on a white background. Avoid photorealistic materials, shadows, textures, lifestyle background, and decorative rendering. The result should feel suitable for design documentation and appearance patent reference.",
+  "consistencyPrompt": "The patent line drawing must represent one coherent lamp design. The structural outline should match the selected style and lighting type.",
+  "layoutPrompt": "Use clean black-and-white line art on a white background. Prefer orthographic or lightly perspective product view. Keep the product centered and clearly readable.",
+  "avoidPrompt": [
+    "Photorealistic rendering",
+    "Interior scene",
+    "Color materials",
+    "Heavy shadows",
+    "Text labels",
+    "Logo",
+    "Watermark",
+    "Unclear outline",
+    "Overly artistic sketch"
+  ],
+  "sortOrder": 8
+}

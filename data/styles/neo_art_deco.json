@@ -1,0 +1,13 @@
+{
+  "id": "neo_art_deco",
+  "displayName": "装饰主义回归",
+  "englishName": "Neo-Art Deco",
+  "stylePrompt": "Create a completely original Neo-Art Deco lighting product that reinterprets 1920s glamour with lighter contemporary proportions and disciplined luxury. Use repeated geometry, elegant symmetry, brass outlines, curved floral abstraction, and luminous stone or glass. The result should feel socially confident, architectural, and refined rather than theatrical or historically copied. Ornament must support structure, light distribution, and manufacturability.",
+  "inspirationSources": ["Art Deco Sunbursts", "Stepped Skyscraper Profiles", "Magnolia Blossoms", "Calla Lily Silhouettes", "Fan Geometry", "Jewelry Settings", "Lacquer Panels", "Geometric Marquetry"],
+  "specificElements": ["A magnolia bloom abstracted into brass ribs", "A stepped central spine", "A fan-shaped diffuser with precise symmetry", "Repeating arches framing opal glass", "A gemstone-like alabaster inset", "A slim brass line separating dark lacquer planes"],
+  "materials": ["Satin Brass", "Polished Brass Accent", "Alabaster", "Opal Glass", "Mother of Pearl", "High-Gloss Lacquer", "Dark Marble", "Plaster"],
+  "colors": ["Deep Emerald", "Midnight Blue", "Warm Gold", "Ivory", "Black Lacquer", "Burgundy Accent", "Pearl White"],
+  "avoid": ["Heavy Gatsby pastiche", "Excessive gold coverage", "Cheap crystal imitation", "Overloaded ornament", "Literal floral decoration", "Bulky historical proportions", "Generic hotel chandelier styling"],
+  "sortOrder": 23,
+  "enabled": true
+}

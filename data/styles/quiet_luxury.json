@@ -1,0 +1,13 @@
+{
+  "id": "quiet_luxury",
+  "displayName": "静奢风",
+  "englishName": "Quiet Luxury",
+  "stylePrompt": "Create a completely original Quiet Luxury lighting product where exceptional material, invisible engineering, and perfect proportion communicate value without visual display. Use restrained silhouettes, seamless joints, concealed light sources, and finely controlled illumination. The lamp should feel expensive to the touch and effortless to the eye, balancing warmth and precision without logos, ostentatious ornament, or trend-driven decoration.",
+  "inspirationSources": ["Tailored Cashmere", "Silk Wall Finishes", "Invisible Architectural Details", "Luxury Watch Tolerances", "Monolithic Stone", "Soft Natural Daylight", "Hand-Finished Joinery", "Gallery-Grade Metalwork"],
+  "specificElements": ["A nearly invisible seam between stone and metal", "A concealed source creating a floating halo", "A slim profile with jewelry-grade edges", "A hand-polished control integrated flush into the body", "A silk-like light wash", "A precisely balanced asymmetrical arm"],
+  "materials": ["Alabaster", "Travertine", "Satin Brass", "Bronze", "Silk-Finish Glass", "Fine-Grain Walnut", "Anodized Aluminum", "Leather Accent"],
+  "colors": ["Warm Ivory", "Champagne", "Soft Taupe", "Deep Bronze", "Walnut Brown", "Smoked Grey", "Muted Black"],
+  "avoid": ["Visible bulbs", "Large logos", "Flashy gold ornament", "Trend-heavy shapes", "Exposed fasteners", "Harsh glare", "Cheap simulated materials"],
+  "sortOrder": 18,
+  "enabled": true
+}

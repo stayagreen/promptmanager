@@ -1,0 +1,9 @@
+{
+  "id": "9_16",
+  "displayName": "9:16 竖版",
+  "ratioValue": "9:16",
+  "isDefault": true,
+  "ratioPrompt": "Generate a single vertical image. Aspect Ratio 9:16. The storyboard must fill the entire vertical canvas. Suitable for Xiaohongshu, TikTok, Reels, Shorts, vertical social media content, and mobile-first product presentation.",
+  "enabled": true,
+  "sortOrder": 2
+}

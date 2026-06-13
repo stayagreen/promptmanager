@@ -1,0 +1,13 @@
+{
+  "id": "cream_style",
+  "displayName": "奶油风",
+  "englishName": "Cream Style",
+  "stylePrompt": "Create a completely original lighting product inspired by contemporary Cream Style interiors. Express softness, emotional comfort, low-saturation warmth, and tactile refinement through rounded proportions, seamless transitions, and gentle diffused light. The lamp should feel delicate and healing without becoming childish, sugary, or visually weak. Translate creamy interiors into a premium, manufacturable product with a calm silhouette, soft-touch materials, and subtle architectural curves.",
+  "inspirationSources": ["Whipped Cream Folds", "Rounded Interior Arches", "River-Worn Pebbles", "Soft Cloud Layers", "Boucle Furniture", "Milk Glass Objects", "Smooth Plaster Niches", "Folded Linen"],
+  "specificElements": ["A continuous arch flowing into the lamp stem", "A pebble-like diffuser with no sharp transition", "Layered cream-toned volumes", "A softly recessed light aperture", "A rounded base inspired by upholstered furniture", "A cloud-like opal glass cluster"],
+  "materials": ["Opal Glass", "Milk Glass", "Matte Ceramic", "Soft-Touch Resin", "Cream Powder-Coated Metal", "Light Oak", "Natural Linen", "Translucent Alabaster"],
+  "colors": ["Cream White", "Milk Tea Beige", "Warm Ivory", "Oatmeal", "Light Oak", "Pale Taupe", "Soft Greige"],
+  "avoid": ["Sharp aggressive edges", "High saturation colors", "Cold blue lighting", "Cheap candy-like styling", "Excessive decoration", "Bulky cartoon forms", "Glossy plastic appearance"],
+  "sortOrder": 10,
+  "enabled": true
+}

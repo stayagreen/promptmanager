@@ -1,0 +1,22 @@
+{
+  "id": "four_separate_photos",
+  "displayName": "四张独立产品摄影图",
+  "englishName": "Four Separate Product Photos",
+  "category": "photographic",
+  "isDefault": false,
+  "enabled": true,
+  "outputPrompt": "Generate four separate product photography images of the EXACT SAME lamp. These should be four independent images, not a 2×2 grid and not a collage. The same lamp design must remain completely consistent across all four images. Image 1: daytime front full-view product photo in a refined interior, lighting off, the lamp is the main subject, background slightly blurred. Image 2: macro craftsmanship detail photo showing material texture, surface treatment, connection detail, and construction logic. Image 3: daytime 45-degree upward hero angle emphasizing silhouette, structure, and design language. Image 4: nighttime illuminated atmosphere photo, lamp turned on, showing warm ambient light, soft shadows, and emotional mood.",
+  "consistencyPrompt": "All four separate images must show the exact same product. Do not change the lamp design, material, color, proportion, number of heads, shade form, or structural logic.",
+  "layoutPrompt": "Do not create a grid. Do not create a collage. Do not merge the four photos into one layout. Each image should feel like an independent product photography output.",
+  "avoidPrompt": [
+    "2×2 grid",
+    "Collage layout",
+    "Different lamp designs",
+    "Inconsistent materials",
+    "Text labels",
+    "Logo",
+    "Watermark",
+    "Frame borders"
+  ],
+  "sortOrder": 2
+}

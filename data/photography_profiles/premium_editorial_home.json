@@ -1,0 +1,22 @@
+{
+  "id": "premium_editorial_home",
+  "displayName": "高端家居杂志模式",
+  "englishName": "Premium Editorial Home Photography",
+  "isDefault": true,
+  "enabled": true,
+  "profilePrompt": "The photography should feel like a premium interior design magazine feature. The image should be refined, elegant, editorial-quality, visually polished, and suitable for a luxury home design publication.",
+  "compositionPrompt": "Use carefully balanced editorial composition with strong product focus, elegant negative space, refined styling, and premium spatial hierarchy. The lamp should appear as the hero product in a luxury home story.",
+  "lightingPrompt": "Use luminous natural light, controlled highlights, realistic soft shadows, and refined tonal separation. The scene should feel bright, premium, and emotionally rich without looking artificial.",
+  "cameraPrompt": "Shot on iPhone 17 Pro Max, but with the eye of a top-tier interior photographer. The image should remain realistic while feeling professionally composed.",
+  "moodPrompt": "The mood should feel aspirational, calm, luxurious, memorable, and emotionally engaging. It should create a tasteful first-glance wow effect.",
+  "avoidPrompt": [
+    "Cheap showroom feeling",
+    "Flat catalog image",
+    "Overly grey atmosphere",
+    "Messy styling",
+    "Unrealistic render look",
+    "Excessive dramatic lighting",
+    "Low-end marketplace product image"
+  ],
+  "sortOrder": 1
+}

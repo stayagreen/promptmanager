@@ -1,0 +1,21 @@
+{
+  "id": "fresh_air",
+  "displayName": "清新空气感",
+  "englishName": "Fresh Air",
+  "isDefault": false,
+  "enabled": true,
+  "tonePrompt": "EMOTIONAL IMPACT REQUIREMENTS\n\nThe final image should feel fresh, airy, luminous, breathable, and emotionally refreshing.\n\nThe atmosphere should feel like a breath of fresh air — clean, graceful, clear, uplifting, and inspiring.\n\nThe lighting product should create a gentle sense of beauty, clarity, and visual relief at first glance.\n\nThe image should feel elegant but not emotionally flat.\n\nUse light, space, tone, and material interaction to create a clean and refreshing emotional response.",
+  "colorAddOn": "The color palette should feel luminous, clean, airy, and emotionally uplifting rather than dull or overly muted. Use fresh tonal separation, soft highlights, and clean warm whites to prevent the image from becoming grey or muddy.",
+  "panel1AddOn": "The first panel should feel bright, airy, and emotionally inviting. The scene should feel open and breathable, as if sunlight and clean air are flowing through the space. The lamp should create a fresh first impression while remaining elegant and realistic.",
+  "panel4AddOn": "The illuminated atmosphere should feel luminous, gentle, clear, and emotionally refreshing. The glow should feel warm but not heavy, creating a sense of calm freshness and visual comfort.",
+  "photographyAddOn": "The photography should feel bright, airy, luminous, and clean. The image should have beautiful light clarity, fresh tonal separation, natural highlights, and a refreshing atmosphere.",
+  "avoidAddOn": [
+    "Dull grey atmosphere",
+    "Muddy shadows",
+    "Lifeless beige monotony",
+    "Flat low-energy colors",
+    "Gloomy lighting",
+    "Heavy visual atmosphere"
+  ],
+  "sortOrder": 1
+}

@@ -1,0 +1,3011 @@
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { ReactNode } from "react";
+import {
+  AlertTriangle,
+  Archive,
+  CheckCircle2,
+  Clipboard,
+  Download,
+  FileText,
+  Layers3,
+  Loader2,
+  PackageCheck,
+  Pencil,
+  Plus,
+  Save,
+  Sparkles,
+  Trash2,
+} from "lucide-react";
+import {
+  buildChinesePromptReference,
+  formatChinesePromptReference,
+  translateToChineseReference,
+} from "./domain/chineseReference";
+import {
+  buildAllEmotionalPrompts,
+  buildAllPrompts,
+  buildPrompt,
+  formatRatioForFilename,
+  getActiveCustomPrompts,
+  getActiveEmotionalTones,
+  getActiveLightingTypes,
+  getActiveOutputModes,
+  getActivePhotographyProfiles,
+  getActiveRatios,
+  getActiveStyles,
+  getDefaultEmotionalTone,
+  getDefaultOutputMode,
+  getDefaultPhotographyProfile,
+  getDefaultRatio,
+} from "./domain/promptAssembler";
+import type {
+  CatalogData,
+  CommonPromptModule,
+  CustomPromptModule,
+  EmotionalToneModule,
+  HistoryCheckpoint,
+  LightingTypeModule,
+  ModuleHistoryKind,
+  OutputModeModule,
+  PhotographyProfileModule,
+  PromptBuildResult,
+  RatioModule,
+  StyleModule,
+} from "./domain/schema";
+import {
+  deleteCustomPrompt,
+  deleteEmotionalTone,
+  deleteCheckpoint,
+  deleteLightingType,
+  deleteOutputMode,
+  deletePhotographyProfile,
+  deleteRatio,
+  deleteStyle,
+  fetchHistory,
+  fetchCatalog,
+  restoreCheckpoint,
+  saveCommonPrompt,
+  saveCustomPrompt,
+  saveEmotionalTone,
+  saveLightingType,
+  saveOutputMode,
+  savePhotographyProfile,
+  saveRatio,
+  saveStyle,
+  translateText,
+} from "./utils/api";
+import {
+  buildLibraryZipName,
+  downloadPromptText,
+  downloadPromptZip,
+  downloadTextFile,
+} from "./utils/download";
+import { ReferenceWorkspace } from "./ReferenceWorkspace";
+
+type PageMode = "generate" | "manage";
+type WorkspaceMode = "text" | "reference";
+type ManageSection =
+  | "styles"
+  | "lightingTypes"
+  | "ratios"
+  | "emotionalTones"
+  | "photographyProfiles"
+  | "outputModes"
+  | "customPrompts"
+  | "common";
+type ExportJob =
+  | "single"
+  | "styleTypes"
+  | "styleRatios"
+  | "allCurrentRatio"
+  | "all"
+  | "allEmotions";
+type OutputLanguage = "english" | "chinese";
+type TranslationStatus = "idle" | "loading" | "google" | "fallback";
+
+const clientTranslationCache = new Map<string, string>();
+
+const idPattern = /^[a-z0-9_]+$/;
+
+export function App() {
+  const [catalog, setCatalog] = useState<CatalogData | null>(null);
+  const [loadError, setLoadError] = useState("");
+  const [mode, setMode] = useState<PageMode>("generate");
+  const [workspaceMode, setWorkspaceMode] = useState<WorkspaceMode>("text");
+  const [styleId, setStyleId] = useState("");
+  const [lightingTypeId, setLightingTypeId] = useState("");
+  const [ratioId, setRatioId] = useState("");
+  const [outputModeId, setOutputModeId] = useState("four_panel_storyboard");
+  const [emotionalToneId, setEmotionalToneId] = useState("none");
+  const [photographyProfileId, setPhotographyProfileId] = useState(
+    "premium_editorial_home",
+  );
+  const [customPromptId, setCustomPromptId] = useState("none");
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
+  const [exporting, setExporting] = useState<ExportJob | null>(null);
+  const [outputLanguage, setOutputLanguage] = useState<OutputLanguage>("english");
+
+  async function reloadCatalog() {
+    try {
+      const nextCatalog = await fetchCatalog();
+      setCatalog(nextCatalog);
+      setLoadError("");
+    } catch (error) {
+      setLoadError(error instanceof Error ? error.message : "加载数据失败");
+    }
+  }
+
+  useEffect(() => {
+    void reloadCatalog();
+  }, []);
+
+  useEffect(() => {
+    if (!catalog) return;
+
+    const activeStyles = getActiveStyles(catalog);
+    const activeTypes = getActiveLightingTypes(catalog);
+    const activeRatios = getActiveRatios(catalog);
+    const activeEmotionalTones = getActiveEmotionalTones(catalog);
+    const activePhotographyProfiles = getActivePhotographyProfiles(catalog);
+    const activeOutputModes = getActiveOutputModes(catalog);
+    const activeCustomPrompts = getActiveCustomPrompts(catalog);
+
+    if (!activeStyles.some((style) => style.id === styleId)) {
+      setStyleId(activeStyles[0]?.id ?? "");
+    }
+    if (!activeTypes.some((lightingType) => lightingType.id === lightingTypeId)) {
+      setLightingTypeId(activeTypes[0]?.id ?? "");
+    }
+    if (!activeRatios.some((ratio) => ratio.id === ratioId)) {
+      setRatioId(getDefaultRatio(catalog).id);
+    }
+    if (!activeEmotionalTones.some((tone) => tone.id === emotionalToneId)) {
+      setEmotionalToneId(getDefaultEmotionalTone(catalog).id);
+    }
+    if (
+      !activePhotographyProfiles.some(
+        (profile) => profile.id === photographyProfileId,
+      )
+    ) {
+      setPhotographyProfileId(getDefaultPhotographyProfile(catalog).id);
+    }
+    if (!activeOutputModes.some((outputMode) => outputMode.id === outputModeId)) {
+      setOutputModeId(getDefaultOutputMode(catalog).id);
+    }
+    if (
+      customPromptId !== "none" &&
+      !activeCustomPrompts.some((customPrompt) => customPrompt.id === customPromptId)
+    ) {
+      setCustomPromptId("none");
+    }
+  }, [
+    catalog,
+    customPromptId,
+    emotionalToneId,
+    lightingTypeId,
+    outputModeId,
+    photographyProfileId,
+    ratioId,
+    styleId,
+  ]);
+
+  const activeStyles = catalog ? getActiveStyles(catalog) : [];
+  const activeLightingTypes = catalog ? getActiveLightingTypes(catalog) : [];
+  const activeRatios = catalog ? getActiveRatios(catalog) : [];
+  const activeEmotionalTones = catalog ? getActiveEmotionalTones(catalog) : [];
+  const activePhotographyProfiles = catalog
+    ? getActivePhotographyProfiles(catalog)
+    : [];
+  const activeOutputModes = catalog ? getActiveOutputModes(catalog) : [];
+  const activeCustomPrompts = catalog ? getActiveCustomPrompts(catalog) : [];
+
+  const prompt = useMemo(() => {
+    if (
+      !catalog ||
+      (customPromptId === "none" && (!styleId || !lightingTypeId || !ratioId))
+    ) {
+      return null;
+    }
+    return buildPrompt(catalog, {
+      styleId,
+      lightingTypeId,
+      ratioId,
+      outputModeId,
+      emotionalToneId,
+      photographyProfileId,
+      customPromptId,
+    });
+  }, [
+    catalog,
+    customPromptId,
+    emotionalToneId,
+    lightingTypeId,
+    outputModeId,
+    photographyProfileId,
+    ratioId,
+    styleId,
+  ]);
+
+  const selectedStyleForPrompt = activeStyles.find((style) => style.id === styleId);
+  const selectedTypeForPrompt = activeLightingTypes.find(
+    (lightingType) => lightingType.id === lightingTypeId,
+  );
+  const selectedRatioForPrompt = activeRatios.find((ratio) => ratio.id === ratioId);
+  const selectedEmotionalToneForPrompt = activeEmotionalTones.find(
+    (tone) => tone.id === emotionalToneId,
+  );
+  const selectedPhotographyProfileForPrompt = activePhotographyProfiles.find(
+    (profile) => profile.id === photographyProfileId,
+  );
+  const selectedOutputModeForPrompt = activeOutputModes.find(
+    (outputMode) => outputMode.id === outputModeId,
+  );
+  const selectedCustomPromptForPrompt = activeCustomPrompts.find(
+    (customPrompt) => customPrompt.id === customPromptId,
+  );
+  const promptFallbackTranslation =
+    prompt && selectedCustomPromptForPrompt
+      ? translateToChineseReference(prompt.promptText)
+      : prompt &&
+    selectedStyleForPrompt &&
+    selectedTypeForPrompt &&
+    selectedRatioForPrompt &&
+    selectedOutputModeForPrompt &&
+    selectedEmotionalToneForPrompt &&
+    selectedPhotographyProfileForPrompt
+      ? buildChinesePromptReference(
+          prompt,
+          selectedStyleForPrompt,
+          selectedTypeForPrompt,
+          selectedRatioForPrompt,
+          selectedOutputModeForPrompt,
+          selectedEmotionalToneForPrompt,
+          selectedPhotographyProfileForPrompt,
+        )
+      : "";
+  const promptTranslation = useTranslatedText(
+    prompt?.promptText ?? "",
+    promptFallbackTranslation.replace(/^【中文参考稿】\n说明：.*?\n\n/s, ""),
+  );
+
+  if (loadError) {
+    return (
+      <div className="empty-state">
+        <AlertTriangle aria-hidden="true" />
+        <h1>数据加载失败</h1>
+        <p>{loadError}</p>
+        <button type="button" onClick={() => void reloadCatalog()}>
+          重新加载
+        </button>
+      </div>
+    );
+  }
+
+  if (!catalog || !prompt) {
+    return (
+      <div className="empty-state">
+        <Loader2 className="spin" aria-hidden="true" />
+        <h1>正在加载本地数据</h1>
+      </div>
+    );
+  }
+
+  if (workspaceMode === "reference") {
+    return (
+      <ReferenceWorkspace
+        catalog={catalog}
+        onWorkspaceMode={setWorkspaceMode}
+      />
+    );
+  }
+
+  const currentPrompt = prompt;
+  const selectedStyle = selectedStyleForPrompt ?? activeStyles[0]!;
+  const selectedType =
+    selectedTypeForPrompt ?? activeLightingTypes[0]!;
+  const selectedRatio = selectedRatioForPrompt ?? activeRatios[0]!;
+  const selectedEmotionalTone =
+    selectedEmotionalToneForPrompt ?? getDefaultEmotionalTone(catalog);
+  const selectedPhotographyProfile =
+    selectedPhotographyProfileForPrompt ??
+    getDefaultPhotographyProfile(catalog);
+  const selectedOutputMode =
+    selectedOutputModeForPrompt ?? getDefaultOutputMode(catalog);
+  const selectedCustomPrompt = selectedCustomPromptForPrompt ?? null;
+  const isCustomMode = selectedCustomPrompt !== null;
+  const isTechnicalOutput = selectedOutputMode.category === "technical";
+  const chinesePromptText = formatChinesePromptReference(promptTranslation.text);
+  const selectedOutputText =
+    outputLanguage === "chinese" ? chinesePromptText : currentPrompt.promptText;
+  const selectedOutputFilename =
+    outputLanguage === "chinese"
+      ? addFilenameSuffix(currentPrompt.filename, "_中文参考")
+      : currentPrompt.filename;
+
+  async function handleCopy() {
+    try {
+      await copyText(selectedOutputText);
+      setCopyStatus("copied");
+      window.setTimeout(() => setCopyStatus("idle"), 1600);
+    } catch {
+      setCopyStatus("failed");
+      window.setTimeout(() => setCopyStatus("idle"), 2200);
+    }
+  }
+
+  async function handleSingleDownload() {
+    setExporting("single");
+    if (outputLanguage === "chinese") {
+      downloadTextFile(selectedOutputText, selectedOutputFilename);
+    } else {
+      await downloadPromptText(currentPrompt);
+    }
+    setExporting(null);
+  }
+
+  async function handleZipExport(job: ExportJob, prompts: PromptBuildResult[], filename: string) {
+    const invalid = prompts.filter((item) => !item.validation.valid);
+    if (invalid.length > 0) {
+      window.alert(`有 ${invalid.length} 个提示词未通过校验，已停止导出。`);
+      return;
+    }
+
+    setExporting(job);
+    await downloadPromptZip(prompts, filename);
+    setExporting(null);
+  }
+
+  const ratioFileLabel = formatRatioForFilename(selectedRatio);
+  const styleAllTypes = () =>
+    activeLightingTypes.map((lightingType) =>
+      buildPrompt(catalog, {
+        styleId: selectedStyle.id,
+        lightingTypeId: lightingType.id,
+        ratioId: selectedRatio.id,
+        outputModeId: "four_panel_storyboard",
+        emotionalToneId: selectedEmotionalTone.id,
+      }),
+    );
+  const styleAllRatios = () =>
+    activeRatios.map((ratio) =>
+      buildPrompt(catalog, {
+        styleId: selectedStyle.id,
+        lightingTypeId: selectedType.id,
+        ratioId: ratio.id,
+        outputModeId: "four_panel_storyboard",
+        emotionalToneId: selectedEmotionalTone.id,
+      }),
+    );
+  const allStylesAllTypesCurrentRatio = () =>
+    activeStyles.flatMap((style) =>
+      activeLightingTypes.map((lightingType) =>
+        buildPrompt(catalog, {
+          styleId: style.id,
+          lightingTypeId: lightingType.id,
+          ratioId: selectedRatio.id,
+          outputModeId: "four_panel_storyboard",
+          emotionalToneId: selectedEmotionalTone.id,
+        }),
+      ),
+    );
+  const emotionalZipSuffix =
+    selectedEmotionalTone.id === "none" ? "" : `_${selectedEmotionalTone.displayName}`;
+
+  return (
+    <div className="app-shell">
+      <aside className="control-pane">
+        <header className="app-header">
+          <div>
+            <p className="eyebrow">Prompt Library</p>
+            <h1>灯具提示词组合系统</h1>
+          </div>
+          <PackageCheck aria-hidden="true" />
+        </header>
+
+        <div className="workspace-tabs" role="tablist" aria-label="提示词工作区">
+          <button type="button" className="active">
+            文生图
+          </button>
+          <button type="button" onClick={() => setWorkspaceMode("reference")}>
+            参考图任务
+          </button>
+        </div>
+
+        <div className="mode-tabs" role="tablist" aria-label="页面模式">
+          <button
+            type="button"
+            className={mode === "generate" ? "active" : ""}
+            onClick={() => setMode("generate")}
+          >
+            <FileText aria-hidden="true" />
+            生成
+          </button>
+          <button
+            type="button"
+            className={mode === "manage" ? "active" : ""}
+            onClick={() => setMode("manage")}
+          >
+            <Pencil aria-hidden="true" />
+            管理
+          </button>
+        </div>
+
+        {mode === "generate" ? (
+          <>
+            <section className="panel">
+              <div className="panel-title">
+                <Layers3 aria-hidden="true" />
+                <h2>组合</h2>
+              </div>
+
+              <SelectField
+                label="用户自定义"
+                value={customPromptId}
+                onChange={setCustomPromptId}
+              >
+                <option value="none">无</option>
+                {activeCustomPrompts.map((customPrompt) => (
+                  <option key={customPrompt.id} value={customPrompt.id}>
+                    {customPrompt.displayName}
+                  </option>
+                ))}
+              </SelectField>
+
+              <SelectField
+                label="风格"
+                value={styleId}
+                onChange={setStyleId}
+                disabled={isCustomMode}
+              >
+                {activeStyles.map((style) => (
+                  <option key={style.id} value={style.id}>
+                    {style.displayName}
+                  </option>
+                ))}
+              </SelectField>
+
+              <SelectField
+                label="灯具类型"
+                value={lightingTypeId}
+                onChange={setLightingTypeId}
+                disabled={isCustomMode}
+              >
+                {activeLightingTypes.map((lightingType) => (
+                  <option key={lightingType.id} value={lightingType.id}>
+                    {lightingType.displayName}
+                  </option>
+                ))}
+              </SelectField>
+
+              <SelectField
+                label="比例"
+                value={ratioId}
+                onChange={setRatioId}
+                disabled={isCustomMode}
+              >
+                {activeRatios.map((ratio) => (
+                  <option key={ratio.id} value={ratio.id}>
+                    {ratio.displayName}
+                  </option>
+                ))}
+              </SelectField>
+
+              <SelectField
+                label="输出方式"
+                value={outputModeId}
+                onChange={setOutputModeId}
+                disabled={isCustomMode}
+              >
+                {activeOutputModes.map((outputMode) => (
+                  <option key={outputMode.id} value={outputMode.id}>
+                    {outputMode.displayName}
+                  </option>
+                ))}
+              </SelectField>
+
+              <SelectField
+                label="情绪增强"
+                value={emotionalToneId}
+                onChange={setEmotionalToneId}
+                disabled={isCustomMode || isTechnicalOutput}
+              >
+                {activeEmotionalTones.map((tone) => (
+                  <option key={tone.id} value={tone.id}>
+                    {tone.displayName}
+                  </option>
+                ))}
+              </SelectField>
+
+              <SelectField
+                label="摄影风格模式"
+                value={photographyProfileId}
+                onChange={setPhotographyProfileId}
+                disabled={isCustomMode || isTechnicalOutput}
+              >
+                {activePhotographyProfiles.map((profile) => (
+                  <option key={profile.id} value={profile.id}>
+                    {profile.displayName}
+                  </option>
+                ))}
+              </SelectField>
+
+              {isCustomMode && (
+                <p className="custom-mode-note">
+                  已启用“{selectedCustomPrompt.displayName}”，当前输出只使用该条自定义提示词，其他组合项暂不参与。
+                </p>
+              )}
+
+              {!isCustomMode && isTechnicalOutput && (
+                <p className="technical-mode-note">
+                  当前为技术类输出，情绪增强和摄影风格模式不参与本次组合。
+                </p>
+              )}
+            </section>
+
+            <section className="panel">
+              <div className="panel-title">
+                <FileText aria-hidden="true" />
+                <h2>单个导出</h2>
+              </div>
+
+              <SelectField
+                label="复制 / 下载语言"
+                value={outputLanguage}
+                onChange={(value) => setOutputLanguage(value as OutputLanguage)}
+              >
+                <option value="english">英文原文</option>
+                <option value="chinese">中文参考</option>
+              </SelectField>
+
+              <div className="button-grid">
+                <button type="button" onClick={handleCopy} title="复制提示词">
+                  <Clipboard aria-hidden="true" />
+                  {copyStatus === "copied"
+                    ? "已复制"
+                    : copyStatus === "failed"
+                      ? "复制失败"
+                      : "复制"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSingleDownload}
+                  disabled={exporting === "single"}
+                  title="下载当前 TXT"
+                >
+                  {exporting === "single" ? (
+                    <Loader2 className="spin" aria-hidden="true" />
+                  ) : (
+                    <Download aria-hidden="true" />
+                  )}
+                  下载 TXT
+                </button>
+              </div>
+            </section>
+
+            <section className="panel">
+              <div className="panel-title">
+                <Archive aria-hidden="true" />
+                <h2>批量 ZIP</h2>
+              </div>
+              <p className="batch-note">
+                {isCustomMode
+                  ? "用户自定义模式不产生组合维度，因此批量 ZIP 暂不可用。"
+                  : "批量导出固定使用“2×2四宫格产品摄影”，不扩展全部输出方式组合。"}
+              </p>
+
+              <div className="batch-actions">
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleZipExport(
+                      "styleTypes",
+                      styleAllTypes(),
+                      `灯具提示词库_${selectedStyle.displayName}_${activeLightingTypes.length}类型_${ratioFileLabel}${emotionalZipSuffix}.zip`,
+                    )
+                  }
+                  disabled={isCustomMode || exporting === "styleTypes"}
+                >
+                  <DownloadOrSpinner active={exporting === "styleTypes"} />
+                  当前风格全部类型
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleZipExport(
+                      "styleRatios",
+                      styleAllRatios(),
+                      `灯具提示词库_${selectedStyle.displayName}_${selectedType.displayName}_${activeRatios.length}比例${emotionalZipSuffix}.zip`,
+                    )
+                  }
+                  disabled={isCustomMode || exporting === "styleRatios"}
+                >
+                  <DownloadOrSpinner active={exporting === "styleRatios"} />
+                  当前组合全部比例
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleZipExport(
+                      "allCurrentRatio",
+                      allStylesAllTypesCurrentRatio(),
+                      `灯具提示词库_${activeStyles.length}风格_${activeLightingTypes.length}类型_${ratioFileLabel}${emotionalZipSuffix}.zip`,
+                    )
+                  }
+                  disabled={isCustomMode || exporting === "allCurrentRatio"}
+                >
+                  <DownloadOrSpinner active={exporting === "allCurrentRatio"} />
+                  全部风格类型
+                </button>
+
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={() =>
+                    handleZipExport(
+                      "all",
+                      buildAllPrompts(catalog, selectedEmotionalTone.id),
+                      buildLibraryZipName(
+                        activeStyles.length,
+                        activeLightingTypes.length,
+                        activeRatios.length,
+                      ).replace(/\.zip$/, `${emotionalZipSuffix}.zip`),
+                    )
+                  }
+                  disabled={isCustomMode || exporting === "all"}
+                >
+                  {exporting === "all" ? (
+                    <Loader2 className="spin" aria-hidden="true" />
+                  ) : (
+                    <Archive aria-hidden="true" />
+                  )}
+                  全部 {activeStyles.length * activeLightingTypes.length * activeRatios.length} 份
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleZipExport(
+                      "allEmotions",
+                      buildAllEmotionalPrompts(catalog),
+                      `灯具提示词库_全部情绪_${activeEmotionalTones.length}版本.zip`,
+                    )
+                  }
+                  disabled={isCustomMode || exporting === "allEmotions"}
+                >
+                  <DownloadOrSpinner active={exporting === "allEmotions"} />
+                  全部情绪版本{" "}
+                  {activeStyles.length *
+                    activeLightingTypes.length *
+                    activeRatios.length *
+                    activeEmotionalTones.length}{" "}
+                  份
+                </button>
+              </div>
+            </section>
+          </>
+        ) : (
+          <ManagementNav />
+        )}
+      </aside>
+
+      {mode === "generate" ? (
+        <PromptPreview
+          prompt={currentPrompt}
+          chinesePromptText={chinesePromptText}
+          chinesePromptStatus={promptTranslation.status}
+          selectedStyle={selectedStyle}
+          selectedType={selectedType}
+          selectedRatio={selectedRatio}
+          selectedOutputMode={selectedOutputMode}
+          selectedEmotionalTone={selectedEmotionalTone}
+          selectedPhotographyProfile={selectedPhotographyProfile}
+          selectedCustomPrompt={selectedCustomPrompt}
+        />
+      ) : (
+        <ManagementView catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+    </div>
+  );
+}
+
+function PromptPreview({
+  prompt,
+  chinesePromptText,
+  chinesePromptStatus,
+  selectedStyle,
+  selectedType,
+  selectedRatio,
+  selectedOutputMode,
+  selectedEmotionalTone,
+  selectedPhotographyProfile,
+  selectedCustomPrompt,
+}: {
+  prompt: PromptBuildResult;
+  chinesePromptText: string;
+  chinesePromptStatus: TranslationStatus;
+  selectedStyle: StyleModule;
+  selectedType: LightingTypeModule;
+  selectedRatio: RatioModule;
+  selectedOutputMode: OutputModeModule;
+  selectedEmotionalTone: EmotionalToneModule;
+  selectedPhotographyProfile: PhotographyProfileModule;
+  selectedCustomPrompt: CustomPromptModule | null;
+}) {
+  const [previewLanguage, setPreviewLanguage] = useState<"bilingual" | OutputLanguage>(
+    "bilingual",
+  );
+  const activePreviewText =
+    previewLanguage === "chinese" ? chinesePromptText : prompt.promptText;
+  const previewLength =
+    previewLanguage === "bilingual"
+      ? prompt.promptText.length + chinesePromptText.length
+      : activePreviewText.length;
+
+  return (
+    <main className="preview-pane">
+      <section className="summary-bar">
+        <div>
+          <p className="eyebrow">当前文件</p>
+          <h2>{prompt.filename}</h2>
+        </div>
+        <ValidationBadge prompt={prompt} />
+      </section>
+
+      <section
+        className={`metrics-strip${selectedCustomPrompt ? " custom" : ""}`}
+      >
+        {selectedCustomPrompt ? (
+          <>
+            <Metric label="用户自定义" value={selectedCustomPrompt.displayName} />
+            <Metric label="字数" value={prompt.wordCount.toLocaleString("zh-CN")} />
+          </>
+        ) : (
+          <>
+            <Metric label="风格" value={selectedStyle.displayName} />
+            <Metric label="类型" value={selectedType.displayName} />
+            <Metric label="比例" value={selectedRatio.ratioValue} />
+            <Metric label="输出" value={selectedOutputMode.displayName} />
+            <Metric
+              label="情绪"
+              value={
+                selectedOutputMode.category === "technical"
+                  ? "不参与"
+                  : selectedEmotionalTone.displayName
+              }
+            />
+            <Metric
+              label="摄影"
+              value={
+                selectedOutputMode.category === "technical"
+                  ? "不参与"
+                  : selectedPhotographyProfile.displayName
+              }
+            />
+            <Metric label="字数" value={prompt.wordCount.toLocaleString("zh-CN")} />
+          </>
+        )}
+      </section>
+
+      <section className="preview-layout">
+        <div className="prompt-preview">
+          <div className="preview-header">
+            <div>
+              <h2>完整提示词</h2>
+              <p>中文为本地词库即时参考稿，不会保存到模块数据。</p>
+            </div>
+            <span>{previewLength.toLocaleString("zh-CN")} 字符</span>
+          </div>
+
+          <div className="preview-mode-tabs" role="tablist" aria-label="预览语言">
+            <button
+              type="button"
+              className={previewLanguage === "bilingual" ? "active" : ""}
+              onClick={() => setPreviewLanguage("bilingual")}
+            >
+              中英对照
+            </button>
+            <button
+              type="button"
+              className={previewLanguage === "english" ? "active" : ""}
+              onClick={() => setPreviewLanguage("english")}
+            >
+              英文
+            </button>
+            <button
+              type="button"
+              className={previewLanguage === "chinese" ? "active" : ""}
+              onClick={() => setPreviewLanguage("chinese")}
+            >
+              中文参考
+            </button>
+          </div>
+
+          {previewLanguage === "bilingual" ? (
+            <SyncedTextareaPair
+              containerClassName="bilingual-preview"
+              columnClassName="prompt-column"
+              labelClassName="column-title"
+              leftLabel="英文原文"
+              rightLabel={`中文参考${formatTranslationStatus(chinesePromptStatus)}`}
+              leftValue={prompt.promptText}
+              rightValue={chinesePromptText}
+              leftReadOnly
+              rightReadOnly
+            />
+          ) : (
+            <textarea readOnly value={activePreviewText} spellCheck={false} />
+          )}
+        </div>
+
+        <div className="module-panel">
+          <h2>模块来源</h2>
+          <ul>
+            {prompt.moduleSources.map((source) => (
+              <li key={source}>{source}</li>
+            ))}
+          </ul>
+
+          {!prompt.validation.valid && (
+            <div className="validation-detail">
+              <h3>校验问题</h3>
+              {prompt.validation.forbiddenTokens.length > 0 && (
+                <p>禁用内容：{prompt.validation.forbiddenTokens.join("、")}</p>
+              )}
+              {prompt.validation.missingKeywords.length > 0 && (
+                <p>缺少关键词：{prompt.validation.missingKeywords.join("、")}</p>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function ManagementNav() {
+  return (
+    <section className="panel subtle-panel">
+      <div className="panel-title">
+        <Save aria-hidden="true" />
+        <h2>本地文件管理</h2>
+      </div>
+      <p className="helper-text">
+        保存会直接写入项目下的 JSON/MD 文件，刷新页面后仍然生效。
+      </p>
+    </section>
+  );
+}
+
+function ManagementView({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const [section, setSection] = useState<ManageSection>("styles");
+
+  return (
+    <main className="preview-pane">
+      <section className="summary-bar">
+        <div>
+          <p className="eyebrow">模块管理</p>
+          <h2>编辑本地 JSON / MD 数据</h2>
+        </div>
+        <button type="button" onClick={() => void reloadCatalog()}>
+          <Layers3 aria-hidden="true" />
+          重新载入文件
+        </button>
+      </section>
+
+      <div className="manager-tabs" role="tablist" aria-label="管理模块">
+        <button
+          type="button"
+          className={section === "styles" ? "active" : ""}
+          onClick={() => setSection("styles")}
+        >
+          风格
+        </button>
+        <button
+          type="button"
+          className={section === "lightingTypes" ? "active" : ""}
+          onClick={() => setSection("lightingTypes")}
+        >
+          灯具类型
+        </button>
+        <button
+          type="button"
+          className={section === "ratios" ? "active" : ""}
+          onClick={() => setSection("ratios")}
+        >
+          比例
+        </button>
+        <button
+          type="button"
+          className={section === "emotionalTones" ? "active" : ""}
+          onClick={() => setSection("emotionalTones")}
+        >
+          情绪增强
+        </button>
+        <button
+          type="button"
+          className={section === "photographyProfiles" ? "active" : ""}
+          onClick={() => setSection("photographyProfiles")}
+        >
+          摄影模式
+        </button>
+        <button
+          type="button"
+          className={section === "outputModes" ? "active" : ""}
+          onClick={() => setSection("outputModes")}
+        >
+          输出方式
+        </button>
+        <button
+          type="button"
+          className={section === "customPrompts" ? "active" : ""}
+          onClick={() => setSection("customPrompts")}
+        >
+          用户自定义
+        </button>
+        <button
+          type="button"
+          className={section === "common" ? "active" : ""}
+          onClick={() => setSection("common")}
+        >
+          固定提示词
+        </button>
+      </div>
+
+      {section === "styles" && (
+        <StyleManager catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+      {section === "lightingTypes" && (
+        <LightingTypeManager catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+      {section === "ratios" && <RatioManager catalog={catalog} reloadCatalog={reloadCatalog} />}
+      {section === "emotionalTones" && (
+        <EmotionalToneManager catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+      {section === "photographyProfiles" && (
+        <PhotographyProfileManager
+          catalog={catalog}
+          reloadCatalog={reloadCatalog}
+        />
+      )}
+      {section === "outputModes" && (
+        <OutputModeManager catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+      {section === "customPrompts" && (
+        <CustomPromptManager catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+      {section === "common" && (
+        <CommonPromptManager catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+    </main>
+  );
+}
+
+function StyleManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const firstId = catalog.styles[0]?.id ?? "";
+  const [selectedId, setSelectedId] = useState(firstId);
+  const [isNew, setIsNew] = useState(false);
+  const [draft, setDraft] = useState<StyleModule>(() => catalog.styles[0] ?? createEmptyStyle());
+  const [listDraft, setListDraft] = useState(() =>
+    styleListsToText(catalog.styles[0] ?? createEmptyStyle()),
+  );
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected = catalog.styles.find((style) => style.id === selectedId) ?? catalog.styles[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+      setListDraft(styleListsToText(selected));
+    }
+  }, [catalog.styles, isNew, selectedId]);
+
+  async function handleSave() {
+    const styleToSave = {
+      ...draft,
+      inspirationSources: linesToArray(listDraft.inspirationSources),
+      specificElements: linesToArray(listDraft.specificElements),
+      materials: linesToArray(listDraft.materials),
+      colors: linesToArray(listDraft.colors),
+      avoid: linesToArray(listDraft.avoid),
+    };
+
+    if (!validateId(styleToSave.id)) return;
+    if (isNew && catalog.styles.some((style) => style.id === styleToSave.id)) {
+      window.alert("这个风格 ID 已存在，请换一个 ID。");
+      return;
+    }
+    await saveStyle(styleToSave);
+    await reloadCatalog();
+    setSelectedId(styleToSave.id);
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/styles/${styleToSave.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew) return;
+    if (!window.confirm(`确定删除风格：${draft.displayName}？`)) return;
+    await deleteStyle(draft.id);
+    await reloadCatalog();
+    setSelectedId("");
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已删除 data/styles/${draft.id}.json`);
+  }
+
+  const styleTranslationPairs = buildModuleTranslationPairs(draft.displayName, draft.englishName);
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="风格模块"
+        selectLabel="选择风格"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.styles.map((style) => ({ id: style.id, label: style.displayName }))}
+        isNew={isNew}
+        onNew={() => {
+          setIsNew(true);
+          setDraft(createEmptyStyle());
+          setListDraft(styleListsToText(createEmptyStyle()));
+          setStatus("");
+        }}
+      />
+
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="风格名称"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <TextField
+          label="英文名称"
+          value={draft.englishName}
+          onChange={(value) => setDraft({ ...draft, englishName: value })}
+        />
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+
+      <CheckboxField
+        label="启用"
+        checked={draft.enabled !== false}
+        onChange={(checked) => setDraft({ ...draft, enabled: checked })}
+      />
+
+      <TextareaField
+        label="风格描述"
+        value={draft.stylePrompt}
+        onChange={(value) => setDraft({ ...draft, stylePrompt: value })}
+        translationText={translateToChineseReference(draft.stylePrompt, styleTranslationPairs)}
+      />
+      <TextareaField
+        label="灵感来源，每行一个"
+        value={listDraft.inspirationSources}
+        onChange={(value) => setListDraft({ ...listDraft, inspirationSources: value })}
+        translationText={translateToChineseReference(
+          listDraft.inspirationSources,
+          styleTranslationPairs,
+        )}
+      />
+      <TextareaField
+        label="具体元素，每行一个"
+        value={listDraft.specificElements}
+        onChange={(value) => setListDraft({ ...listDraft, specificElements: value })}
+        translationText={translateToChineseReference(
+          listDraft.specificElements,
+          styleTranslationPairs,
+        )}
+      />
+      <TextareaField
+        label="材料体系，每行一个"
+        value={listDraft.materials}
+        onChange={(value) => setListDraft({ ...listDraft, materials: value })}
+        translationText={translateToChineseReference(listDraft.materials, styleTranslationPairs)}
+      />
+      <TextareaField
+        label="色彩体系，每行一个"
+        value={listDraft.colors}
+        onChange={(value) => setListDraft({ ...listDraft, colors: value })}
+        translationText={translateToChineseReference(listDraft.colors, styleTranslationPairs)}
+      />
+      <TextareaField
+        label="避免事项，每行一个"
+        value={listDraft.avoid}
+        onChange={(value) => setListDraft({ ...listDraft, avoid: value })}
+        translationText={translateToChineseReference(listDraft.avoid, styleTranslationPairs)}
+      />
+
+      <EditorActions
+        isNew={isNew}
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+
+      {draft.id && (
+        <HistoryPanel
+          kind="styles"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function LightingTypeManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const [selectedId, setSelectedId] = useState(catalog.lightingTypes[0]?.id ?? "");
+  const [isNew, setIsNew] = useState(false);
+  const [draft, setDraft] = useState<LightingTypeModule>(
+    () => catalog.lightingTypes[0] ?? createEmptyLightingType(),
+  );
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected =
+      catalog.lightingTypes.find((lightingType) => lightingType.id === selectedId) ??
+      catalog.lightingTypes[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+    }
+  }, [catalog.lightingTypes, isNew, selectedId]);
+
+  async function handleSave() {
+    if (!validateId(draft.id)) return;
+    if (isNew && catalog.lightingTypes.some((lightingType) => lightingType.id === draft.id)) {
+      window.alert("这个灯具类型 ID 已存在，请换一个 ID。");
+      return;
+    }
+    await saveLightingType(draft);
+    await reloadCatalog();
+    setSelectedId(draft.id);
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/lighting_types/${draft.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew) return;
+    if (!window.confirm(`确定删除灯具类型：${draft.displayName}？`)) return;
+    await deleteLightingType(draft.id);
+    await reloadCatalog();
+    setSelectedId("");
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已删除 data/lighting_types/${draft.id}.json`);
+  }
+
+  const lightingTypeTranslationPairs = buildModuleTranslationPairs(
+    draft.displayName,
+    draft.englishName,
+  );
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="灯具类型模块"
+        selectLabel="选择类型"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.lightingTypes.map((lightingType) => ({
+          id: lightingType.id,
+          label: lightingType.displayName,
+        }))}
+        isNew={isNew}
+        onNew={() => {
+          setIsNew(true);
+          setDraft(createEmptyLightingType());
+          setStatus("");
+        }}
+      />
+
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="中文名称"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <TextField
+          label="英文名称"
+          value={draft.englishName}
+          onChange={(value) => setDraft({ ...draft, englishName: value })}
+        />
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+
+      <CheckboxField
+        label="启用"
+        checked={draft.enabled !== false}
+        onChange={(checked) => setDraft({ ...draft, enabled: checked })}
+      />
+
+      <TextareaField
+        label="类型提示词"
+        value={draft.typePrompt}
+        onChange={(value) => setDraft({ ...draft, typePrompt: value })}
+        translationText={translateToChineseReference(
+          draft.typePrompt,
+          lightingTypeTranslationPairs,
+        )}
+      />
+
+      <EditorActions
+        isNew={isNew}
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+
+      {draft.id && (
+        <HistoryPanel
+          kind="lighting_types"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function RatioManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const [selectedId, setSelectedId] = useState(catalog.ratios[0]?.id ?? "");
+  const [isNew, setIsNew] = useState(false);
+  const [draft, setDraft] = useState<RatioModule>(() => catalog.ratios[0] ?? createEmptyRatio());
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected = catalog.ratios.find((ratio) => ratio.id === selectedId) ?? catalog.ratios[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+    }
+  }, [catalog.ratios, isNew, selectedId]);
+
+  async function handleSave() {
+    if (!validateId(draft.id)) return;
+    if (isNew && catalog.ratios.some((ratio) => ratio.id === draft.id)) {
+      window.alert("这个比例 ID 已存在，请换一个 ID。");
+      return;
+    }
+    await saveRatio(draft);
+    await reloadCatalog();
+    setSelectedId(draft.id);
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/ratios/${draft.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew) return;
+    if (catalog.ratios.length <= 1) {
+      window.alert("至少需要保留一个比例。");
+      return;
+    }
+    if (!window.confirm(`确定删除比例：${draft.displayName}？`)) return;
+    await deleteRatio(draft.id);
+    await reloadCatalog();
+    setSelectedId("");
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已删除 data/ratios/${draft.id}.json`);
+  }
+
+  const ratioTranslationPairs = buildModuleTranslationPairs(draft.displayName, draft.ratioValue);
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="比例模块"
+        selectLabel="选择比例"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.ratios.map((ratio) => ({ id: ratio.id, label: ratio.displayName }))}
+        isNew={isNew}
+        onNew={() => {
+          setIsNew(true);
+          setDraft(createEmptyRatio());
+          setStatus("");
+        }}
+      />
+
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="比例名称"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <TextField
+          label="比例值"
+          value={draft.ratioValue}
+          onChange={(value) => setDraft({ ...draft, ratioValue: value })}
+        />
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+
+      <div className="checkbox-row">
+        <CheckboxField
+          label="启用"
+          checked={draft.enabled !== false}
+          onChange={(checked) => setDraft({ ...draft, enabled: checked })}
+        />
+        <CheckboxField
+          label="设为默认比例"
+          checked={draft.isDefault}
+          onChange={(checked) => setDraft({ ...draft, isDefault: checked })}
+        />
+      </div>
+
+      <TextareaField
+        label="比例提示词"
+        value={draft.ratioPrompt}
+        onChange={(value) => setDraft({ ...draft, ratioPrompt: value })}
+        translationText={translateToChineseReference(draft.ratioPrompt, ratioTranslationPairs)}
+      />
+
+      <EditorActions
+        isNew={isNew}
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+
+      {draft.id && (
+        <HistoryPanel
+          kind="ratios"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function EmotionalToneManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const firstTone =
+    catalog.emotionalTones.find((tone) => tone.id === "none") ??
+    catalog.emotionalTones[0] ??
+    createEmptyEmotionalTone();
+  const [selectedId, setSelectedId] = useState(firstTone.id);
+  const [isNew, setIsNew] = useState(false);
+  const [draft, setDraft] = useState<EmotionalToneModule>(() => ({ ...firstTone }));
+  const [avoidDraft, setAvoidDraft] = useState(() =>
+    (firstTone.avoidAddOn ?? []).join("\n"),
+  );
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected =
+      catalog.emotionalTones.find((tone) => tone.id === selectedId) ??
+      catalog.emotionalTones.find((tone) => tone.id === "none") ??
+      catalog.emotionalTones[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+      setAvoidDraft((selected.avoidAddOn ?? []).join("\n"));
+    }
+  }, [catalog.emotionalTones, isNew, selectedId]);
+
+  const isProtectedNone = !isNew && draft.id === "none";
+  const translationPairs = buildModuleTranslationPairs(
+    draft.displayName,
+    draft.englishName,
+  );
+
+  async function handleSave() {
+    const toneToSave: EmotionalToneModule = {
+      ...draft,
+      avoidAddOn: linesToArray(avoidDraft),
+    };
+
+    if (!validateId(toneToSave.id)) return;
+    if (
+      isNew &&
+      catalog.emotionalTones.some((tone) => tone.id === toneToSave.id)
+    ) {
+      window.alert("这个情绪增强 ID 已存在，请换一个 ID。");
+      return;
+    }
+
+    const saved = await saveEmotionalTone(toneToSave);
+    await reloadCatalog();
+    setSelectedId(saved.id);
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/emotional_tones/${saved.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew || isProtectedNone) return;
+    if (!window.confirm(`确定删除情绪增强：${draft.displayName}？`)) return;
+    await deleteEmotionalTone(draft.id);
+    await reloadCatalog();
+    setSelectedId("none");
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已删除 data/emotional_tones/${draft.id}.json`);
+  }
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="情绪增强模块"
+        selectLabel="选择情绪"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.emotionalTones.map((tone) => ({
+          id: tone.id,
+          label: tone.displayName,
+        }))}
+        isNew={isNew}
+        onNew={() => {
+          setIsNew(true);
+          setDraft(createEmptyEmotionalTone());
+          setAvoidDraft("");
+          setStatus("");
+        }}
+      />
+
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="中文名称"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <TextField
+          label="英文名称"
+          value={draft.englishName}
+          disabled={isProtectedNone}
+          onChange={(value) => setDraft({ ...draft, englishName: value })}
+        />
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          disabled={isProtectedNone}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+
+      {isProtectedNone ? (
+        <p className="helper-text protected-note">
+          “不启用”是系统默认兜底选项，只能修改中文名称，不能停用或删除。
+        </p>
+      ) : (
+        <CheckboxField
+          label="启用"
+          checked={draft.enabled !== false}
+          onChange={(checked) => setDraft({ ...draft, enabled: checked })}
+        />
+      )}
+
+      <TextareaField
+        label="核心情绪提示词"
+        value={draft.tonePrompt}
+        disabled={isProtectedNone}
+        onChange={(value) => setDraft({ ...draft, tonePrompt: value })}
+        translationText={translateToChineseReference(draft.tonePrompt, translationPairs)}
+        tall
+      />
+      <TextareaField
+        label="色彩情绪增强"
+        value={draft.colorAddOn ?? ""}
+        disabled={isProtectedNone}
+        onChange={(value) => setDraft({ ...draft, colorAddOn: value })}
+        translationText={translateToChineseReference(draft.colorAddOn ?? "", translationPairs)}
+      />
+      <TextareaField
+        label="Panel 1 情绪增强"
+        value={draft.panel1AddOn ?? ""}
+        disabled={isProtectedNone}
+        onChange={(value) => setDraft({ ...draft, panel1AddOn: value })}
+        translationText={translateToChineseReference(draft.panel1AddOn ?? "", translationPairs)}
+      />
+      <TextareaField
+        label="Panel 4 情绪增强"
+        value={draft.panel4AddOn ?? ""}
+        disabled={isProtectedNone}
+        onChange={(value) => setDraft({ ...draft, panel4AddOn: value })}
+        translationText={translateToChineseReference(draft.panel4AddOn ?? "", translationPairs)}
+      />
+      <TextareaField
+        label="摄影情绪增强"
+        value={draft.photographyAddOn ?? ""}
+        disabled={isProtectedNone}
+        onChange={(value) => setDraft({ ...draft, photographyAddOn: value })}
+        translationText={translateToChineseReference(
+          draft.photographyAddOn ?? "",
+          translationPairs,
+        )}
+      />
+      <TextareaField
+        label="情绪避免事项，每行一个"
+        value={avoidDraft}
+        disabled={isProtectedNone}
+        onChange={setAvoidDraft}
+        translationText={translateToChineseReference(avoidDraft, translationPairs)}
+      />
+
+      <EditorActions
+        isNew={isNew}
+        canDelete={!isProtectedNone}
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+
+      {draft.id && (
+        <HistoryPanel
+          kind="emotional_tones"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function PhotographyProfileManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const firstProfile =
+    catalog.photographyProfiles.find((profile) => profile.isDefault) ??
+    catalog.photographyProfiles[0] ??
+    createEmptyPhotographyProfile();
+  const [selectedId, setSelectedId] = useState(firstProfile.id);
+  const [isNew, setIsNew] = useState(false);
+  const [draft, setDraft] = useState<PhotographyProfileModule>(() => ({
+    ...firstProfile,
+  }));
+  const [avoidDraft, setAvoidDraft] = useState(() =>
+    (firstProfile.avoidPrompt ?? []).join("\n"),
+  );
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected =
+      catalog.photographyProfiles.find((profile) => profile.id === selectedId) ??
+      catalog.photographyProfiles.find((profile) => profile.isDefault) ??
+      catalog.photographyProfiles[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+      setAvoidDraft((selected.avoidPrompt ?? []).join("\n"));
+    }
+  }, [catalog.photographyProfiles, isNew, selectedId]);
+
+  const isCurrentDefault = !isNew && Boolean(draft.isDefault);
+  const translationPairs = buildModuleTranslationPairs(
+    draft.displayName,
+    draft.englishName,
+  );
+
+  async function handleSave() {
+    const profileToSave: PhotographyProfileModule = {
+      ...draft,
+      avoidPrompt: linesToArray(avoidDraft),
+    };
+
+    if (!validateId(profileToSave.id)) return;
+    if (
+      isNew &&
+      catalog.photographyProfiles.some(
+        (profile) => profile.id === profileToSave.id,
+      )
+    ) {
+      window.alert("这个摄影模式 ID 已存在，请换一个 ID。");
+      return;
+    }
+
+    const saved = await savePhotographyProfile(profileToSave);
+    await reloadCatalog();
+    setSelectedId(saved.id);
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/photography_profiles/${saved.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew || isCurrentDefault) return;
+    if (!window.confirm(`确定删除摄影模式：${draft.displayName}？`)) return;
+    await deletePhotographyProfile(draft.id);
+    await reloadCatalog();
+    setSelectedId(
+      catalog.photographyProfiles.find((profile) => profile.isDefault)?.id ?? "",
+    );
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已删除 data/photography_profiles/${draft.id}.json`);
+  }
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="摄影风格模式模块"
+        selectLabel="选择摄影模式"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.photographyProfiles.map((profile) => ({
+          id: profile.id,
+          label: profile.displayName,
+        }))}
+        isNew={isNew}
+        onNew={() => {
+          setIsNew(true);
+          setDraft(createEmptyPhotographyProfile());
+          setAvoidDraft("");
+          setStatus("");
+        }}
+      />
+
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="中文名称"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <TextField
+          label="英文名称"
+          value={draft.englishName}
+          onChange={(value) => setDraft({ ...draft, englishName: value })}
+        />
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+
+      <div className="checkbox-row">
+        <CheckboxField
+          label="启用"
+          checked={draft.enabled !== false}
+          disabled={isCurrentDefault}
+          onChange={(checked) => setDraft({ ...draft, enabled: checked })}
+        />
+        <CheckboxField
+          label="设为默认摄影模式"
+          checked={Boolean(draft.isDefault)}
+          disabled={isCurrentDefault}
+          onChange={(checked) =>
+            setDraft({
+              ...draft,
+              isDefault: checked,
+              enabled: checked ? true : draft.enabled,
+            })
+          }
+        />
+      </div>
+
+      {isCurrentDefault && (
+        <p className="helper-text protected-note">
+          当前默认摄影模式不能停用、取消默认或删除。请先把其他模式设为默认。
+        </p>
+      )}
+
+      <TextareaField
+        label="整体摄影风格"
+        value={draft.profilePrompt}
+        onChange={(value) => setDraft({ ...draft, profilePrompt: value })}
+        translationText={translateToChineseReference(
+          draft.profilePrompt,
+          translationPairs,
+        )}
+        tall
+      />
+      <TextareaField
+        label="构图方式"
+        value={draft.compositionPrompt}
+        onChange={(value) => setDraft({ ...draft, compositionPrompt: value })}
+        translationText={translateToChineseReference(
+          draft.compositionPrompt,
+          translationPairs,
+        )}
+      />
+      <TextareaField
+        label="光线与照明"
+        value={draft.lightingPrompt}
+        onChange={(value) => setDraft({ ...draft, lightingPrompt: value })}
+        translationText={translateToChineseReference(
+          draft.lightingPrompt,
+          translationPairs,
+        )}
+      />
+      <TextareaField
+        label="镜头与手机拍摄"
+        value={draft.cameraPrompt}
+        onChange={(value) => setDraft({ ...draft, cameraPrompt: value })}
+        translationText={translateToChineseReference(
+          draft.cameraPrompt,
+          translationPairs,
+        )}
+      />
+      <TextareaField
+        label="画面情绪与氛围"
+        value={draft.moodPrompt}
+        onChange={(value) => setDraft({ ...draft, moodPrompt: value })}
+        translationText={translateToChineseReference(
+          draft.moodPrompt,
+          translationPairs,
+        )}
+      />
+      <TextareaField
+        label="摄影避免事项，每行一个"
+        value={avoidDraft}
+        onChange={setAvoidDraft}
+        translationText={translateToChineseReference(
+          avoidDraft,
+          translationPairs,
+        )}
+      />
+
+      <EditorActions
+        isNew={isNew}
+        canDelete={!isCurrentDefault}
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+
+      {draft.id && (
+        <HistoryPanel
+          kind="photography_profiles"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function OutputModeManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const firstMode =
+    catalog.outputModes.find((outputMode) => outputMode.isDefault) ??
+    catalog.outputModes[0] ??
+    createEmptyOutputMode();
+  const [selectedId, setSelectedId] = useState(firstMode.id);
+  const [isNew, setIsNew] = useState(false);
+  const [draft, setDraft] = useState<OutputModeModule>(() => ({ ...firstMode }));
+  const [avoidDraft, setAvoidDraft] = useState(() =>
+    (firstMode.avoidPrompt ?? []).join("\n"),
+  );
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected =
+      catalog.outputModes.find((outputMode) => outputMode.id === selectedId) ??
+      catalog.outputModes.find((outputMode) => outputMode.isDefault) ??
+      catalog.outputModes[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+      setAvoidDraft((selected.avoidPrompt ?? []).join("\n"));
+    }
+  }, [catalog.outputModes, isNew, selectedId]);
+
+  const isCurrentDefault = !isNew && Boolean(draft.isDefault);
+  const translationPairs = buildModuleTranslationPairs(
+    draft.displayName,
+    draft.englishName,
+  );
+
+  async function handleSave() {
+    const outputModeToSave: OutputModeModule = {
+      ...draft,
+      avoidPrompt: linesToArray(avoidDraft),
+    };
+
+    if (!validateId(outputModeToSave.id)) return;
+    if (
+      isNew &&
+      catalog.outputModes.some(
+        (outputMode) => outputMode.id === outputModeToSave.id,
+      )
+    ) {
+      window.alert("这个输出方式 ID 已存在，请换一个 ID。");
+      return;
+    }
+
+    const saved = await saveOutputMode(outputModeToSave);
+    await reloadCatalog();
+    setSelectedId(saved.id);
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/output_modes/${saved.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew || isCurrentDefault) return;
+    if (!window.confirm(`确定删除输出方式：${draft.displayName}？`)) return;
+    await deleteOutputMode(draft.id);
+    await reloadCatalog();
+    setSelectedId(
+      catalog.outputModes.find((outputMode) => outputMode.isDefault)?.id ?? "",
+    );
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已删除 data/output_modes/${draft.id}.json`);
+  }
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="输出方式模块"
+        selectLabel="选择输出方式"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.outputModes.map((outputMode) => ({
+          id: outputMode.id,
+          label: outputMode.displayName,
+        }))}
+        isNew={isNew}
+        onNew={() => {
+          setIsNew(true);
+          setDraft(createEmptyOutputMode());
+          setAvoidDraft("");
+          setStatus("");
+        }}
+      />
+
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="中文名称"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <TextField
+          label="英文名称"
+          value={draft.englishName}
+          onChange={(value) => setDraft({ ...draft, englishName: value })}
+        />
+        <SelectField
+          label="输出分类"
+          value={draft.category}
+          onChange={(value) =>
+            setDraft({
+              ...draft,
+              category: value as OutputModeModule["category"],
+            })
+          }
+        >
+          <option value="photographic">摄影类 photographic</option>
+          <option value="technical">技术类 technical</option>
+        </SelectField>
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+
+      <div className="checkbox-row">
+        <CheckboxField
+          label="启用"
+          checked={draft.enabled !== false}
+          disabled={isCurrentDefault}
+          onChange={(checked) => setDraft({ ...draft, enabled: checked })}
+        />
+        <CheckboxField
+          label="设为默认输出方式"
+          checked={Boolean(draft.isDefault)}
+          disabled={isCurrentDefault}
+          onChange={(checked) =>
+            setDraft({
+              ...draft,
+              isDefault: checked,
+              enabled: checked ? true : draft.enabled,
+            })
+          }
+        />
+      </div>
+
+      {isCurrentDefault && (
+        <p className="helper-text protected-note">
+          当前默认输出方式不能停用、取消默认或删除。请先把其他方式设为默认。
+        </p>
+      )}
+
+      <TextareaField
+        label="核心输出提示词"
+        value={draft.outputPrompt}
+        onChange={(value) => setDraft({ ...draft, outputPrompt: value })}
+        translationText={translateToChineseReference(
+          draft.outputPrompt,
+          translationPairs,
+        )}
+        tall
+      />
+      <TextareaField
+        label="一致性要求"
+        value={draft.consistencyPrompt ?? ""}
+        onChange={(value) => setDraft({ ...draft, consistencyPrompt: value })}
+        translationText={translateToChineseReference(
+          draft.consistencyPrompt ?? "",
+          translationPairs,
+        )}
+      />
+      <TextareaField
+        label="布局要求"
+        value={draft.layoutPrompt ?? ""}
+        onChange={(value) => setDraft({ ...draft, layoutPrompt: value })}
+        translationText={translateToChineseReference(
+          draft.layoutPrompt ?? "",
+          translationPairs,
+        )}
+      />
+      <TextareaField
+        label="输出避免事项，每行一个"
+        value={avoidDraft}
+        onChange={setAvoidDraft}
+        translationText={translateToChineseReference(
+          avoidDraft,
+          translationPairs,
+        )}
+      />
+
+      <EditorActions
+        isNew={isNew}
+        canDelete={!isCurrentDefault}
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+
+      {draft.id && (
+        <HistoryPanel
+          kind="output_modes"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function CustomPromptManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const firstPrompt = catalog.customPrompts[0] ?? createEmptyCustomPrompt();
+  const [selectedId, setSelectedId] = useState(firstPrompt.id);
+  const [isNew, setIsNew] = useState(catalog.customPrompts.length === 0);
+  const [draft, setDraft] = useState<CustomPromptModule>(() => ({
+    ...firstPrompt,
+  }));
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected =
+      catalog.customPrompts.find((customPrompt) => customPrompt.id === selectedId) ??
+      catalog.customPrompts[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+    }
+  }, [catalog.customPrompts, isNew, selectedId]);
+
+  async function handleSave() {
+    if (!validateId(draft.id)) return;
+    if (!draft.displayName.trim()) {
+      window.alert("请填写自定义提示词标题。");
+      return;
+    }
+    if (!draft.promptText.trim()) {
+      window.alert("请填写自定义提示词内容。");
+      return;
+    }
+    if (
+      isNew &&
+      catalog.customPrompts.some(
+        (customPrompt) => customPrompt.id === draft.id,
+      )
+    ) {
+      window.alert("这个用户自定义 ID 已存在，请换一个 ID。");
+      return;
+    }
+
+    const saved = await saveCustomPrompt(draft);
+    await reloadCatalog();
+    setSelectedId(saved.id);
+    setDraft({ ...saved });
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/custom_prompts/${saved.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew) return;
+    if (!window.confirm(`确定删除用户自定义提示词“${draft.displayName}”吗？`)) {
+      return;
+    }
+    await deleteCustomPrompt(draft.id);
+    await reloadCatalog();
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(
+      `已删除 data/custom_prompts/${draft.id}.json；删除前版本仍保留在历史检查点中`,
+    );
+  }
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="用户自定义提示词"
+        selectLabel="选择自定义标题"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.customPrompts.map((customPrompt) => ({
+          id: customPrompt.id,
+          label: customPrompt.displayName,
+        }))}
+        isNew={isNew}
+        onNew={() => {
+          setIsNew(true);
+          setSelectedId("");
+          setDraft(createEmptyCustomPrompt());
+          setStatus("");
+        }}
+      />
+
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="标题"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+
+      <CheckboxField
+        label="启用"
+        checked={draft.enabled !== false}
+        onChange={(checked) => setDraft({ ...draft, enabled: checked })}
+      />
+
+      <TextareaField
+        label="自定义提示词"
+        value={draft.promptText}
+        onChange={(value) => setDraft({ ...draft, promptText: value })}
+        translationText={translateToChineseReference(draft.promptText)}
+        tall
+      />
+
+      <EditorActions
+        isNew={isNew}
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+
+      {draft.id && (
+        <HistoryPanel
+          kind="custom_prompts"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setIsNew(false);
+            setSelectedId(draft.id);
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function CommonPromptManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const [selectedId, setSelectedId] = useState(catalog.commonPrompts[0]?.id ?? "");
+  const [draft, setDraft] = useState("");
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+  const selectedPrompt =
+    catalog.commonPrompts.find((prompt) => prompt.id === selectedId) ?? catalog.commonPrompts[0];
+
+  useEffect(() => {
+    if (selectedPrompt) {
+      setSelectedId(selectedPrompt.id);
+      setDraft(selectedPrompt.content);
+    }
+  }, [selectedPrompt]);
+
+  async function handleSave() {
+    if (!selectedPrompt) return;
+    await saveCommonPrompt(selectedPrompt.id, draft);
+    await reloadCatalog();
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/common/${selectedPrompt.filename}`);
+  }
+
+  return (
+    <section className="editor-panel">
+      <div className="editor-toolbar">
+        <div>
+          <p className="eyebrow">Common Prompts</p>
+          <h2>固定提示词模块</h2>
+        </div>
+        <SelectField label="选择固定模块" value={selectedId} onChange={setSelectedId}>
+          {catalog.commonPrompts.map((prompt) => (
+            <option key={prompt.id} value={prompt.id}>
+              {prompt.displayName}
+            </option>
+          ))}
+        </SelectField>
+      </div>
+
+      <TextareaField
+        label={selectedPrompt ? selectedPrompt.filename : "固定提示词"}
+        value={draft}
+        onChange={setDraft}
+        tall
+        translationText={translateToChineseReference(draft)}
+      />
+
+      {selectedPrompt?.deprecated && (
+        <p className="technical-mode-note">
+          这是旧版四宫格规则备份，当前组合器不再使用；对应规则已迁移到“输出方式”模块。
+        </p>
+      )}
+
+      <div className="editor-actions">
+        <button type="button" className="primary" onClick={() => void handleSave()}>
+          <Save aria-hidden="true" />
+          保存固定提示词
+        </button>
+        {status && <span className="save-status">{status}</span>}
+      </div>
+
+      {selectedPrompt && (
+        <HistoryPanel
+          kind="common"
+          moduleId={selectedPrompt.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
+function HistoryPanel({
+  kind,
+  moduleId,
+  refreshKey,
+  onRestore,
+}: {
+  kind: ModuleHistoryKind;
+  moduleId: string;
+  refreshKey: number;
+  onRestore: () => Promise<void>;
+}) {
+  const [checkpoints, setCheckpoints] = useState<HistoryCheckpoint[]>([]);
+  const [selectedId, setSelectedId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
+
+  async function reloadHistory() {
+    if (!moduleId) return;
+    setLoading(true);
+    try {
+      const nextCheckpoints = await fetchHistory(kind, moduleId);
+      setCheckpoints(nextCheckpoints);
+      setSelectedId((currentId) =>
+        nextCheckpoints.some((checkpoint) => checkpoint.id === currentId)
+          ? currentId
+          : (nextCheckpoints[0]?.id ?? ""),
+      );
+      setStatus("");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "历史检查点读取失败");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    void reloadHistory();
+  }, [kind, moduleId, refreshKey]);
+
+  const selectedCheckpoint =
+    checkpoints.find((checkpoint) => checkpoint.id === selectedId) ?? checkpoints[0];
+
+  async function handleRestore() {
+    if (!selectedCheckpoint) return;
+    if (!window.confirm("确定恢复到这个历史检查点？当前版本会先自动保存为新的检查点。")) {
+      return;
+    }
+
+    await restoreCheckpoint(kind, moduleId, selectedCheckpoint.id);
+    await onRestore();
+    await reloadHistory();
+    setStatus("恢复完成");
+  }
+
+  async function handleDelete() {
+    if (!selectedCheckpoint) return;
+    if (!window.confirm("确定删除这个历史检查点？")) return;
+
+    await deleteCheckpoint(kind, moduleId, selectedCheckpoint.id);
+    await reloadHistory();
+    setStatus("检查点已删除");
+  }
+
+  return (
+    <section className="history-panel">
+      <div className="history-header">
+        <div>
+          <p className="eyebrow">History</p>
+          <h2>历史检查点</h2>
+        </div>
+        <button type="button" onClick={() => void reloadHistory()}>
+          {loading ? <Loader2 className="spin" aria-hidden="true" /> : <Layers3 aria-hidden="true" />}
+          刷新
+        </button>
+      </div>
+
+      {checkpoints.length === 0 ? (
+        <p className="history-empty">还没有检查点。第一次修改并保存后，会自动记录保存前版本。</p>
+      ) : (
+        <>
+          <div className="history-list">
+            {checkpoints.map((checkpoint) => (
+              <button
+                key={checkpoint.id}
+                type="button"
+                className={checkpoint.id === selectedCheckpoint?.id ? "active" : ""}
+                onClick={() => setSelectedId(checkpoint.id)}
+              >
+                <span>{formatDateTime(checkpoint.createdAt)}</span>
+                <strong>{checkpoint.label}</strong>
+              </button>
+            ))}
+          </div>
+
+          {selectedCheckpoint && (
+            <div className="history-preview">
+              <div className="history-actions">
+                <button type="button" className="primary" onClick={() => void handleRestore()}>
+                  <Save aria-hidden="true" />
+                  恢复此检查点
+                </button>
+                <button type="button" className="danger" onClick={() => void handleDelete()}>
+                  <Trash2 aria-hidden="true" />
+                  删除检查点
+                </button>
+              </div>
+              <textarea
+                readOnly
+                className="editor-textarea tall"
+                value={formatCheckpointSnapshot(selectedCheckpoint)}
+                spellCheck={false}
+              />
+            </div>
+          )}
+        </>
+      )}
+
+      {status && <p className="history-status">{status}</p>}
+    </section>
+  );
+}
+
+function EditorToolbar({
+  title,
+  selectLabel,
+  selectedId,
+  onSelectedId,
+  items,
+  isNew,
+  onNew,
+}: {
+  title: string;
+  selectLabel: string;
+  selectedId: string;
+  onSelectedId: (id: string) => void;
+  items: Array<{ id: string; label: string }>;
+  isNew: boolean;
+  onNew: () => void;
+}) {
+  return (
+    <div className="editor-toolbar">
+      <div>
+        <p className="eyebrow">{isNew ? "New Module" : "Edit Module"}</p>
+        <h2>{title}</h2>
+      </div>
+      <div className="toolbar-actions">
+        {!isNew && (
+          <SelectField label={selectLabel} value={selectedId} onChange={onSelectedId}>
+            {items.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.label}
+              </option>
+            ))}
+          </SelectField>
+        )}
+        <button type="button" onClick={onNew}>
+          <Plus aria-hidden="true" />
+          新增
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function EditorActions({
+  isNew,
+  canDelete = true,
+  status,
+  onSave,
+  onDelete,
+}: {
+  isNew: boolean;
+  canDelete?: boolean;
+  status: string;
+  onSave: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="editor-actions">
+      <button type="button" className="primary" onClick={onSave}>
+        <Save aria-hidden="true" />
+        保存
+      </button>
+      {!isNew && canDelete && (
+        <button type="button" className="danger" onClick={onDelete}>
+          <Trash2 aria-hidden="true" />
+          删除
+        </button>
+      )}
+      {status && <span className="save-status">{status}</span>}
+    </div>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="metric">
+      <span>{label}</span>
+      <strong>{value}</strong>
+    </div>
+  );
+}
+
+function ValidationBadge({ prompt }: { prompt: PromptBuildResult }) {
+  if (prompt.validation.valid) {
+    return (
+      <div className="status-pill valid">
+        <CheckCircle2 aria-hidden="true" />
+        校验通过
+      </div>
+    );
+  }
+
+  return (
+    <div className="status-pill invalid">
+      <AlertTriangle aria-hidden="true" />
+      校验未通过
+    </div>
+  );
+}
+
+function DownloadOrSpinner({ active }: { active: boolean }) {
+  return active ? (
+    <Loader2 className="spin" aria-hidden="true" />
+  ) : (
+    <Download aria-hidden="true" />
+  );
+}
+
+function SelectField({
+  label,
+  value,
+  onChange,
+  children,
+  disabled,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  children: ReactNode;
+  disabled?: boolean;
+}) {
+  return (
+    <label className="field">
+      <span>{label}</span>
+      <select
+        value={value}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.value)}
+      >
+        {children}
+      </select>
+    </label>
+  );
+}
+
+function TextField({
+  label,
+  value,
+  onChange,
+  disabled,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <label className="field">
+      <span>{label}</span>
+      <input
+        value={value}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.value)}
+      />
+    </label>
+  );
+}
+
+function NumberField({
+  label,
+  value,
+  onChange,
+  disabled,
+}: {
+  label: string;
+  value?: number;
+  onChange: (value: number | undefined) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <label className="field">
+      <span>{label}</span>
+      <input
+        type="number"
+        value={value ?? ""}
+        disabled={disabled}
+        onChange={(event) =>
+          onChange(event.target.value ? Number(event.target.value) : undefined)
+        }
+      />
+    </label>
+  );
+}
+
+function CheckboxField({
+  label,
+  checked,
+  onChange,
+  disabled,
+}: {
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <label className="checkbox-field">
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.checked)}
+      />
+      <span>{label}</span>
+    </label>
+  );
+}
+
+function SyncedTextareaPair({
+  containerClassName,
+  columnClassName,
+  labelClassName,
+  leftLabel,
+  rightLabel,
+  leftValue,
+  rightValue,
+  onLeftChange,
+  textareaClassName,
+  leftReadOnly,
+  rightReadOnly,
+}: {
+  containerClassName: string;
+  columnClassName: string;
+  labelClassName?: string;
+  leftLabel: string;
+  rightLabel: string;
+  leftValue: string;
+  rightValue: string;
+  onLeftChange?: (value: string) => void;
+  textareaClassName?: string;
+  leftReadOnly?: boolean;
+  rightReadOnly?: boolean;
+}) {
+  const leftRef = useRef<HTMLTextAreaElement | null>(null);
+  const rightRef = useRef<HTMLTextAreaElement | null>(null);
+  const syncingRef = useRef(false);
+
+  function syncScroll(source: HTMLTextAreaElement, target: HTMLTextAreaElement | null) {
+    if (!target || syncingRef.current) return;
+
+    const sourceScrollable = source.scrollHeight - source.clientHeight;
+    const targetScrollable = target.scrollHeight - target.clientHeight;
+    const ratio = sourceScrollable > 0 ? source.scrollTop / sourceScrollable : 0;
+
+    syncingRef.current = true;
+    target.scrollTop = targetScrollable > 0 ? ratio * targetScrollable : 0;
+    window.requestAnimationFrame(() => {
+      syncingRef.current = false;
+    });
+  }
+
+  useEffect(() => {
+    const left = leftRef.current;
+    const right = rightRef.current;
+    if (!left || !right) return;
+
+    syncScroll(left, right);
+  }, [leftValue, rightValue]);
+
+  return (
+    <div className={containerClassName}>
+      <label className={columnClassName}>
+        <span className={labelClassName}>{leftLabel}</span>
+        <textarea
+          ref={leftRef}
+          readOnly={leftReadOnly}
+          className={textareaClassName}
+          value={leftValue}
+          onChange={(event) => onLeftChange?.(event.target.value)}
+          onScroll={(event) => syncScroll(event.currentTarget, rightRef.current)}
+          spellCheck={false}
+        />
+      </label>
+      <label className={columnClassName}>
+        <span className={labelClassName}>{rightLabel}</span>
+        <textarea
+          ref={rightRef}
+          readOnly={rightReadOnly}
+          className={textareaClassName}
+          value={rightValue}
+          onScroll={(event) => syncScroll(event.currentTarget, leftRef.current)}
+          spellCheck={false}
+        />
+      </label>
+    </div>
+  );
+}
+
+function useTranslatedText(sourceText: string, fallbackText: string) {
+  const [state, setState] = useState<{
+    text: string;
+    status: TranslationStatus;
+  }>({
+    text: fallbackText,
+    status: sourceText.trim() ? "loading" : "idle",
+  });
+
+  useEffect(() => {
+    const normalizedText = sourceText.replace(/\r\n/g, "\n").trim();
+    if (!normalizedText) {
+      setState({ text: "", status: "idle" });
+      return;
+    }
+
+    const cached = clientTranslationCache.get(normalizedText);
+    if (cached !== undefined) {
+      setState({ text: cached, status: "google" });
+      return;
+    }
+
+    let cancelled = false;
+    setState({ text: fallbackText, status: "loading" });
+
+    const timeoutId = window.setTimeout(() => {
+      translateText(normalizedText)
+        .then((translatedText) => {
+          if (cancelled) return;
+          clientTranslationCache.set(normalizedText, translatedText);
+          setState({ text: translatedText, status: "google" });
+        })
+        .catch(() => {
+          if (cancelled) return;
+          setState({ text: fallbackText, status: "fallback" });
+        });
+    }, 650);
+
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timeoutId);
+    };
+  }, [fallbackText, sourceText]);
+
+  return state;
+}
+
+function TextareaField({
+  label,
+  value,
+  onChange,
+  tall,
+  translationText,
+  disabled,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  tall?: boolean;
+  translationText?: string;
+  disabled?: boolean;
+}) {
+  const textareaClassName = tall ? "editor-textarea tall" : "editor-textarea";
+  const translatedText = useTranslatedText(
+    translationText !== undefined ? value : "",
+    translationText ?? "",
+  );
+
+  if (translationText !== undefined) {
+    return (
+      <div className="field">
+        <span>{label}</span>
+          <SyncedTextareaPair
+            containerClassName="editor-translation-grid"
+            columnClassName="translation-column"
+            leftLabel={disabled ? "英文（系统锁定）" : "英文（可编辑）"}
+            rightLabel={`中文参考（只读，不保存）${formatTranslationStatus(translatedText.status)}`}
+            leftValue={value}
+            rightValue={translatedText.text}
+            onLeftChange={disabled ? undefined : onChange}
+            textareaClassName={textareaClassName}
+            leftReadOnly={disabled}
+            rightReadOnly
+        />
+      </div>
+    );
+  }
+
+  return (
+    <label className="field">
+      <span>{label}</span>
+      <textarea
+        className={textareaClassName}
+        value={value}
+        readOnly={disabled}
+        onChange={(event) => onChange(event.target.value)}
+        spellCheck={false}
+      />
+    </label>
+  );
+}
+
+function formatTranslationStatus(status: TranslationStatus): string {
+  if (status === "loading") return " · 翻译中";
+  if (status === "google") return " · Google";
+  if (status === "fallback") return " · 本地回退";
+  return "";
+}
+
+async function copyText(text: string): Promise<void> {
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand("copy");
+  textarea.remove();
+}
+
+function createEmptyStyle(): StyleModule {
+  return {
+    id: "",
+    displayName: "",
+    englishName: "",
+    stylePrompt: "",
+    inspirationSources: [],
+    specificElements: [],
+    materials: [],
+    colors: [],
+    avoid: [],
+    enabled: true,
+  };
+}
+
+function createEmptyLightingType(): LightingTypeModule {
+  return {
+    id: "",
+    displayName: "",
+    englishName: "",
+    typePrompt: "",
+    enabled: true,
+  };
+}
+
+function createEmptyRatio(): RatioModule {
+  return {
+    id: "",
+    displayName: "",
+    ratioValue: "",
+    isDefault: false,
+    ratioPrompt: "",
+    enabled: true,
+  };
+}
+
+function createEmptyEmotionalTone(): EmotionalToneModule {
+  return {
+    id: "",
+    displayName: "",
+    englishName: "",
+    isDefault: false,
+    enabled: true,
+    tonePrompt: "",
+    colorAddOn: "",
+    panel1AddOn: "",
+    panel4AddOn: "",
+    photographyAddOn: "",
+    avoidAddOn: [],
+  };
+}
+
+function createEmptyPhotographyProfile(): PhotographyProfileModule {
+  return {
+    id: "",
+    displayName: "",
+    englishName: "",
+    isDefault: false,
+    enabled: true,
+    profilePrompt: "",
+    compositionPrompt: "",
+    lightingPrompt: "",
+    cameraPrompt: "",
+    moodPrompt: "",
+    avoidPrompt: [],
+  };
+}
+
+function createEmptyOutputMode(): OutputModeModule {
+  return {
+    id: "",
+    displayName: "",
+    englishName: "",
+    category: "photographic",
+    isDefault: false,
+    enabled: true,
+    outputPrompt: "",
+    consistencyPrompt: "",
+    layoutPrompt: "",
+    avoidPrompt: [],
+  };
+}
+
+function createEmptyCustomPrompt(): CustomPromptModule {
+  return {
+    id: "",
+    displayName: "",
+    promptText: "",
+    enabled: true,
+  };
+}
+
+function styleListsToText(style: StyleModule) {
+  return {
+    inspirationSources: style.inspirationSources.join("\n"),
+    specificElements: style.specificElements.join("\n"),
+    materials: style.materials.join("\n"),
+    colors: style.colors.join("\n"),
+    avoid: style.avoid.join("\n"),
+  };
+}
+
+function linesToArray(value: string): string[] {
+  return value
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function validateId(id: string): boolean {
+  if (!idPattern.test(id)) {
+    window.alert("ID 只能使用小写英文字母、数字和下划线，例如 art_deco。");
+    return false;
+  }
+  return true;
+}
+
+function addFilenameSuffix(filename: string, suffix: string): string {
+  return filename.endsWith(".txt")
+    ? filename.replace(/\.txt$/, `${suffix}.txt`)
+    : `${filename}${suffix}`;
+}
+
+function buildModuleTranslationPairs(
+  displayName: string,
+  englishName?: string,
+): Array<[string, string]> {
+  const pairs: Array<[string, string]> = [];
+  if (englishName?.trim() && displayName.trim()) {
+    pairs.push([englishName.trim(), displayName.trim()]);
+  }
+  return pairs;
+}
+
+function formatDateTime(iso: string): string {
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  }).format(new Date(iso));
+}
+
+function formatCheckpointSnapshot(checkpoint: HistoryCheckpoint): string {
+  if (
+    typeof checkpoint.snapshot === "object" &&
+    checkpoint.snapshot !== null &&
+    "content" in checkpoint.snapshot
+  ) {
+    const snapshot = checkpoint.snapshot as CommonPromptModule;
+    return snapshot.content;
+  }
+
+  return JSON.stringify(checkpoint.snapshot, null, 2);
+}

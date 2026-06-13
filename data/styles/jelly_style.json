@@ -1,0 +1,13 @@
+{
+  "id": "jelly_style",
+  "displayName": "复古果冻风",
+  "englishName": "Jelly Style",
+  "stylePrompt": "Create a completely original Jelly Style lighting product inspired by translucent color, soft retro-pop geometry, and optical refraction. Use colored glass, acrylic, or resin to make light pass through layered volumes and cast controlled chromatic shadows. The object should feel buoyant, playful, and sophisticated, balancing nostalgic color with contemporary detailing. Ensure heat management, optical clarity, and structural stability are believable.",
+  "inspirationSources": ["Gelatin Desserts", "Colored Glass Blocks", "1970s Lucite Furniture", "Soap Bubbles", "Hard Candy", "Liquid Refraction", "Transparent Inflatable Forms", "Pop Art Color"],
+  "specificElements": ["Layered translucent discs producing colored shadows", "A rounded acrylic body with a glowing core", "A glass gradient from amber to pink", "A clear support making the diffuser appear to float", "A lens-like curved surface bending light", "Stacked jelly-like modules with crisp interfaces"],
+  "materials": ["Cast Acrylic", "Colored Borosilicate Glass", "Optical Resin", "Translucent Polycarbonate", "Opal Glass", "Polished Aluminum", "Silicone Diffuser"],
+  "colors": ["Transparent Amber", "Cherry Red", "Aqua Blue", "Grape Purple", "Lime Green", "Rose Pink", "Clear Crystal"],
+  "avoid": ["Cloudy low-grade plastic", "Unsafe heat near resin", "Overly childish candy shapes", "Uncontrolled rainbow effects", "Heavy opaque construction", "Fake glass appearance", "Too many colors in one object"],
+  "sortOrder": 22,
+  "enabled": true
+}

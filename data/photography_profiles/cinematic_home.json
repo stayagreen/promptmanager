@@ -1,0 +1,22 @@
+{
+  "id": "cinematic_home",
+  "displayName": "电影感家居模式",
+  "englishName": "Cinematic Home Photography",
+  "isDefault": false,
+  "enabled": true,
+  "profilePrompt": "The photography should feel cinematic, emotionally immersive, and visually atmospheric while remaining realistic. The lamp should feel like part of a beautifully directed scene in a refined home interior.",
+  "compositionPrompt": "Use deliberate cinematic framing, strong visual storytelling, tasteful depth, layered foreground and background relationship, and emotionally expressive spatial composition. The lamp must remain clearly visible and dominant.",
+  "lightingPrompt": "Use moody but controlled residential lighting, elegant highlights, believable shadows, and atmospheric contrast. The light should feel emotionally rich without becoming theatrical or fake.",
+  "cameraPrompt": "Shot on iPhone 17 Pro Max with realistic mobile photography behavior, but guided by the visual instincts of a cinematic interior photographer.",
+  "moodPrompt": "The mood should feel intimate, memorable, atmospheric, emotionally deep, and visually rich. The image should feel like a still frame from a beautifully lit luxury home film scene.",
+  "avoidPrompt": [
+    "Overly dark unreadable image",
+    "Fake movie color grading",
+    "Excessive dramatic shadows",
+    "Unrealistic spotlight effects",
+    "Loss of product detail",
+    "CGI cinematic fantasy look",
+    "Messy low-light noise feeling"
+  ],
+  "sortOrder": 6
+}

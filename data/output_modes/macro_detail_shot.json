@@ -1,0 +1,22 @@
+{
+  "id": "macro_detail_shot",
+  "displayName": "微距细节图",
+  "englishName": "Macro Detail Shot",
+  "category": "photographic",
+  "isDefault": false,
+  "enabled": true,
+  "outputPrompt": "Generate one macro product detail photography image of the lamp. Focus on craftsmanship, material texture, surface treatment, connection structure, lampshade edge, metal joint, ceramic detail, glass texture, wood grain, fabric weave, or other premium design details. The image should feel close, tactile, refined, and commercially useful for showing product quality.",
+  "consistencyPrompt": "The macro detail must belong to the selected lamp design. The material and design language must match the overall style and lighting type.",
+  "layoutPrompt": "Single macro image. No grid. No collage. Shallow depth of field is allowed, but the key detail must remain sharp and clear.",
+  "avoidPrompt": [
+    "Full-room wide shot",
+    "Unclear detail",
+    "Unrelated decorative object",
+    "Overly abstract macro",
+    "Loss of product identity",
+    "Text",
+    "Logo",
+    "Watermark"
+  ],
+  "sortOrder": 4
+}

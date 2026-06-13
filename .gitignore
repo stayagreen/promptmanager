@@ -1,0 +1,17 @@
+node_modules
+dist
+.vite
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+vite-dev.log
+vite-dev.err.log
+local-server.log
+local-server.err.log
+.promptmanager.pid
+.tools/
+data/history/
+data/product_projects/*
+!data/product_projects/.gitkeep

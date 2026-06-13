@@ -1,0 +1,14 @@
+{
+  "id": "none",
+  "displayName": "不启用",
+  "englishName": "None",
+  "isDefault": true,
+  "enabled": false,
+  "tonePrompt": "",
+  "colorAddOn": "",
+  "panel1AddOn": "",
+  "panel4AddOn": "",
+  "photographyAddOn": "",
+  "avoidAddOn": [],
+  "sortOrder": 0
+}

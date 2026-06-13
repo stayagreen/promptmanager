@@ -1,0 +1,23 @@
+{
+  "id": "four_panel_storyboard",
+  "displayName": "2×2四宫格产品摄影",
+  "englishName": "2×2 Four-Panel Product Storyboard",
+  "category": "photographic",
+  "isDefault": true,
+  "enabled": true,
+  "outputPrompt": "Generate a single image divided into a seamless 2×2 product storyboard grid. The image must contain four panels in one canvas. All four panels must show the EXACT SAME lamp. The shape, material, color, proportion, lampshade details, arms, base, mounting, and structural logic must remain completely consistent across all four panels. Only the camera angle, lighting condition, distance, and photographic composition may change. Panel 1: daytime interior context shot, lighting off, the lamp is the main subject, occupies a significant portion of the frame, and remains perfectly sharp and in focus while the recognizable background is slightly blurred with soft natural bokeh. Panel 2: macro craftsmanship detail shot, showing material texture, surface treatment, connection details, and construction logic. Panel 3: hero perspective shot, emphasizing silhouette, balance, curves, geometry, and design language. Panel 4: illuminated atmosphere shot, lamp turned on, showing warm ambient lighting, soft shadows, material interaction, and emotional mood.",
+  "consistencyPrompt": "The same lamp design must appear in all four panels. Do not change the number of lamp heads, lampshade shape, material, color, structure, mounting method, or design language between panels.",
+  "layoutPrompt": "The final image must be a true seamless 2×2 grid. No spacing between panels. No gutters. No margins. No white borders. No black borders. No frames. No separators. No captions. No text. No labels. No logos. No watermark. Each panel must directly touch adjacent panels. The grid must occupy 100% of the canvas area.",
+  "avoidPrompt": [
+    "Four different lamp designs",
+    "Inconsistent materials between panels",
+    "Panel spacing",
+    "White borders",
+    "Black borders",
+    "Text captions",
+    "Logo",
+    "Watermark",
+    "Random collage layout"
+  ],
+  "sortOrder": 1
+}

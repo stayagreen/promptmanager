@@ -1,0 +1,22 @@
+{
+  "id": "luxury_product_catalog",
+  "displayName": "奢侈品牌产品摄影模式",
+  "englishName": "Luxury Product Catalog Photography",
+  "isDefault": false,
+  "enabled": true,
+  "profilePrompt": "The photography should feel like a luxury product catalog or premium designer lighting campaign. The lamp must be the dominant visual subject, with exceptionally clear material rendering, elegant styling, and strong commercial polish.",
+  "compositionPrompt": "Use product-centered composition with clean framing, strong subject emphasis, minimal distraction, controlled background styling, and clear visibility of the lamp structure. The product should feel hero-level and commercially powerful.",
+  "lightingPrompt": "Use refined highlights, controlled reflections, accurate shadow modeling, and luxurious material clarity. The scene should feel premium, clean, and high-end without becoming artificial.",
+  "cameraPrompt": "Shot on iPhone 17 Pro Max with realistic smartphone photography feel, but directed with the precision of a luxury brand product shoot.",
+  "moodPrompt": "The mood should feel premium, confident, sharp, polished, and commercially aspirational. The viewer should immediately perceive the lamp as a high-value designer product.",
+  "avoidPrompt": [
+    "Weak product presence",
+    "Messy background styling",
+    "Low-end catalog feel",
+    "Grey dull atmosphere",
+    "Unclear material texture",
+    "Overly casual blogger framing",
+    "Cheap e-commerce marketplace look"
+  ],
+  "sortOrder": 5
+}

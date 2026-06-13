@@ -1,0 +1,22 @@
+{
+  "id": "xiaohongshu_home_blogger",
+  "displayName": "小红书家居博主模式",
+  "englishName": "Xiaohongshu Home Blogger Style",
+  "isDefault": false,
+  "enabled": true,
+  "profilePrompt": "The photography should feel like a high-performing Xiaohongshu home blogger's real home tour content. The image should look natural, warm, stylish, realistic, and emotionally engaging. It should feel like a beautiful real home moment rather than a formal studio shoot.",
+  "compositionPrompt": "Use a casual but carefully composed smartphone photography composition. The lamp should remain the main subject, but the surrounding home environment should feel lived-in, tasteful, and aspirational. The composition should feel natural, not overly staged.",
+  "lightingPrompt": "Use soft natural daylight, gentle highlights, warm residential light, and clean shadows. The image should feel bright, breathable, and inviting.",
+  "cameraPrompt": "Shot on iPhone 17 Pro Max with realistic smartphone optics, natural HDR, slight background blur, true-to-life scale, and authentic handheld home-tour feeling.",
+  "moodPrompt": "The mood should feel fresh, warm, relatable, premium, and easy to imagine in a real home. The viewer should feel inspired and want to save the image.",
+  "avoidPrompt": [
+    "Overly staged showroom feeling",
+    "Cold hotel lobby feeling",
+    "CGI render look",
+    "Flat grey atmosphere",
+    "Messy background",
+    "Fake influencer aesthetic",
+    "Overly polished advertising look"
+  ],
+  "sortOrder": 2
+}

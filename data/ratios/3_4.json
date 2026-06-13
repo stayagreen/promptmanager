@@ -1,0 +1,9 @@
+{
+  "id": "3_4",
+  "displayName": "3:4 电商图",
+  "ratioValue": "3:4",
+  "isDefault": false,
+  "ratioPrompt": "Generate a single image. Aspect Ratio 3:4. The storyboard must fill the entire canvas. Suitable for e-commerce product listings, product catalogs, detail pages, portfolio presentations, and commercial product display.",
+  "enabled": true,
+  "sortOrder": 1
+}

@@ -1,0 +1,22 @@
+{
+  "id": "three_view_drawing",
+  "displayName": "三视图",
+  "englishName": "Three-View Drawing",
+  "category": "technical",
+  "isDefault": false,
+  "enabled": true,
+  "outputPrompt": "Generate a clean three-view design drawing of the lamp. Show front view, side view, and top view of the same lamp design. The three views must be consistent with each other and clearly communicate the lamp's structure, proportion, silhouette, mounting method, and main components. The drawing should be suitable for product development, supplier communication, 3D modeling reference, and sample production discussion.",
+  "consistencyPrompt": "Front view, side view, and top view must describe the same lamp. Do not change the number of lamp heads, shade shapes, base structure, suspension method, or proportions between views.",
+  "layoutPrompt": "Use a clean technical layout with three clearly separated views. Prefer white or light neutral background, precise linework, simple shadows if needed, and clear product readability.",
+  "avoidPrompt": [
+    "Lifestyle scene",
+    "Interior photography",
+    "Different designs in different views",
+    "Messy annotations",
+    "Inconsistent proportions",
+    "Decorative background",
+    "Unclear silhouette",
+    "CG fantasy structure"
+  ],
+  "sortOrder": 6
+}
