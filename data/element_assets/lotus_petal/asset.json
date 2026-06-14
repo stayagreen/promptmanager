@@ -1,0 +1,15 @@
+{
+  "id": "lotus_petal",
+  "displayName": "莲花瓣",
+  "category": "flower",
+  "description": "clean overlapping lotus petals with a quiet symmetrical rhythm, translated into smooth manufacturable layers",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "around the shade, diffuser, canopy, or central body",
+  "defaultStrength": "medium",
+  "defaultQuantity": "three to eight simplified petal layers",
+  "avoidPrompt": "no literal religious statue, no ornate temple lamp, no excessive petal count",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7207844Z",
+  "updatedAt": "2026-06-14T05:13:52.721Z"
+}

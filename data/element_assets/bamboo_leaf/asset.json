@@ -1,0 +1,15 @@
+{
+  "id": "bamboo_leaf",
+  "displayName": "竹叶",
+  "category": "flower",
+  "description": "slender bamboo leaves arranged in a sparse balanced cluster with controlled directional rhythm",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "on linear arms, shade cutouts, joint details, or surface relief",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "two to five simplified leaf strokes",
+  "avoidPrompt": "no literal bamboo forest, no restaurant decor cliché, no excessive green color",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7819881Z",
+  "updatedAt": "2026-06-14T05:13:52.783Z"
+}

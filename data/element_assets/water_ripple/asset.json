@@ -1,0 +1,15 @@
+{
+  "id": "water_ripple",
+  "displayName": "水波纹",
+  "category": "carving",
+  "description": "soft concentric water ripples with calm spacing and a subtle expanding rhythm",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "on glass, metal, ceramic surfaces, diffuser relief, or circular base details",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "two to five restrained ripple rings",
+  "avoidPrompt": "no turbulent waves, no literal water splash, no busy high-contrast pattern",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8479993Z",
+  "updatedAt": "2026-06-14T05:13:52.849Z"
+}

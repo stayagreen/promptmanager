@@ -1,0 +1,15 @@
+{
+  "id": "butterfly_wing",
+  "displayName": "蝴蝶翅膀",
+  "category": "animal",
+  "description": "a butterfly-wing-inspired bilateral curve with light layered translucency and restrained vein geometry",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in paired shade panels, diffuser wings, or symmetrical wall-sconce forms",
+  "defaultStrength": "medium",
+  "defaultQuantity": "one balanced pair of abstract wings",
+  "avoidPrompt": "no cartoon butterfly, no rainbow colors, no literal insect body, no paper-thin fragility",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8119905Z",
+  "updatedAt": "2026-06-14T05:13:52.812Z"
+}

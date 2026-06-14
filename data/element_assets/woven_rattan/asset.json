@@ -1,0 +1,15 @@
+{
+  "id": "woven_rattan",
+  "displayName": "藤编纹理",
+  "category": "texture",
+  "description": "a clean handwoven rattan pattern with consistent spacing, natural fiber variation, and breathable light transmission",
+  "defaultFusionMode": "texture",
+  "defaultPlacement": "on shades, outer sleeves, panels, or warm natural accents",
+  "defaultStrength": "medium",
+  "defaultQuantity": "use on one coherent woven component",
+  "avoidPrompt": "no loose fibers, no rustic basket cliché, no uneven broken weave",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9159878Z",
+  "updatedAt": "2026-06-14T05:13:52.917Z"
+}

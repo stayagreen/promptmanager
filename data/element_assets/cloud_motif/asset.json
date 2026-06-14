@@ -1,0 +1,15 @@
+{
+  "id": "cloud_motif",
+  "displayName": "祥云曲线",
+  "category": "carving",
+  "description": "a modernized cloud-scroll motif with broad continuous curves and clean negative space",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in a bracket, arm profile, canopy relief, or perforated shade pattern",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one continuous cloud rhythm",
+  "avoidPrompt": "no ornate palace pattern, no red-and-gold festival styling, no repetitive border clutter",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8379882Z",
+  "updatedAt": "2026-06-14T05:13:52.840Z"
+}

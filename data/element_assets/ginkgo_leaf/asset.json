@@ -1,0 +1,15 @@
+{
+  "id": "ginkgo_leaf",
+  "displayName": "银杏叶",
+  "category": "flower",
+  "description": "a fan-shaped ginkgo leaf with a softly divided edge and elegant radiating veins",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in a shade panel, wall-sconce backplate, finial, or repeated arm rhythm",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one to three simplified leaves",
+  "avoidPrompt": "no literal autumn wreath, no bright yellow overload, no sharp fragile leaf edge",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7709876Z",
+  "updatedAt": "2026-06-14T05:13:52.773Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "wildflower_sprig",
+  "displayName": "野花小枝",
+  "category": "flower",
+  "description": "a tiny delicate wildflower sprig with sparse buds and an informal natural rhythm",
+  "defaultFusionMode": "direct",
+  "defaultPlacement": "as a small side detail, pull ornament, base accent, or scene accessory",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one sparse sprig",
+  "avoidPrompt": "no dense bouquet, no colorful floral clutter, no oversized leaves",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7649897Z",
+  "updatedAt": "2026-06-14T05:13:52.766Z"
+}

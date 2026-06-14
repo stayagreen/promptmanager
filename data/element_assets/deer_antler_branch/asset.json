@@ -1,0 +1,15 @@
+{
+  "id": "deer_antler_branch",
+  "displayName": "鹿角分枝",
+  "category": "animal",
+  "description": "a softened antler-inspired branching structure with balanced forks and rounded manufacturable junctions",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in chandelier arms, branching supports, or sculptural frame logic",
+  "defaultStrength": "medium",
+  "defaultQuantity": "three to six controlled branches",
+  "avoidPrompt": "no hunting trophy, no skull, no sharp dangerous tips, no chaotic branch count",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8299882Z",
+  "updatedAt": "2026-06-14T05:13:52.830Z"
+}

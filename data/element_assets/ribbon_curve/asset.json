@@ -1,0 +1,15 @@
+{
+  "id": "ribbon_curve",
+  "displayName": "飘带曲线",
+  "category": "structure",
+  "description": "a continuous ribbon-like structural curve with controlled thickness, smooth torsion, and elegant directional flow",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in a pendant loop, wall-light arm, floor-lamp stem, or sculptural frame",
+  "defaultStrength": "medium",
+  "defaultQuantity": "one continuous primary ribbon",
+  "avoidPrompt": "no fabric appearance, no impossible unsupported twist, no sharp folded edges",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9669888Z",
+  "updatedAt": "2026-06-14T05:13:52.968Z"
+}

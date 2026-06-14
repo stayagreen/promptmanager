@@ -1,0 +1,15 @@
+{
+  "id": "exposed_hinge",
+  "displayName": "精密外露转轴",
+  "category": "hardware",
+  "description": "a refined exposed pivot hinge with tight tolerances, visible mechanical logic, and minimal hardware language",
+  "defaultFusionMode": "direct",
+  "defaultPlacement": "at adjustable arms, rotating shades, or folding wall-light brackets",
+  "defaultStrength": "medium",
+  "defaultQuantity": "one hinge at each real movement point",
+  "avoidPrompt": "no bulky machinery, no loose screws, no decorative fake hinge, no visible wiring clutter",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9329888Z",
+  "updatedAt": "2026-06-14T05:13:52.934Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "layered_petals",
+  "displayName": "层叠花瓣结构",
+  "category": "structure",
+  "description": "overlapping petal-like modules arranged as a controlled luminous shell with clear repetition and assembly logic",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "around a pendant shade, chandelier center, or wall-light diffuser",
+  "defaultStrength": "medium",
+  "defaultQuantity": "four to twelve repeatable modules",
+  "avoidPrompt": "no excessive ornamental flower, no hundreds of parts, no fragile razor-thin petals",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9389874Z",
+  "updatedAt": "2026-06-14T05:13:52.941Z"
+}

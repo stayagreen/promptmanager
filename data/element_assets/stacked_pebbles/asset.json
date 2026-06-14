@@ -1,0 +1,15 @@
+{
+  "id": "stacked_pebbles",
+  "displayName": "叠石结构",
+  "category": "structure",
+  "description": "smooth pebble-like volumes stacked with calm asymmetry, broad contact points, and believable structural balance",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in a table-lamp base, floor-lamp base, counterweight, or compact body",
+  "defaultStrength": "medium",
+  "defaultQuantity": "two to four simplified volumes",
+  "avoidPrompt": "no unstable balancing trick, no literal garden cairn, no rough dirty stones",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9599893Z",
+  "updatedAt": "2026-06-14T05:13:52.962Z"
+}

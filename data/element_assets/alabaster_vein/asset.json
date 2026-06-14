@@ -1,0 +1,15 @@
+{
+  "id": "alabaster_vein",
+  "displayName": "雪花石膏纹理",
+  "category": "texture",
+  "description": "soft translucent alabaster veining with milky layered depth and warm light diffusion",
+  "defaultFusionMode": "texture",
+  "defaultPlacement": "on diffusers, shade panels, glowing discs, or compact lamp bodies",
+  "defaultStrength": "medium",
+  "defaultQuantity": "use as one continuous luminous material treatment",
+  "avoidPrompt": "no marble countertop look, no dark heavy veins, no opaque plastic appearance",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8959899Z",
+  "updatedAt": "2026-06-14T05:13:52.897Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "hammered_brass",
+  "displayName": "锤纹黄铜",
+  "category": "texture",
+  "description": "a refined hand-hammered brass surface with shallow irregular facets and warm controlled highlights",
+  "defaultFusionMode": "texture",
+  "defaultPlacement": "on metal shades, canopies, bases, joint covers, or accent rings",
+  "defaultStrength": "medium",
+  "defaultQuantity": "use on one primary metal surface or selected accents",
+  "avoidPrompt": "no rough damaged metal, no excessive mirror shine, no random dents",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8889877Z",
+  "updatedAt": "2026-06-14T05:13:52.890Z"
+}

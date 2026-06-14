@@ -1,0 +1,15 @@
+{
+  "id": "floating_disc",
+  "displayName": "悬浮圆盘",
+  "category": "structure",
+  "description": "a thin floating luminous disc separated from its support by a precise shadow gap, creating visual lightness",
+  "defaultFusionMode": "direct",
+  "defaultPlacement": "as a shade, diffuser, canopy layer, or secondary reflector",
+  "defaultStrength": "medium",
+  "defaultQuantity": "one to three aligned or offset discs",
+  "avoidPrompt": "no impossible levitation, no invisible support logic, no razor-thin unrealistic material",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9519899Z",
+  "updatedAt": "2026-06-14T05:13:52.954Z"
+}

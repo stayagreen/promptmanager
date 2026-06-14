@@ -1,0 +1,15 @@
+{
+  "id": "branching_arm",
+  "displayName": "自然分枝灯臂",
+  "category": "structure",
+  "description": "an organic branching arm system with smooth load paths, rounded junctions, and balanced light-head distribution",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in chandelier arms, floor-lamp branches, or multi-light structures",
+  "defaultStrength": "medium",
+  "defaultQuantity": "three to six controlled branches",
+  "avoidPrompt": "no random tree sculpture, no unstable asymmetry, no sharp twig tips, no excessive head count",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9449884Z",
+  "updatedAt": "2026-06-14T05:13:52.946Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "tree_bark_texture",
+  "displayName": "树皮肌理",
+  "category": "texture",
+  "description": "a simplified natural bark relief with shallow vertical grooves and tactile organic irregularity",
+  "defaultFusionMode": "texture",
+  "defaultPlacement": "on ceramic, cast metal, resin, or wood-inspired bases and stems",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "apply to one restrained surface zone",
+  "avoidPrompt": "no rotten wood, no sharp splinters, no hyper-real forest trunk",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9019888Z",
+  "updatedAt": "2026-06-14T05:13:52.903Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "calla_lily",
+  "displayName": "马蹄莲",
+  "category": "flower",
+  "description": "a calla-lily-inspired wrapped petal silhouette with a smooth funnel curve and elegant inward fold",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in the lampshade, diffuser, or upward-facing light cup",
+  "defaultStrength": "medium",
+  "defaultQuantity": "one primary wrapped form",
+  "avoidPrompt": "no literal plastic flower, no unstable paper-thin edge, no bridal bouquet styling",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7569927Z",
+  "updatedAt": "2026-06-14T05:13:52.762Z"
+}

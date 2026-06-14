@@ -1,0 +1,15 @@
+{
+  "id": "small_bird",
+  "displayName": "小鸟雕刻件",
+  "category": "animal",
+  "description": "a small serene bird sculpture with simplified wings, a compact silhouette, and refined collectible character",
+  "defaultFusionMode": "direct",
+  "defaultPlacement": "perched on a secondary arm, base edge, finial, or wall-sconce bracket",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one small bird",
+  "avoidPrompt": "no cartoon bird, no detailed feathers, no large bird overpowering the lamp, no taxidermy appearance",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8009899Z",
+  "updatedAt": "2026-06-14T05:13:52.802Z"
+}

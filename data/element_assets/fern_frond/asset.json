@@ -1,0 +1,15 @@
+{
+  "id": "fern_frond",
+  "displayName": "蕨叶",
+  "category": "flower",
+  "description": "a gently unfurling fern frond with repeating leaflets and a soft organic spiral",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "along a curved arm, perforation pattern, shade relief, or base engraving",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one simplified frond rhythm",
+  "avoidPrompt": "no tropical jungle clutter, no highly detailed fragile leaflets, no green plastic appearance",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7769877Z",
+  "updatedAt": "2026-06-14T05:13:52.778Z"
+}

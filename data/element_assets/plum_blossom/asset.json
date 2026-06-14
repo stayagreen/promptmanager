@@ -1,0 +1,15 @@
+{
+  "id": "plum_blossom",
+  "displayName": "梅花",
+  "category": "flower",
+  "description": "a minimal five-petal plum blossom motif with crisp rounded petals and a small precise center",
+  "defaultFusionMode": "direct",
+  "defaultPlacement": "on a joint cover, pull detail, finial, wall plate, or small ornament",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one to three small blossoms",
+  "avoidPrompt": "no dense branch painting, no festive red-and-gold styling, no cartoon flower",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7499927Z",
+  "updatedAt": "2026-06-14T05:13:52.750Z"
+}

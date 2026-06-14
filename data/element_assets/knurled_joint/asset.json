@@ -1,0 +1,15 @@
+{
+  "id": "knurled_joint",
+  "displayName": "滚花调节件",
+  "category": "hardware",
+  "description": "a compact precision-machined knurled joint with fine tactile grooves and a clean adjustable mechanism",
+  "defaultFusionMode": "direct",
+  "defaultPlacement": "at pivots, dimmer controls, arm connections, or height-adjustment points",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one functional joint per adjustment point",
+  "avoidPrompt": "no oversized industrial bolt, no aggressive gear teeth, no fake nonfunctional mechanism",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9269876Z",
+  "updatedAt": "2026-06-14T05:13:52.927Z"
+}

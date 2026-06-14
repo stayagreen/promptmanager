@@ -1,0 +1,15 @@
+{
+  "id": "garden_lattice",
+  "displayName": "园林窗格",
+  "category": "carving",
+  "description": "a simplified classical garden lattice with balanced geometric openings and generous negative space",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in a shade frame, wall backplate, screen-like diffuser, or structural panel",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one clean geometric lattice module",
+  "avoidPrompt": "no dense antique window reproduction, no restaurant décor cliché, no visual obstruction of light",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8619884Z",
+  "updatedAt": "2026-06-14T05:13:52.862Z"
+}

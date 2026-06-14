@@ -1,0 +1,15 @@
+{
+  "id": "orchid_curve",
+  "displayName": "兰花曲线",
+  "category": "flower",
+  "description": "a slender orchid-inspired curve with graceful asymmetry and restrained botanical elegance",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "along an arm, stem, support, or side profile",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one or two flowing curves",
+  "avoidPrompt": "no realistic potted orchid, no tangled stems, no overly thin fragile structure",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7439915Z",
+  "updatedAt": "2026-06-14T05:13:52.745Z"
+}

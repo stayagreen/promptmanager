@@ -1,0 +1,15 @@
+{
+  "id": "crane_silhouette",
+  "displayName": "仙鹤意象",
+  "category": "animal",
+  "description": "an elegant crane-inspired silhouette expressed through a long neck curve, poised balance, and quiet upward gesture",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in the supporting arm, floor-lamp stem, or sculptural side profile",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one abstract crane gesture",
+  "avoidPrompt": "no literal full-size crane statue, no traditional painting scene, no fragile legs",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8059904Z",
+  "updatedAt": "2026-06-14T05:13:52.807Z"
+}

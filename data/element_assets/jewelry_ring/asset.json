@@ -1,0 +1,15 @@
+{
+  "id": "jewelry_ring",
+  "displayName": "首饰感金属环",
+  "category": "hardware",
+  "description": "a precise jewelry-like metal ring with a slim rounded profile, seamless connection, and polished edge control",
+  "defaultFusionMode": "direct",
+  "defaultPlacement": "at suspension points, shade collars, joints, handles, or decorative transitions",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one to three small rings",
+  "avoidPrompt": "no chain clutter, no oversized hoop, no cheap key-ring appearance",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9209898Z",
+  "updatedAt": "2026-06-14T05:13:52.922Z"
+}

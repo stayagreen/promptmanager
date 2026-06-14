@@ -1,0 +1,15 @@
+{
+  "id": "seed_pod",
+  "displayName": "种荚",
+  "category": "flower",
+  "description": "a smooth organic seed-pod form with a slightly tapered body and subtle natural segmentation",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "as a pendant shade, counterweight, finial, or compact lamp body",
+  "defaultStrength": "medium",
+  "defaultQuantity": "one primary pod form or a small balanced cluster",
+  "avoidPrompt": "no alien creature, no grotesque biological texture, no unrealistic thin shell",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7949901Z",
+  "updatedAt": "2026-06-14T05:13:52.796Z"
+}

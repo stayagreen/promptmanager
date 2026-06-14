@@ -1,0 +1,15 @@
+{
+  "id": "magnolia_blossom",
+  "displayName": "玉兰花",
+  "category": "flower",
+  "description": "a refined sculpted magnolia blossom with softly layered elongated petals and a calm opening gesture",
+  "defaultFusionMode": "direct",
+  "defaultPlacement": "at a finial, joint, shade edge, or restrained decorative focal point",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one small blossom or a pair of restrained petals",
+  "avoidPrompt": "no oversized flower, no bridal decoration, no dense floral bouquet, no fragile needle-thin petals",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.6387902Z",
+  "updatedAt": "2026-06-14T05:13:52.708Z"
+}

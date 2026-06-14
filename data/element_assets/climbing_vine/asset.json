@@ -1,0 +1,15 @@
+{
+  "id": "climbing_vine",
+  "displayName": "藤蔓曲线",
+  "category": "flower",
+  "description": "a controlled climbing-vine curve with gentle branching and generous negative space",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "around a stem, suspension cable, frame edge, or wall-mounted arm",
+  "defaultStrength": "medium",
+  "defaultQuantity": "one continuous restrained vine gesture",
+  "avoidPrompt": "no tangled overgrowth, no thorny vines, no structure-obscuring foliage",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.7879892Z",
+  "updatedAt": "2026-06-14T05:13:52.789Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "mother_of_pearl",
+  "displayName": "贝母虹彩",
+  "category": "texture",
+  "description": "subtle mother-of-pearl iridescence with fine layered shimmer in pale ivory, soft green, and muted rose",
+  "defaultFusionMode": "texture",
+  "defaultPlacement": "on small inlays, accent panels, finials, switches, or decorative rings",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "use as limited inlay accents",
+  "avoidPrompt": "no rainbow overload, no glitter, no cheap holographic plastic",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.9089887Z",
+  "updatedAt": "2026-06-14T05:13:52.910Z"
+}

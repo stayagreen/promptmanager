@@ -1,0 +1,15 @@
+{
+  "id": "celadon_crackle",
+  "displayName": "冰裂青瓷纹",
+  "category": "texture",
+  "description": "a fine irregular celadon crackle-glaze texture with subtle tonal variation and handcrafted depth",
+  "defaultFusionMode": "texture",
+  "defaultPlacement": "on ceramic shades, bases, finials, or small glazed components",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "apply as a controlled surface finish",
+  "avoidPrompt": "no broken object appearance, no deep structural cracks, no high-contrast black fracture lines",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8819877Z",
+  "updatedAt": "2026-06-14T05:13:52.883Z"
+}

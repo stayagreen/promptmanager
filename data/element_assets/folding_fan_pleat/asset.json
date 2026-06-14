@@ -1,0 +1,15 @@
+{
+  "id": "folding_fan_pleat",
+  "displayName": "折扇骨架",
+  "category": "carving",
+  "description": "a folding-fan-inspired radial structure with evenly spaced ribs and an elegant opening angle",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in a wall-sconce shade, pendant frame, canopy, or radial diffuser",
+  "defaultStrength": "medium",
+  "defaultQuantity": "five to twelve simplified radial ribs",
+  "avoidPrompt": "no literal handheld fan, no painted fan scene, no overly dense ribs",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8559911Z",
+  "updatedAt": "2026-06-14T05:13:52.857Z"
+}

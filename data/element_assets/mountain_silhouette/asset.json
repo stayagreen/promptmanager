@@ -1,0 +1,15 @@
+{
+  "id": "mountain_silhouette",
+  "displayName": "远山轮廓",
+  "category": "carving",
+  "description": "a layered distant-mountain silhouette with low asymmetric peaks and atmospheric horizontal rhythm",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in a linear pendant, shade edge, wall-light profile, or layered metal panel",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "two or three simplified layers",
+  "avoidPrompt": "no literal landscape painting, no jagged fantasy mountains, no excessive layering",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8759884Z",
+  "updatedAt": "2026-06-14T05:13:52.877Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "ruyi_curve",
+  "displayName": "如意曲线",
+  "category": "carving",
+  "description": "a restrained ruyi-inspired terminal curve with a smooth inward scroll and refined symbolic softness",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "at arm ends, finials, brackets, handles, or canopy transitions",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one or two terminal curves",
+  "avoidPrompt": "no ornate imperial carving, no gold overload, no literal ceremonial object",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8679924Z",
+  "updatedAt": "2026-06-14T05:13:52.869Z"
+}

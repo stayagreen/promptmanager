@@ -1,0 +1,15 @@
+{
+  "id": "koi_curve",
+  "displayName": "锦鲤曲线",
+  "category": "animal",
+  "description": "a koi-inspired flowing S-curve with a smooth tapered body rhythm and gentle sense of movement",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in a pendant silhouette, curved arm, base profile, or repeated composition",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one or two abstract flowing curves",
+  "avoidPrompt": "no literal aquarium, no fish eyes or scales, no bright multicolor koi pattern",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8239891Z",
+  "updatedAt": "2026-06-14T05:13:52.825Z"
+}

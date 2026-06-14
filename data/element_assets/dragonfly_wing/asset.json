@@ -1,0 +1,15 @@
+{
+  "id": "dragonfly_wing",
+  "displayName": "蜻蜓翅脉",
+  "category": "animal",
+  "description": "a refined dragonfly-wing vein network with elongated transparent cells and precise lightweight geometry",
+  "defaultFusionMode": "abstract",
+  "defaultPlacement": "in glass panels, perforated metal, diffuser texture, or linear shade details",
+  "defaultStrength": "subtle",
+  "defaultQuantity": "one simplified wing-vein pattern",
+  "avoidPrompt": "no literal giant insect, no dense biological detail, no sharp exposed wire",
+  "images": [],
+  "enabled": true,
+  "createdAt": "2026-06-14T05:13:52.8179933Z",
+  "updatedAt": "2026-06-14T05:13:52.819Z"
+}
