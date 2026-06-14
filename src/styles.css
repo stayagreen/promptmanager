@@ -106,13 +106,13 @@ button svg {
 }
 
 .export-dock-layout {
-  padding-top: 76px;
+  padding-bottom: 76px;
 }
 
 .export-dock {
   position: fixed;
   z-index: 100;
-  top: 0;
+  bottom: 0;
   right: 0;
   left: 0;
   min-height: 68px;
@@ -121,9 +121,9 @@ button svg {
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  border-bottom: 1px solid var(--line-strong);
+  border-top: 1px solid var(--line-strong);
   background: rgb(255 253 250 / 96%);
-  box-shadow: 0 8px 24px rgb(46 39 29 / 10%);
+  box-shadow: 0 -8px 24px rgb(46 39 29 / 10%);
   backdrop-filter: blur(12px);
 }
 
@@ -181,7 +181,7 @@ button svg {
 
 .batch-export-popover {
   position: absolute;
-  top: calc(100% + 10px);
+  bottom: calc(100% + 10px);
   right: 0;
   width: min(340px, calc(100vw - 32px));
   padding: 12px;
@@ -1495,7 +1495,7 @@ textarea {
   }
 
   .export-dock-layout {
-    padding-top: 124px;
+    padding-bottom: 124px;
   }
 
   .export-dock-single {
@@ -1524,7 +1524,7 @@ textarea {
     right: 0;
     left: 0;
     width: 100%;
-    max-height: calc(100vh - 132px);
+    max-height: calc(100vh - 124px);
     overflow-y: auto;
   }
 
