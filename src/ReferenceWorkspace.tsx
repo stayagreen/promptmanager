@@ -10,9 +10,11 @@ import {
   Loader2,
   PackageCheck,
   Plus,
+  RefreshCw,
   Save,
   Trash2,
 } from "lucide-react";
+import { ElementReferencePanel } from "./ElementReferencePanel";
 import {
   buildReferencePrompt,
   referenceTasks,
@@ -27,6 +29,7 @@ import {
 } from "./domain/promptAssembler";
 import type {
   CatalogData,
+  ElementReferenceAsset,
   HistoryCheckpoint,
   ReferenceConsistencyLevel,
   ReferenceProductProject,
@@ -36,6 +39,7 @@ import {
   deleteProductImage,
   deleteProductProject,
   fetchHistory,
+  fetchElementAssets,
   fetchProductProjects,
   restoreCheckpoint,
   saveProductProject,
@@ -80,6 +84,8 @@ export function ReferenceWorkspace({
   const [translation, setTranslation] = useState("");
   const [translating, setTranslating] = useState(false);
   const [history, setHistory] = useState<HistoryCheckpoint[]>([]);
+  const [elementAssets, setElementAssets] = useState<ElementReferenceAsset[]>([]);
+  const [elementRandomToken, setElementRandomToken] = useState(0);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const styles = getActiveStyles(catalog);
@@ -103,6 +109,7 @@ export function ReferenceWorkspace({
 
   useEffect(() => {
     void reloadProjects();
+    void fetchElementAssets().then(setElementAssets);
   }, []);
 
   useEffect(() => {
@@ -139,6 +146,8 @@ export function ReferenceWorkspace({
       allowProps,
       allowCableCleanup,
       additionalRequirements,
+      elementAssets,
+      elementRandomToken,
     });
   }, [
     additionalRequirements,
@@ -150,6 +159,8 @@ export function ReferenceWorkspace({
     catalog,
     consistency,
     draft,
+    elementAssets,
+    elementRandomToken,
     photographyProfileId,
     photographyProfiles,
     ratioId,
@@ -589,6 +600,13 @@ export function ReferenceWorkspace({
 
             <DimensionEditor draft={draft} onChange={setDraft} />
 
+            <ElementReferencePanel
+              project={draft}
+              assets={elementAssets}
+              onProjectChange={setDraft}
+              onAssetsChange={setElementAssets}
+            />
+
             {promptResult && (
               <section className="reference-prompt-section">
                 <div className="reference-prompt-toolbar">
@@ -597,6 +615,17 @@ export function ReferenceWorkspace({
                     <h2>{promptResult.title}</h2>
                   </div>
                   <div className="reference-prompt-actions">
+                    {(draft.elementSelections ?? []).some(
+                      (selection) => selection.selectionMode === "random",
+                    ) && (
+                      <button
+                        type="button"
+                        onClick={() => setElementRandomToken((value) => value + 1)}
+                      >
+                        <RefreshCw aria-hidden="true" />
+                        重选随机元素
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => void navigator.clipboard.writeText(promptResult.promptText)}
@@ -646,7 +675,11 @@ export function ReferenceWorkspace({
                   </div>
                 </div>
                 <p className="reference-warning">
-                  系统不会把参考图自动发送到生图平台。使用此提示词时，请同时上传本档案中的参考图，并将主图设为产品主体参考。
+                  系统不会把图片自动发送到生图平台。使用提示词时，请同时上传产品参考图
+                  {promptResult.resolvedElements.length > 0
+                    ? `和当前选中的元素图（${promptResult.resolvedElements.map((asset) => asset.displayName).join("、")}）`
+                    : ""}
+                  ，并将产品主图设为最高优先级参考。
                 </p>
                 <SyncedPromptPair
                   english={promptResult.promptText}
@@ -966,6 +999,7 @@ function createEmptyProject(): ReferenceProductProject {
     dimensionMode: "none",
     dimensions: [],
     estimationBasis: "",
+    elementSelections: [],
     savedPrompts: [],
     createdAt: now,
     updatedAt: now,

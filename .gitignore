@@ -15,3 +15,5 @@ local-server.err.log
 data/history/
 data/product_projects/*
 !data/product_projects/.gitkeep
+data/element_assets/*
+!data/element_assets/.gitkeep

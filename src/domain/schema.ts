@@ -106,6 +106,52 @@ export type ReferenceDimension = {
   value: string;
 };
 
+export type ElementAssetCategory =
+  | "flower"
+  | "animal"
+  | "carving"
+  | "texture"
+  | "hardware"
+  | "structure"
+  | "other";
+
+export type ElementFusionMode = "direct" | "abstract" | "texture";
+export type ElementInfluenceStrength = "subtle" | "medium" | "strong";
+export type ElementSelectionMode = "required" | "random";
+
+export type ElementReferenceImage = {
+  id: string;
+  filename: string;
+  originalName: string;
+  url: string;
+  createdAt: string;
+};
+
+export type ElementReferenceAsset = {
+  id: string;
+  displayName: string;
+  category: ElementAssetCategory;
+  description: string;
+  defaultFusionMode: ElementFusionMode;
+  defaultPlacement: string;
+  defaultStrength: ElementInfluenceStrength;
+  defaultQuantity: string;
+  avoidPrompt: string;
+  images: ElementReferenceImage[];
+  enabled: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ProductElementSelection = {
+  assetId: string;
+  selectionMode: ElementSelectionMode;
+  fusionMode: ElementFusionMode;
+  placement: string;
+  strength: ElementInfluenceStrength;
+  quantity: string;
+};
+
 export type SavedReferencePrompt = {
   id: string;
   taskId: string;
@@ -125,6 +171,7 @@ export type ReferenceProductProject = {
   dimensionMode: ReferenceDimensionMode;
   dimensions: ReferenceDimension[];
   estimationBasis: string;
+  elementSelections: ProductElementSelection[];
   savedPrompts: SavedReferencePrompt[];
   createdAt: string;
   updatedAt: string;
@@ -158,6 +205,7 @@ export type ModuleHistoryKind =
   | "output_modes"
   | "custom_prompts"
   | "product_projects"
+  | "element_assets"
   | "common";
 
 export type HistoryCheckpoint<T = unknown> = {

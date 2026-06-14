@@ -5,6 +5,8 @@ import type {
   CatalogData,
   CommonPromptModule,
   CustomPromptModule,
+  ElementReferenceAsset,
+  ElementReferenceImage,
   EmotionalToneModule,
   HistoryCheckpoint,
   LightingTypeModule,
@@ -27,6 +29,7 @@ const photographyProfilesDir = join(dataDir, "photography_profiles");
 const outputModesDir = join(dataDir, "output_modes");
 const customPromptsDir = join(dataDir, "custom_prompts");
 const productProjectsDir = join(dataDir, "product_projects");
+const elementAssetsDir = join(dataDir, "element_assets");
 const commonDir = join(dataDir, "common");
 const historyDir = join(dataDir, "history");
 
@@ -291,7 +294,51 @@ export async function loadProductProjects(): Promise<ReferenceProductProject[]> 
 
   return projects
     .filter((project): project is ReferenceProductProject => project !== null)
+    .map((project) => ({
+      ...project,
+      elementSelections: project.elementSelections ?? [],
+    }))
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+export async function loadElementAssets(): Promise<ElementReferenceAsset[]> {
+  await mkdir(elementAssetsDir, { recursive: true });
+  const entries = await readdir(elementAssetsDir, { withFileTypes: true });
+  const assets = await Promise.all(
+    entries
+      .filter((entry) => entry.isDirectory() && safeIdPattern.test(entry.name))
+      .map((entry) =>
+        readJsonFileIfExists<ElementReferenceAsset>(
+          join(elementAssetsDir, entry.name, "asset.json"),
+        ),
+      ),
+  );
+
+  return assets
+    .filter((asset): asset is ElementReferenceAsset => asset !== null)
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+export async function saveElementAsset(
+  asset: ElementReferenceAsset,
+): Promise<ElementReferenceAsset> {
+  assertSafeId(asset.id);
+  await writeJsonFileWithCheckpoint(
+    "element_assets",
+    asset.id,
+    join(elementAssetsDir, asset.id, "asset.json"),
+    asset,
+  );
+  return asset;
+}
+
+export async function deleteElementAsset(id: string): Promise<void> {
+  assertSafeId(id);
+  await deleteJsonFileWithCheckpoint(
+    "element_assets",
+    id,
+    join(elementAssetsDir, id, "asset.json"),
+  );
 }
 
 export async function saveProductProject(
@@ -362,6 +409,41 @@ export function getProductImagePath(projectId: string, filename: string): string
   assertSafeId(projectId);
   assertSafeImageFilename(filename);
   return join(productProjectsDir, projectId, "images", filename);
+}
+
+export async function saveElementAssetImage(
+  assetId: string,
+  originalName: string,
+  dataUrl: string,
+): Promise<ElementReferenceImage> {
+  assertSafeId(assetId);
+  const stored = await saveImageFile(
+    join(elementAssetsDir, assetId, "images"),
+    originalName,
+    dataUrl,
+  );
+  return {
+    ...stored,
+    url: `/api/element-assets/${assetId}/images/${stored.filename}`,
+  };
+}
+
+export async function deleteElementAssetImage(
+  assetId: string,
+  filename: string,
+): Promise<void> {
+  assertSafeId(assetId);
+  assertSafeImageFilename(filename);
+  await rm(join(elementAssetsDir, assetId, "images", filename), { force: true });
+}
+
+export function getElementAssetImagePath(
+  assetId: string,
+  filename: string,
+): string {
+  assertSafeId(assetId);
+  assertSafeImageFilename(filename);
+  return join(elementAssetsDir, assetId, "images", filename);
 }
 
 export async function saveCommonPrompt(
@@ -581,6 +663,16 @@ export async function restoreHistoryCheckpoint(
     return;
   }
 
+  if (moduleKind === "element_assets") {
+    await restoreJsonSnapshot(
+      moduleKind,
+      moduleId,
+      join(elementAssetsDir, moduleId, "asset.json"),
+      checkpoint.snapshot as ElementReferenceAsset,
+    );
+    return;
+  }
+
   const current = await readCommonPromptById(moduleId);
   const snapshot = checkpoint.snapshot as CommonPromptModule;
   const meta = findCommonMeta(moduleId);
@@ -600,6 +692,7 @@ async function ensureDataDirectories(): Promise<void> {
     mkdir(outputModesDir, { recursive: true }),
     mkdir(customPromptsDir, { recursive: true }),
     mkdir(productProjectsDir, { recursive: true }),
+    mkdir(elementAssetsDir, { recursive: true }),
     mkdir(commonDir, { recursive: true }),
     mkdir(historyDir, { recursive: true }),
   ]);
@@ -793,6 +886,31 @@ function assertSafeImageFilename(filename: string): void {
   if (!/^img_[a-z0-9_]+\.(?:png|jpg|webp)$/.test(filename)) {
     throw new Error("Invalid image filename.");
   }
+}
+
+async function saveImageFile(
+  imageDir: string,
+  originalName: string,
+  dataUrl: string,
+): Promise<Omit<ElementReferenceImage, "url">> {
+  const match = dataUrl.match(/^data:(image\/(?:png|jpeg|webp));base64,(.+)$/s);
+  if (!match) {
+    throw new Error("Only PNG, JPEG, and WebP images are supported.");
+  }
+
+  const extension =
+    match[1] === "image/png" ? "png" : match[1] === "image/webp" ? "webp" : "jpg";
+  const createdAt = new Date().toISOString();
+  const id = `img_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const filename = `${id}.${extension}`;
+  await mkdir(imageDir, { recursive: true });
+  await writeFile(join(imageDir, filename), Buffer.from(match[2], "base64"));
+  return {
+    id,
+    filename,
+    originalName: originalName.trim() || filename,
+    createdAt,
+  };
 }
 
 function createProtectedNoneTone(displayName: string): EmotionalToneModule {

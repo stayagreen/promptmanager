@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
   deleteCustomPrompt,
+  deleteElementAsset,
+  deleteElementAssetImage,
   deleteEmotionalTone,
   deleteLightingType,
   deleteHistoryCheckpoint,
@@ -13,11 +15,15 @@ import {
   deleteProductImage,
   deleteProductProject,
   getProductImagePath,
+  getElementAssetImagePath,
   listHistory,
   loadCatalog,
+  loadElementAssets,
   loadProductProjects,
   restoreHistoryCheckpoint,
   saveCommonPrompt,
+  saveElementAsset,
+  saveElementAssetImage,
   saveCustomPrompt,
   saveEmotionalTone,
   saveLightingType,
@@ -31,6 +37,11 @@ import {
 import { translateToChinese } from "./translator";
 import type {
   CustomPromptModule,
+  ElementAssetCategory,
+  ElementFusionMode,
+  ElementInfluenceStrength,
+  ElementReferenceAsset,
+  ElementReferenceImage,
   EmotionalToneModule,
   LightingTypeModule,
   ModuleHistoryKind,
@@ -42,6 +53,7 @@ import type {
   ReferenceDimensionMode,
   ReferenceProductImage,
   ReferenceProductProject,
+  ProductElementSelection,
   SavedReferencePrompt,
   StyleModule,
 } from "../src/domain/schema";
@@ -307,6 +319,63 @@ app.delete(
   "/api/product-projects/:id/images/:filename",
   asyncHandler(async (request, response) => {
     await deleteProductImage(request.params.id, request.params.filename);
+    response.json({ ok: true });
+  }),
+);
+
+app.get(
+  "/api/element-assets",
+  asyncHandler(async (_request, response) => {
+    response.json(await loadElementAssets());
+  }),
+);
+
+app.put(
+  "/api/element-assets/:id",
+  asyncHandler(async (request, response) => {
+    const asset = normalizeElementAsset({
+      ...request.body,
+      id: request.params.id,
+    });
+    response.json(await saveElementAsset(asset));
+  }),
+);
+
+app.delete(
+  "/api/element-assets/:id",
+  asyncHandler(async (request, response) => {
+    await deleteElementAsset(request.params.id);
+    response.json({ ok: true });
+  }),
+);
+
+app.post(
+  "/api/element-assets/:id/images",
+  asyncHandler(async (request, response) => {
+    response.json(
+      await saveElementAssetImage(
+        request.params.id,
+        String(request.body.originalName ?? ""),
+        String(request.body.dataUrl ?? ""),
+      ),
+    );
+  }),
+);
+
+app.get("/api/element-assets/:id/images/:filename", (request, response, next) => {
+  try {
+    response.sendFile(
+      getElementAssetImagePath(request.params.id, request.params.filename),
+    );
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.delete(
+  "/api/element-assets/:id/images/:filename",
+  asyncHandler(async (request, response) => {
+    await deleteElementAssetImage(request.params.id, request.params.filename);
     response.json({ ok: true });
   }),
 );
@@ -583,10 +652,95 @@ function normalizeProductProject(
     dimensionMode: normalizeDimensionMode(input.dimensionMode),
     dimensions: normalizeDimensions(input.dimensions),
     estimationBasis: normalizeOptionalText(input.estimationBasis),
+    elementSelections: normalizeElementSelections(input.elementSelections),
     savedPrompts: normalizeSavedPrompts(input.savedPrompts),
     createdAt: normalizeOptionalText(input.createdAt) || now,
     updatedAt: now,
   };
+}
+
+function normalizeElementAsset(
+  input: Partial<ElementReferenceAsset>,
+): ElementReferenceAsset {
+  requireText(input.id, "id");
+  requireText(input.displayName, "displayName");
+  requireText(input.description, "description");
+  const now = new Date().toISOString();
+
+  return {
+    id: input.id.trim(),
+    displayName: input.displayName.trim(),
+    category: normalizeElementCategory(input.category),
+    description: input.description.trim(),
+    defaultFusionMode: normalizeFusionMode(input.defaultFusionMode),
+    defaultPlacement: normalizeOptionalText(input.defaultPlacement),
+    defaultStrength: normalizeInfluenceStrength(input.defaultStrength),
+    defaultQuantity: normalizeOptionalText(input.defaultQuantity),
+    avoidPrompt: normalizeOptionalText(input.avoidPrompt),
+    images: normalizeElementImages(input.images),
+    enabled: input.enabled ?? true,
+    createdAt: normalizeOptionalText(input.createdAt) || now,
+    updatedAt: now,
+  };
+}
+
+function normalizeElementImages(value: unknown): ElementReferenceImage[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => item as Partial<ElementReferenceImage>)
+    .filter(
+      (item) =>
+        typeof item.id === "string" &&
+        typeof item.filename === "string" &&
+        typeof item.url === "string",
+    )
+    .map((item) => ({
+      id: item.id!.trim(),
+      filename: item.filename!.trim(),
+      originalName: normalizeOptionalText(item.originalName),
+      url: item.url!.trim(),
+      createdAt: normalizeOptionalText(item.createdAt) || new Date().toISOString(),
+    }));
+}
+
+function normalizeElementSelections(value: unknown): ProductElementSelection[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => item as Partial<ProductElementSelection>)
+    .filter((item) => typeof item.assetId === "string" && item.assetId.trim())
+    .map((item) => ({
+      assetId: item.assetId!.trim(),
+      selectionMode: item.selectionMode === "random" ? "random" : "required",
+      fusionMode: normalizeFusionMode(item.fusionMode),
+      placement: normalizeOptionalText(item.placement),
+      strength: normalizeInfluenceStrength(item.strength),
+      quantity: normalizeOptionalText(item.quantity),
+    }));
+}
+
+function normalizeElementCategory(value: unknown): ElementAssetCategory {
+  if (
+    value === "flower" ||
+    value === "animal" ||
+    value === "carving" ||
+    value === "texture" ||
+    value === "hardware" ||
+    value === "structure" ||
+    value === "other"
+  ) {
+    return value;
+  }
+  return "other";
+}
+
+function normalizeFusionMode(value: unknown): ElementFusionMode {
+  if (value === "abstract" || value === "texture") return value;
+  return "direct";
+}
+
+function normalizeInfluenceStrength(value: unknown): ElementInfluenceStrength {
+  if (value === "subtle" || value === "strong") return value;
+  return "medium";
 }
 
 function normalizeProductImages(value: unknown): ReferenceProductImage[] {
@@ -700,6 +854,7 @@ function parseHistoryKind(kind: string): ModuleHistoryKind {
   if (kind === "output-modes") return "output_modes";
   if (kind === "custom-prompts") return "custom_prompts";
   if (kind === "product-projects") return "product_projects";
+  if (kind === "element-assets") return "element_assets";
   if (kind === "common-prompts") return "common";
   throw new Error(`Unknown history kind: ${kind}`);
 }

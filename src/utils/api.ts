@@ -2,6 +2,8 @@ import type {
   CatalogData,
   CommonPromptModule,
   CustomPromptModule,
+  ElementReferenceAsset,
+  ElementReferenceImage,
   EmotionalToneModule,
   HistoryCheckpoint,
   LightingTypeModule,
@@ -160,6 +162,45 @@ export async function deleteProductImage(
   });
 }
 
+export async function fetchElementAssets(): Promise<ElementReferenceAsset[]> {
+  return request<ElementReferenceAsset[]>("/api/element-assets");
+}
+
+export async function saveElementAsset(
+  asset: ElementReferenceAsset,
+): Promise<ElementReferenceAsset> {
+  return request<ElementReferenceAsset>(`/api/element-assets/${asset.id}`, {
+    method: "PUT",
+    body: JSON.stringify(asset),
+  });
+}
+
+export async function deleteElementAsset(id: string): Promise<void> {
+  await request(`/api/element-assets/${id}`, { method: "DELETE" });
+}
+
+export async function uploadElementAssetImage(
+  assetId: string,
+  file: File,
+): Promise<ElementReferenceImage> {
+  return request<ElementReferenceImage>(`/api/element-assets/${assetId}/images`, {
+    method: "POST",
+    body: JSON.stringify({
+      originalName: file.name,
+      dataUrl: await fileToDataUrl(file),
+    }),
+  });
+}
+
+export async function deleteElementAssetImage(
+  assetId: string,
+  filename: string,
+): Promise<void> {
+  await request(`/api/element-assets/${assetId}/images/${filename}`, {
+    method: "DELETE",
+  });
+}
+
 export async function saveCommonPrompt(
   id: string,
   content: string,
@@ -221,6 +262,7 @@ function historyPath(kind: ModuleHistoryKind): string {
   if (kind === "output_modes") return "output-modes";
   if (kind === "custom_prompts") return "custom-prompts";
   if (kind === "product_projects") return "product-projects";
+  if (kind === "element_assets") return "element-assets";
   if (kind === "common") return "common-prompts";
   return kind;
 }

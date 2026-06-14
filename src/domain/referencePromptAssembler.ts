@@ -1,5 +1,7 @@
 import type {
+  ElementReferenceAsset,
   PhotographyProfileModule,
+  ProductElementSelection,
   RatioModule,
   ReferenceConsistencyLevel,
   ReferenceProductProject,
@@ -36,6 +38,8 @@ export type ReferencePromptOptions = {
   allowProps: boolean;
   allowCableCleanup: boolean;
   additionalRequirements: string;
+  elementAssets: ElementReferenceAsset[];
+  elementRandomToken: number;
 };
 
 export type ReferencePromptResult = {
@@ -43,6 +47,7 @@ export type ReferencePromptResult = {
   filename: string;
   promptText: string;
   task: ReferenceTask;
+  resolvedElements: ElementReferenceAsset[];
 };
 
 export const referenceTasks: ReferenceTask[] = [
@@ -105,9 +110,9 @@ export const referenceTasks: ReferenceTask[] = [
 
 const consistencyPrompts: Record<ReferenceConsistencyLevel, string> = {
   strict:
-    "STRICT PRODUCT IDENTITY LOCK. Preserve the exact silhouette, proportions, component count, shade shape, support structure, mounting method, joints, colors, materials, controls, cable positions, and construction details visible in the reference images. Do not redesign, beautify, simplify, or add parts.",
+    "STRICT PRODUCT IDENTITY LOCK. Preserve the exact silhouette, proportions, component count, shade shape, support structure, mounting method, joints, colors, materials, controls, cable positions, and construction details visible in the reference images. Do not redesign, beautify, simplify, or add parts, except for supplemental element integration explicitly authorized in this prompt.",
   high:
-    "HIGH PRODUCT IDENTITY LOCK. Keep the product design, proportions, structure, colors, and materials unchanged. Only presentation variables explicitly allowed below may change.",
+    "HIGH PRODUCT IDENTITY LOCK. Keep the product design, proportions, structure, colors, and materials unchanged. Only presentation variables and supplemental element integration explicitly allowed below may change.",
   optimized:
     "CONTROLLED PRESENTATION OPTIMIZATION. Preserve the recognizable product design and all structural logic. Minor cleanup of surface appearance, seams, reflections, and photographic presentation is allowed, but do not change component count, proportions, mounting method, or core materials.",
   creative:
@@ -153,6 +158,15 @@ export function buildReferencePrompt(
   const photography = options.photographyProfile && photographyAllowed
     ? `PHOTOGRAPHY DIRECTION\n\n${options.photographyProfile.profilePrompt}\n\n${options.photographyProfile.compositionPrompt}\n\n${options.photographyProfile.lightingPrompt}\n\n${options.photographyProfile.cameraPrompt}`
     : "";
+  const resolvedElements = resolveElementAssets(
+    project.elementSelections ?? [],
+    options.elementAssets,
+    `${project.id}:${options.taskId}:${options.elementRandomToken}`,
+  );
+  const elementSection = buildElementReferenceSection(
+    project.elementSelections ?? [],
+    resolvedElements,
+  );
 
   const promptText =
     options.taskId === "hoikei_ecommerce_10"
@@ -162,6 +176,7 @@ export function buildReferencePrompt(
           task,
           permissions,
           photography,
+          elementSection,
         )
       : [
     "REFERENCE-IMAGE PRODUCT TASK",
@@ -172,9 +187,10 @@ export function buildReferencePrompt(
     `ALLOWED PRESENTATION CHANGES\n\n${permissions.join("\n")}`,
     environment,
     photography,
+    elementSection,
     buildDimensionSection(project),
     `OUTPUT FORMAT\n\nAspect Ratio ${options.ratio.ratioValue}. Fill the complete canvas. Produce physically realistic product photography or technical presentation appropriate to the selected task.`,
-    `GLOBAL RESTRICTIONS\n\nDo not add or remove lamp components. Do not change the number of shades, arms, bulbs, supports, switches, mounting points, or visible joints. Do not alter product color or material unless explicitly requested. No logos, watermark, brand marks, fake certification labels, gibberish, or decorative text. Do not copy unrelated products from the scene.`,
+    `GLOBAL RESTRICTIONS\n\nDo not add or remove lamp components except for the exact supplemental element integration explicitly selected above. Never change the number of functional shades, arms, bulbs, supports, switches, mounting points, or visible joints. Do not alter product color or material unless explicitly requested. No logos, watermark, brand marks, fake certification labels, gibberish, or decorative text. Do not copy unrelated products from the scene.`,
     options.additionalRequirements.trim()
       ? `ADDITIONAL REQUIREMENTS\n\n${options.additionalRequirements.trim()}`
       : "",
@@ -192,6 +208,7 @@ export function buildReferencePrompt(
     filename: `${title.replace(/[<>:"/\\|?*]/g, "_")}.txt`,
     promptText,
     task,
+    resolvedElements,
   };
 }
 
@@ -201,6 +218,7 @@ function buildHoikeiEcommerce10Prompt(
   task: ReferenceTask,
   permissions: string[],
   photography: string,
+  elementSection: string,
 ): string {
   const skuSource = options.additionalRequirements.trim()
     ? `USER-PROVIDED SKU AND PRODUCT INFORMATION\n\n${options.additionalRequirements.trim()}`
@@ -212,7 +230,7 @@ function buildHoikeiEcommerce10Prompt(
     "Do not create a collection image, long image, collage, contact sheet, nine-grid, ten-grid, storyboard, or multiple panels on one canvas. Every numbered screen must be a separate output image.",
     "REFERENCE-IMAGE PRODUCT IDENTITY LOCK",
     `Product archive: ${project.title}${project.productCode ? ` (${project.productCode})` : ""}.`,
-    "Use all supplied reference images as the product truth source. Preserve the exact same lamp across all 10 outputs: silhouette, structure, proportions, lamp-head count, shade shape, materials, finishes, colors, canopy, connectors, mounting logic, hardware language, controls, and visible cables. Do not redesign, beautify into another product, simplify, add parts, remove parts, or substitute a similar lamp.",
+    "Use all supplied reference images as the product truth source. Preserve the exact same lamp across all 10 outputs: silhouette, structure, proportions, lamp-head count, shade shape, materials, finishes, colors, canopy, connectors, mounting logic, hardware language, controls, and visible cables. Do not redesign, beautify into another product, simplify, add parts, remove parts, or substitute a similar lamp, except for the exact supplemental element integration explicitly authorized below.",
     consistencyPrompts.strict,
     `TASK\n\n${task.prompt}`,
     "BRAND AND ART DIRECTION",
@@ -253,6 +271,7 @@ IMAGE 10 — DIMENSION DETAIL PAGE — 3:4
 One independent vertical e-commerce dimension page on a white or light minimal background. Show a clear front view and side view when appropriate, with professional readable measurement relationships. Necessary dimension labels and a small HOIKEI 海奇家居 mark are allowed. This is an e-commerce size explanation page, not a dense engineering drawing.`,
     `ALLOWED PRESENTATION CHANGES\n\n${permissions.join("\n")}`,
     photography,
+    elementSection,
     buildDimensionSection(project),
     skuSource,
     "PHOTOGRAPHY AND QUALITY",
@@ -267,6 +286,73 @@ One independent vertical e-commerce dimension page on a white or light minimal b
     .filter(Boolean)
     .join("\n\n")
     .trim();
+}
+
+function resolveElementAssets(
+  selections: ProductElementSelection[],
+  assets: ElementReferenceAsset[],
+  seed: string,
+): ElementReferenceAsset[] {
+  const activeAssets = new Map(
+    assets.filter((asset) => asset.enabled).map((asset) => [asset.id, asset]),
+  );
+  const required = selections
+    .filter((selection) => selection.selectionMode === "required")
+    .map((selection) => activeAssets.get(selection.assetId))
+    .filter((asset): asset is ElementReferenceAsset => Boolean(asset));
+  const randomCandidates = selections
+    .filter((selection) => selection.selectionMode === "random")
+    .map((selection) => activeAssets.get(selection.assetId))
+    .filter((asset): asset is ElementReferenceAsset => Boolean(asset));
+
+  if (randomCandidates.length === 0) return required;
+  const selected = randomCandidates[stableHash(seed) % randomCandidates.length];
+  return [...required, selected];
+}
+
+function buildElementReferenceSection(
+  selections: ProductElementSelection[],
+  resolvedAssets: ElementReferenceAsset[],
+): string {
+  if (resolvedAssets.length === 0) return "";
+  const selectionMap = new Map(
+    selections.map((selection) => [selection.assetId, selection]),
+  );
+  const items = resolvedAssets.map((asset, index) => {
+    const selection = selectionMap.get(asset.id);
+    if (!selection) return "";
+    const fusionRule =
+      selection.fusionMode === "abstract"
+        ? "ABSTRACT INSPIRATION: extract only its geometry, rhythm, contour language, or visual motif. Do not literally attach or copy the donor object."
+        : selection.fusionMode === "texture"
+          ? "TEXTURE ONLY: borrow only surface texture, material feeling, color variation, or finish. Do not reproduce the literal flower, animal, carving, or donor object."
+          : "DIRECT ELEMENT: integrate the recognizable element itself as a restrained product detail, ornament, or scene accessory. Do not copy the entire donor object.";
+    return `ELEMENT E${index + 1} — ${asset.displayName}
+Reference images: ${asset.images.length > 0 ? asset.images.map((image) => image.originalName).join(", ") : "no image stored; follow the written description"}
+Description: ${asset.description}
+Fusion: ${fusionRule}
+Placement: ${selection.placement || asset.defaultPlacement || "choose a structurally plausible secondary location"}
+Influence strength: ${selection.strength}
+Quantity: ${selection.quantity || asset.defaultQuantity || "use sparingly"}
+Avoid: ${asset.avoidPrompt || "avoid visual clutter, pasted-on decoration, and damage to the product's functional structure"}`;
+  });
+
+  return `SUPPLEMENTAL ELEMENT REFERENCES
+
+The product reference images remain the highest-priority source of truth. Element references are secondary inspiration only and must never replace, distort, or contradict the lamp's core silhouette, component count, proportions, mounting logic, controls, materials, or functional structure.
+
+${items.filter(Boolean).join("\n\n")}
+
+Use only the elements listed above for this generation. Upload their stored images alongside the product references and label them E1, E2, and so on when the image-generation platform supports reference labels. Keep every added element physically plausible, manufacturable-looking, and subordinate to the lamp.`;
+}
+
+function stableHash(value: string): number {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
 }
 
 function buildDimensionSection(project: ReferenceProductProject): string {
