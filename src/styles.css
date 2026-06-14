@@ -119,11 +119,11 @@ button svg {
   padding: 10px 24px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 14px;
-  border-top: 1px solid var(--line-strong);
-  background: rgb(255 253 250 / 96%);
-  box-shadow: 0 -8px 24px rgb(46 39 29 / 10%);
+  border-top: 3px solid #d7a33d;
+  background: rgb(31 49 45 / 97%);
+  box-shadow: 0 -10px 30px rgb(25 31 29 / 24%);
   backdrop-filter: blur(12px);
 }
 
@@ -136,12 +136,24 @@ button svg {
 
 .export-dock-single strong {
   margin-right: 4px;
+  color: #fff;
   white-space: nowrap;
 }
 
 .export-dock-single select {
   width: 150px;
   min-height: 42px;
+  border-color: #b9c8c3;
+}
+
+.export-dock-single button {
+  border-color: #d9e2df;
+  background: #fff;
+}
+
+.export-dock-single button:hover:not(:disabled) {
+  border-color: #e7b95a;
+  background: #fff5df;
 }
 
 .export-dock button,
@@ -161,13 +173,14 @@ button svg {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid var(--teal-dark);
+  border: 1px solid #e7b95a;
   border-radius: 8px;
-  background: var(--teal);
+  background: #d49a2f;
   color: #fff;
   cursor: pointer;
   font-weight: 700;
   list-style: none;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 16%);
 }
 
 .batch-export-menu summary::-webkit-details-marker {
@@ -1490,6 +1503,7 @@ textarea {
     min-height: 116px;
     padding: 9px 16px;
     align-items: stretch;
+    justify-content: center;
     flex-direction: column;
     gap: 7px;
   }
@@ -1501,6 +1515,9 @@ textarea {
   .export-dock-single {
     display: grid;
     grid-template-columns: minmax(0, 1fr) repeat(2, auto);
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
   }
 
   .export-dock-single strong {
@@ -1518,6 +1535,12 @@ textarea {
 
   .batch-export-menu summary {
     width: 100%;
+  }
+
+  .batch-export-menu {
+    width: 100%;
+    max-width: 520px;
+    margin: 0 auto;
   }
 
   .batch-export-popover {
