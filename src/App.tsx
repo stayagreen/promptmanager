@@ -438,7 +438,153 @@ export function App() {
     selectedEmotionalTone.id === "none" ? "" : `_${selectedEmotionalTone.displayName}`;
 
   return (
-    <div className="app-shell">
+    <>
+      <header className="export-dock">
+        <div className="export-dock-single">
+          <strong>单个导出</strong>
+          <select
+            aria-label="复制 / 下载语言"
+            value={outputLanguage}
+            onChange={(event) =>
+              setOutputLanguage(event.target.value as OutputLanguage)
+            }
+          >
+            <option value="english">英文原文</option>
+            <option value="chinese">中文参考</option>
+          </select>
+          <button type="button" onClick={handleCopy} title="复制提示词">
+            <Clipboard aria-hidden="true" />
+            {copyStatus === "copied"
+              ? "已复制"
+              : copyStatus === "failed"
+                ? "复制失败"
+                : "复制"}
+          </button>
+          <button
+            type="button"
+            onClick={handleSingleDownload}
+            disabled={exporting === "single"}
+            title="下载当前 TXT"
+          >
+            {exporting === "single" ? (
+              <Loader2 className="spin" aria-hidden="true" />
+            ) : (
+              <Download aria-hidden="true" />
+            )}
+            下载 TXT
+          </button>
+        </div>
+
+        <details className="batch-export-menu">
+          <summary>
+            <Archive aria-hidden="true" />
+            批量 ZIP
+          </summary>
+          <div className="batch-export-popover">
+            <p>
+              {isCustomMode
+                ? "用户自定义模式不产生组合维度，批量导出不可用。"
+                : "批量导出固定使用 2×2 四宫格产品摄影。"}
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                handleZipExport(
+                  "styleTypes",
+                  styleAllTypes(),
+                  `灯具提示词库_${selectedStyle.displayName}_${activeLightingTypes.length}类型_${ratioFileLabel}${emotionalZipSuffix}.zip`,
+                )
+              }
+              disabled={isCustomMode || exporting === "styleTypes"}
+            >
+              <DownloadOrSpinner active={exporting === "styleTypes"} />
+              当前风格全部类型
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                handleZipExport(
+                  "styleRatios",
+                  styleAllRatios(),
+                  `灯具提示词库_${selectedStyle.displayName}_${selectedType.displayName}_${activeRatios.length}比例${emotionalZipSuffix}.zip`,
+                )
+              }
+              disabled={isCustomMode || exporting === "styleRatios"}
+            >
+              <DownloadOrSpinner active={exporting === "styleRatios"} />
+              当前组合全部比例
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                handleZipExport(
+                  "allCurrentRatio",
+                  allStylesAllTypesCurrentRatio(),
+                  `灯具提示词库_${activeStyles.length}风格_${activeLightingTypes.length}类型_${ratioFileLabel}${emotionalZipSuffix}.zip`,
+                )
+              }
+              disabled={isCustomMode || exporting === "allCurrentRatio"}
+            >
+              <DownloadOrSpinner active={exporting === "allCurrentRatio"} />
+              全部风格类型
+            </button>
+            <button
+              type="button"
+              className="primary"
+              onClick={() =>
+                handleZipExport(
+                  "all",
+                  buildAllPrompts(
+                    catalog,
+                    selectedEmotionalTone.id,
+                    "four_panel_storyboard",
+                    {
+                      elementAssets,
+                      elementSelections,
+                      elementReferenceUsageMode: elementUsageMode,
+                      elementRandomToken,
+                    },
+                  ),
+                  buildLibraryZipName(
+                    activeStyles.length,
+                    activeLightingTypes.length,
+                    activeRatios.length,
+                  ).replace(/\.zip$/, `${emotionalZipSuffix}.zip`),
+                )
+              }
+              disabled={isCustomMode || exporting === "all"}
+            >
+              {exporting === "all" ? (
+                <Loader2 className="spin" aria-hidden="true" />
+              ) : (
+                <Archive aria-hidden="true" />
+              )}
+              全部 {activeStyles.length * activeLightingTypes.length * activeRatios.length} 份
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                handleZipExport(
+                  "allEmotions",
+                  buildAllEmotionalPrompts(catalog, {
+                    elementAssets,
+                    elementSelections,
+                    elementReferenceUsageMode: elementUsageMode,
+                    elementRandomToken,
+                  }),
+                  `灯具提示词库_全部情绪_${activeEmotionalTones.length}版本.zip`,
+                )
+              }
+              disabled={isCustomMode || exporting === "allEmotions"}
+            >
+              <DownloadOrSpinner active={exporting === "allEmotions"} />
+              全部情绪版本
+            </button>
+          </div>
+        </details>
+      </header>
+
+      <div className="app-shell export-dock-layout">
       <aside className="control-pane">
         <header className="app-header">
           <div>
@@ -599,163 +745,6 @@ export function App() {
               onManage={() => setWorkspaceMode("reference")}
             />
 
-            <section className="panel">
-              <div className="panel-title">
-                <FileText aria-hidden="true" />
-                <h2>单个导出</h2>
-              </div>
-
-              <SelectField
-                label="复制 / 下载语言"
-                value={outputLanguage}
-                onChange={(value) => setOutputLanguage(value as OutputLanguage)}
-              >
-                <option value="english">英文原文</option>
-                <option value="chinese">中文参考</option>
-              </SelectField>
-
-              <div className="button-grid">
-                <button type="button" onClick={handleCopy} title="复制提示词">
-                  <Clipboard aria-hidden="true" />
-                  {copyStatus === "copied"
-                    ? "已复制"
-                    : copyStatus === "failed"
-                      ? "复制失败"
-                      : "复制"}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleSingleDownload}
-                  disabled={exporting === "single"}
-                  title="下载当前 TXT"
-                >
-                  {exporting === "single" ? (
-                    <Loader2 className="spin" aria-hidden="true" />
-                  ) : (
-                    <Download aria-hidden="true" />
-                  )}
-                  下载 TXT
-                </button>
-              </div>
-            </section>
-
-            <section className="panel">
-              <div className="panel-title">
-                <Archive aria-hidden="true" />
-                <h2>批量 ZIP</h2>
-              </div>
-              <p className="batch-note">
-                {isCustomMode
-                  ? "用户自定义模式不产生组合维度，因此批量 ZIP 暂不可用。"
-                  : "批量导出固定使用“2×2四宫格产品摄影”，不扩展全部输出方式组合。"}
-              </p>
-
-              <div className="batch-actions">
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleZipExport(
-                      "styleTypes",
-                      styleAllTypes(),
-                      `灯具提示词库_${selectedStyle.displayName}_${activeLightingTypes.length}类型_${ratioFileLabel}${emotionalZipSuffix}.zip`,
-                    )
-                  }
-                  disabled={isCustomMode || exporting === "styleTypes"}
-                >
-                  <DownloadOrSpinner active={exporting === "styleTypes"} />
-                  当前风格全部类型
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleZipExport(
-                      "styleRatios",
-                      styleAllRatios(),
-                      `灯具提示词库_${selectedStyle.displayName}_${selectedType.displayName}_${activeRatios.length}比例${emotionalZipSuffix}.zip`,
-                    )
-                  }
-                  disabled={isCustomMode || exporting === "styleRatios"}
-                >
-                  <DownloadOrSpinner active={exporting === "styleRatios"} />
-                  当前组合全部比例
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleZipExport(
-                      "allCurrentRatio",
-                      allStylesAllTypesCurrentRatio(),
-                      `灯具提示词库_${activeStyles.length}风格_${activeLightingTypes.length}类型_${ratioFileLabel}${emotionalZipSuffix}.zip`,
-                    )
-                  }
-                  disabled={isCustomMode || exporting === "allCurrentRatio"}
-                >
-                  <DownloadOrSpinner active={exporting === "allCurrentRatio"} />
-                  全部风格类型
-                </button>
-
-                <button
-                  type="button"
-                  className="primary"
-                  onClick={() =>
-                    handleZipExport(
-                      "all",
-                      buildAllPrompts(
-                        catalog,
-                        selectedEmotionalTone.id,
-                        "four_panel_storyboard",
-                        {
-                          elementAssets,
-                          elementSelections,
-                          elementReferenceUsageMode: elementUsageMode,
-                          elementRandomToken,
-                        },
-                      ),
-                      buildLibraryZipName(
-                        activeStyles.length,
-                        activeLightingTypes.length,
-                        activeRatios.length,
-                      ).replace(/\.zip$/, `${emotionalZipSuffix}.zip`),
-                    )
-                  }
-                  disabled={isCustomMode || exporting === "all"}
-                >
-                  {exporting === "all" ? (
-                    <Loader2 className="spin" aria-hidden="true" />
-                  ) : (
-                    <Archive aria-hidden="true" />
-                  )}
-                  全部 {activeStyles.length * activeLightingTypes.length * activeRatios.length} 份
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleZipExport(
-                      "allEmotions",
-                      buildAllEmotionalPrompts(catalog, {
-                        elementAssets,
-                        elementSelections,
-                        elementReferenceUsageMode: elementUsageMode,
-                        elementRandomToken,
-                      }),
-                      `灯具提示词库_全部情绪_${activeEmotionalTones.length}版本.zip`,
-                    )
-                  }
-                  disabled={isCustomMode || exporting === "allEmotions"}
-                >
-                  <DownloadOrSpinner active={exporting === "allEmotions"} />
-                  全部情绪版本{" "}
-                  {activeStyles.length *
-                    activeLightingTypes.length *
-                    activeRatios.length *
-                    activeEmotionalTones.length}{" "}
-                  份
-                </button>
-              </div>
-            </section>
           </>
         ) : (
           <ManagementNav />
@@ -778,7 +767,8 @@ export function App() {
       ) : (
         <ManagementView catalog={catalog} reloadCatalog={reloadCatalog} />
       )}
-    </div>
+      </div>
+    </>
   );
 }
 

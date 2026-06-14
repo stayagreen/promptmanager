@@ -105,6 +105,106 @@ button svg {
   grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
 }
 
+.export-dock-layout {
+  padding-top: 76px;
+}
+
+.export-dock {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  right: 0;
+  left: 0;
+  min-height: 68px;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-bottom: 1px solid var(--line-strong);
+  background: rgb(255 253 250 / 96%);
+  box-shadow: 0 8px 24px rgb(46 39 29 / 10%);
+  backdrop-filter: blur(12px);
+}
+
+.export-dock-single {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-dock-single strong {
+  margin-right: 4px;
+  white-space: nowrap;
+}
+
+.export-dock-single select {
+  width: 150px;
+  min-height: 42px;
+}
+
+.export-dock button,
+.batch-export-menu summary {
+  min-height: 42px;
+}
+
+.batch-export-menu {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.batch-export-menu summary {
+  min-width: 124px;
+  padding: 9px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--teal-dark);
+  border-radius: 8px;
+  background: var(--teal);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+}
+
+.batch-export-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.batch-export-menu summary svg {
+  width: 18px;
+  height: 18px;
+}
+
+.batch-export-popover {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(340px, calc(100vw - 32px));
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--paper);
+  box-shadow: 0 18px 44px rgb(39 33 25 / 20%);
+}
+
+.batch-export-popover p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.batch-export-popover button {
+  width: 100%;
+  justify-content: flex-start;
+}
+
 .control-pane {
   border-right: 1px solid var(--line);
   background: rgba(255, 253, 250, 0.92);
@@ -1386,6 +1486,48 @@ textarea {
 }
 
 @media (max-width: 700px) {
+  .export-dock {
+    min-height: 116px;
+    padding: 9px 16px;
+    align-items: stretch;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .export-dock-layout {
+    padding-top: 124px;
+  }
+
+  .export-dock-single {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) repeat(2, auto);
+  }
+
+  .export-dock-single strong {
+    display: none;
+  }
+
+  .export-dock-single select {
+    width: 100%;
+  }
+
+  .export-dock-single button {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .batch-export-menu summary {
+    width: 100%;
+  }
+
+  .batch-export-popover {
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-height: calc(100vh - 132px);
+    overflow-y: auto;
+  }
+
   .control-pane,
   .preview-pane {
     padding: 16px;
