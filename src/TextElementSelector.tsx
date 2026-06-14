@@ -1,4 +1,5 @@
 import { Library, RefreshCw } from "lucide-react";
+import { ElementAssetPicker } from "./ElementAssetPicker";
 import type {
   ElementFusionMode,
   ElementInfluenceStrength,
@@ -38,7 +39,6 @@ export function TextElementSelector({
   onReroll: () => void;
   onManage: () => void;
 }) {
-  const enabledAssets = assets.filter((asset) => asset.enabled);
   const selectedIds = new Set(selections.map((selection) => selection.assetId));
 
   function toggle(asset: ElementReferenceAsset) {
@@ -93,28 +93,12 @@ export function TextElementSelector({
         </select>
       </label>
 
-      {enabledAssets.length === 0 ? (
-        <p className="helper-text">素材库为空，可进入素材库新增小花、雕刻件或纹理参考。</p>
-      ) : (
-        <div className="text-element-picker">
-          {enabledAssets.map((asset) => (
-            <label key={asset.id}>
-              <input
-                type="checkbox"
-                checked={selectedIds.has(asset.id)}
-                disabled={disabled}
-                onChange={() => toggle(asset)}
-              />
-              {asset.images[0] ? (
-                <img src={asset.images[0].url} alt="" />
-              ) : (
-                <span className="element-placeholder"><Library /></span>
-              )}
-              <span>{asset.displayName}</span>
-            </label>
-          ))}
-        </div>
-      )}
+      <ElementAssetPicker
+        assets={assets}
+        selectedIds={selectedIds}
+        disabled={disabled}
+        onToggle={toggle}
+      />
 
       {selections.map((selection) => {
         const asset = assets.find((item) => item.id === selection.assetId);

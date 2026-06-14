@@ -26,6 +26,7 @@ import {
   saveElementAsset,
   uploadElementAssetImage,
 } from "./utils/api";
+import { ElementAssetPicker } from "./ElementAssetPicker";
 
 const categoryLabels: Record<ElementAssetCategory, string> = {
   flower: "花卉植物",
@@ -215,26 +216,11 @@ export function ElementReferencePanel({
           还没有元素素材。打开素材库，先建立一份可复用素材。
         </div>
       ) : (
-        <div className="element-picker">
-          {enabledAssets.map((asset) => (
-            <button
-              type="button"
-              key={asset.id}
-              className={selectedIds.has(asset.id) ? "selected" : ""}
-              onClick={() => toggleAsset(asset)}
-            >
-              {asset.images[0] ? (
-                <img src={asset.images[0].url} alt="" />
-              ) : (
-                <span className="element-placeholder"><Library /></span>
-              )}
-              <span>
-                <strong>{asset.displayName}</strong>
-                <small>{categoryLabels[asset.category]}</small>
-              </span>
-            </button>
-          ))}
-        </div>
+        <ElementAssetPicker
+          assets={assets}
+          selectedIds={selectedIds}
+          onToggle={toggleAsset}
+        />
       )}
 
       {(project.elementSelections ?? []).length > 0 && (
@@ -243,18 +229,22 @@ export function ElementReferencePanel({
             const asset = assets.find((item) => item.id === selection.assetId);
             if (!asset) return null;
             return (
-              <article key={selection.assetId}>
-                <div className="element-selection-title">
+              <details className="element-selection-card" key={selection.assetId}>
+                <summary className="element-selection-title">
                   <strong>{asset.displayName}</strong>
                   <button
                     type="button"
                     className="danger icon-button"
                     title="从本产品移除"
-                    onClick={() => toggleAsset(asset)}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                      toggleAsset(asset);
+                    }}
                   >
                     <Trash2 aria-hidden="true" />
                   </button>
-                </div>
+                </summary>
                 <div className="element-control-grid">
                   <label className="field">
                     <span>使用方式</span>
@@ -319,7 +309,7 @@ export function ElementReferencePanel({
                     />
                   </label>
                 </div>
-              </article>
+              </details>
             );
           })}
         </div>
