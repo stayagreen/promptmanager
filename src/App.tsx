@@ -43,11 +43,14 @@ import type {
   CommonPromptModule,
   CustomPromptModule,
   EmotionalToneModule,
+  ElementReferenceAsset,
+  ElementReferenceUsageMode,
   HistoryCheckpoint,
   LightingTypeModule,
   ModuleHistoryKind,
   OutputModeModule,
   PhotographyProfileModule,
+  ProductElementSelection,
   PromptBuildResult,
   RatioModule,
   StyleModule,
@@ -63,6 +66,7 @@ import {
   deleteStyle,
   fetchHistory,
   fetchCatalog,
+  fetchElementAssets,
   restoreCheckpoint,
   saveCommonPrompt,
   saveCustomPrompt,
@@ -81,6 +85,7 @@ import {
   downloadTextFile,
 } from "./utils/download";
 import { ReferenceWorkspace } from "./ReferenceWorkspace";
+import { TextElementSelector } from "./TextElementSelector";
 
 type PageMode = "generate" | "manage";
 type WorkspaceMode = "text" | "reference";
@@ -124,6 +129,11 @@ export function App() {
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const [exporting, setExporting] = useState<ExportJob | null>(null);
   const [outputLanguage, setOutputLanguage] = useState<OutputLanguage>("english");
+  const [elementAssets, setElementAssets] = useState<ElementReferenceAsset[]>([]);
+  const [elementSelections, setElementSelections] = useState<ProductElementSelection[]>([]);
+  const [elementUsageMode, setElementUsageMode] =
+    useState<ElementReferenceUsageMode>("text_only");
+  const [elementRandomToken, setElementRandomToken] = useState(0);
 
   async function reloadCatalog() {
     try {
@@ -137,7 +147,18 @@ export function App() {
 
   useEffect(() => {
     void reloadCatalog();
+    void fetchElementAssets().then(setElementAssets);
   }, []);
+
+  useEffect(() => {
+    setElementSelections((current) =>
+      current.filter((selection) =>
+        elementAssets.some(
+          (asset) => asset.id === selection.assetId && asset.enabled,
+        ),
+      ),
+    );
+  }, [elementAssets]);
 
   useEffect(() => {
     if (!catalog) return;
@@ -214,11 +235,19 @@ export function App() {
       emotionalToneId,
       photographyProfileId,
       customPromptId,
+      elementAssets,
+      elementSelections,
+      elementReferenceUsageMode: elementUsageMode,
+      elementRandomToken,
     });
   }, [
     catalog,
     customPromptId,
     emotionalToneId,
+    elementAssets,
+    elementRandomToken,
+    elementSelections,
+    elementUsageMode,
     lightingTypeId,
     outputModeId,
     photographyProfileId,
@@ -294,7 +323,12 @@ export function App() {
     return (
       <ReferenceWorkspace
         catalog={catalog}
-        onWorkspaceMode={setWorkspaceMode}
+        onWorkspaceMode={(nextMode) => {
+          setWorkspaceMode(nextMode);
+          if (nextMode === "text") {
+            void fetchElementAssets().then(setElementAssets);
+          }
+        }}
       />
     );
   }
@@ -364,6 +398,10 @@ export function App() {
         ratioId: selectedRatio.id,
         outputModeId: "four_panel_storyboard",
         emotionalToneId: selectedEmotionalTone.id,
+        elementAssets,
+        elementSelections,
+        elementReferenceUsageMode: elementUsageMode,
+        elementRandomToken,
       }),
     );
   const styleAllRatios = () =>
@@ -374,6 +412,10 @@ export function App() {
         ratioId: ratio.id,
         outputModeId: "four_panel_storyboard",
         emotionalToneId: selectedEmotionalTone.id,
+        elementAssets,
+        elementSelections,
+        elementReferenceUsageMode: elementUsageMode,
+        elementRandomToken,
       }),
     );
   const allStylesAllTypesCurrentRatio = () =>
@@ -385,6 +427,10 @@ export function App() {
           ratioId: selectedRatio.id,
           outputModeId: "four_panel_storyboard",
           emotionalToneId: selectedEmotionalTone.id,
+          elementAssets,
+          elementSelections,
+          elementReferenceUsageMode: elementUsageMode,
+          elementRandomToken,
         }),
       ),
     );
@@ -542,6 +588,17 @@ export function App() {
               )}
             </section>
 
+            <TextElementSelector
+              assets={elementAssets}
+              selections={elementSelections}
+              usageMode={elementUsageMode}
+              disabled={isCustomMode}
+              onSelectionsChange={setElementSelections}
+              onUsageModeChange={setElementUsageMode}
+              onReroll={() => setElementRandomToken((value) => value + 1)}
+              onManage={() => setWorkspaceMode("reference")}
+            />
+
             <section className="panel">
               <div className="panel-title">
                 <FileText aria-hidden="true" />
@@ -645,7 +702,17 @@ export function App() {
                   onClick={() =>
                     handleZipExport(
                       "all",
-                      buildAllPrompts(catalog, selectedEmotionalTone.id),
+                      buildAllPrompts(
+                        catalog,
+                        selectedEmotionalTone.id,
+                        "four_panel_storyboard",
+                        {
+                          elementAssets,
+                          elementSelections,
+                          elementReferenceUsageMode: elementUsageMode,
+                          elementRandomToken,
+                        },
+                      ),
                       buildLibraryZipName(
                         activeStyles.length,
                         activeLightingTypes.length,
@@ -668,7 +735,12 @@ export function App() {
                   onClick={() =>
                     handleZipExport(
                       "allEmotions",
-                      buildAllEmotionalPrompts(catalog),
+                      buildAllEmotionalPrompts(catalog, {
+                        elementAssets,
+                        elementSelections,
+                        elementReferenceUsageMode: elementUsageMode,
+                        elementRandomToken,
+                      }),
                       `灯具提示词库_全部情绪_${activeEmotionalTones.length}版本.zip`,
                     )
                   }

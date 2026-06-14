@@ -696,6 +696,68 @@ input:disabled {
   gap: 6px;
 }
 
+.text-element-panel.disabled {
+  opacity: 0.62;
+}
+
+.text-element-picker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.text-element-picker label {
+  min-width: 0;
+  padding: 7px;
+  display: grid;
+  grid-template-columns: 16px 36px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.text-element-picker img,
+.text-element-picker .element-placeholder {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+}
+
+.text-element-picker label > span:last-child {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+}
+
+.text-element-detail {
+  margin-top: 9px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fff;
+}
+
+.text-element-detail summary {
+  padding: 9px 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.text-element-controls {
+  padding: 0 10px 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.text-element-actions {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
 .helper-text {
   margin-bottom: 0;
   color: var(--muted);

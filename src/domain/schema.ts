@@ -118,6 +118,7 @@ export type ElementAssetCategory =
 export type ElementFusionMode = "direct" | "abstract" | "texture";
 export type ElementInfluenceStrength = "subtle" | "medium" | "strong";
 export type ElementSelectionMode = "required" | "random";
+export type ElementReferenceUsageMode = "text_only" | "upload_images";
 
 export type ElementReferenceImage = {
   id: string;
@@ -225,6 +226,10 @@ export type PromptBuildRequest = {
   emotionalToneId?: string;
   photographyProfileId?: string;
   customPromptId?: string;
+  elementAssets?: ElementReferenceAsset[];
+  elementSelections?: ProductElementSelection[];
+  elementReferenceUsageMode?: ElementReferenceUsageMode;
+  elementRandomToken?: number;
 };
 
 export type PromptValidationResult = {

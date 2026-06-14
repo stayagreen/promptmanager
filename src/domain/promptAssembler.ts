@@ -12,6 +12,7 @@ import type {
   RatioModule,
   StyleModule,
 } from "./schema";
+import { buildElementItems, resolveElementAssets } from "./elementPrompt";
 
 const forbiddenChecks = [
   { label: "[STYLE]", pattern: /\[STYLE\]/ },
@@ -271,6 +272,18 @@ export function buildPrompt(
     ? title
     : `${title}_${photographyProfile.displayName}`;
   const isTechnicalOutput = outputMode.category === "technical";
+  const elementSelections = request.elementSelections ?? [];
+  const resolvedElements = resolveElementAssets(
+    elementSelections,
+    request.elementAssets ?? [],
+    `${style.id}:${lightingType.id}:${outputMode.id}:${request.elementRandomToken ?? 0}`,
+  );
+  const elementSection = buildTextToImageElementSection(
+    elementSelections,
+    resolvedElements,
+    request.elementReferenceUsageMode ?? "text_only",
+    isTechnicalOutput,
+  );
 
   const promptText = finalizePromptText(
     [
@@ -280,6 +293,7 @@ export function buildPrompt(
       getCommonPrompt(catalog, "base_role"),
       lightingType.typePrompt,
       style.stylePrompt,
+      elementSection,
       buildInspirationSection(style),
       buildMaterialSection(style),
       buildColorSection(style, outputMode),
@@ -321,6 +335,7 @@ export function buildPrompt(
       isTechnicalOutput
         ? `摄影风格：${photographyProfile.displayName}（技术类不参与）`
         : `摄影风格：${photographyProfile.displayName}`,
+      ...resolvedElements.map((asset) => `附加元素：${asset.displayName}`),
       "通用：角色定位",
       "通用：主体优先",
       isTechnicalOutput ? "通用：技术清晰度与量产要求" : "通用：摄影与量产要求",
@@ -338,6 +353,32 @@ export function buildPrompt(
       createdAt: new Date().toISOString(),
     },
   };
+}
+
+function buildTextToImageElementSection(
+  selections: NonNullable<PromptBuildRequest["elementSelections"]>,
+  resolvedElements: NonNullable<PromptBuildRequest["elementAssets"]>,
+  usageMode: NonNullable<PromptBuildRequest["elementReferenceUsageMode"]>,
+  isTechnicalOutput: boolean,
+): string {
+  if (resolvedElements.length === 0) return "";
+  const usageRule =
+    usageMode === "upload_images"
+      ? "REFERENCE IMAGE WORKFLOW: upload the stored images for E1, E2, and so on to the image-generation platform together with this prompt. Use them only as supplemental element references, never as complete lamp designs or scene references."
+      : "TEXT-ONLY WORKFLOW: no element image upload is required. Interpret the written element descriptions below as controlled design instructions.";
+  const outputRule = isTechnicalOutput
+    ? "Integrate the selected element language into a technically clear, structurally coherent, and manufacturable lamp design. The element may influence form, detail, surface, or ornament, but must remain legible in technical presentation."
+    : "The selected element may influence the lampshade, arm, support, base, joint, finial, decorative detail, surface finish, or restrained scene accessory when appropriate.";
+
+  return `SUPPLEMENTAL ELEMENT DESIGN DIRECTION
+
+${usageRule}
+
+${outputRule}
+
+${buildElementItems(selections, resolvedElements)}
+
+Design priority: preserve the selected lighting type, practical lighting function, structural stability, material logic, assembly feasibility, and commercial manufacturability. Translate the element into the lamp's design language instead of pasting it on mechanically. Do not let supplemental elements overwhelm the lamp's primary silhouette or turn it into a nonfunctional sculpture.`;
 }
 
 export function buildCustomPrompt(
@@ -376,6 +417,13 @@ export function buildAllPrompts(
   catalog: CatalogData,
   emotionalToneId = "none",
   outputModeId = "four_panel_storyboard",
+  elementOptions: Pick<
+    PromptBuildRequest,
+    | "elementAssets"
+    | "elementSelections"
+    | "elementReferenceUsageMode"
+    | "elementRandomToken"
+  > = {},
 ): PromptBuildResult[] {
   return getActiveStyles(catalog).flatMap((style) =>
     getActiveLightingTypes(catalog).flatMap((lightingType) =>
@@ -386,15 +434,30 @@ export function buildAllPrompts(
           ratioId: ratio.id,
           outputModeId,
           emotionalToneId,
+          ...elementOptions,
         }),
       ),
     ),
   );
 }
 
-export function buildAllEmotionalPrompts(catalog: CatalogData): PromptBuildResult[] {
+export function buildAllEmotionalPrompts(
+  catalog: CatalogData,
+  elementOptions: Pick<
+    PromptBuildRequest,
+    | "elementAssets"
+    | "elementSelections"
+    | "elementReferenceUsageMode"
+    | "elementRandomToken"
+  > = {},
+): PromptBuildResult[] {
   return getActiveEmotionalTones(catalog).flatMap((emotionalTone) =>
-    buildAllPrompts(catalog, emotionalTone.id),
+    buildAllPrompts(
+      catalog,
+      emotionalTone.id,
+      "four_panel_storyboard",
+      elementOptions,
+    ),
   );
 }
 
