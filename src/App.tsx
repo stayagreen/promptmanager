@@ -117,6 +117,66 @@ const clientTranslationCache = new Map<string, string>();
 
 const idPattern = /^[a-z0-9_]+$/;
 
+const metalOptions = [
+  { label: "铁", value: "iron" },
+  { label: "黑铁", value: "blackened iron" },
+  { label: "黄铜", value: "brass" },
+  { label: "紫铜", value: "copper" },
+  { label: "青铜", value: "bronze" },
+  { label: "不锈钢", value: "stainless steel" },
+  { label: "铝", value: "aluminum" },
+  { label: "锌合金", value: "zinc alloy" },
+];
+
+const finishOptions = [
+  { label: "拉丝", value: "brushed finish" },
+  { label: "镜面抛光", value: "mirror-polished finish" },
+  { label: "喷砂", value: "sandblasted finish" },
+  { label: "哑光喷涂", value: "matte powder coating" },
+  { label: "高光喷涂", value: "gloss powder coating" },
+  { label: "氧化", value: "oxidized finish" },
+  { label: "做旧", value: "antique patina" },
+  { label: "锤纹", value: "hand-hammered finish" },
+  { label: "电镀", value: "electroplated finish" },
+  { label: "发黑", value: "blackened finish" },
+];
+
+const processOptions = [
+  { label: "钣金折弯", value: "sheet-metal bending" },
+  { label: "金属旋压", value: "metal spinning" },
+  { label: "铸造", value: "metal casting" },
+  { label: "冲压", value: "metal stamping" },
+  { label: "激光切割", value: "laser cutting" },
+  { label: "管材弯曲", value: "tube bending" },
+  { label: "焊接", value: "welding" },
+  { label: "钎焊", value: "brazing" },
+  { label: "CNC 加工", value: "CNC machining" },
+  { label: "铝型材挤压", value: "aluminum extrusion" },
+  { label: "金属穿孔", value: "metal perforation" },
+];
+
+const connectionOptions = [
+  { label: "隐藏连接", value: "hidden fasteners" },
+  { label: "精密外露螺丝", value: "precision exposed screws" },
+  { label: "铆钉连接", value: "riveted connections" },
+  { label: "外露转轴", value: "exposed pivot hinges" },
+  { label: "机械关节", value: "articulated mechanical joints" },
+  { label: "无缝套环", value: "seamless collars" },
+  { label: "螺纹连接", value: "threaded connections" },
+  { label: "焊接一体", value: "seamlessly welded construction" },
+];
+
+const shadeOptions = [
+  { label: "实体金属罩", value: "solid metal shade" },
+  { label: "穿孔金属罩", value: "perforated metal shade" },
+  { label: "金属网罩", value: "metal mesh shade" },
+  { label: "金属反射罩", value: "metal reflector shade" },
+  { label: "叶片遮光", value: "metal louver light control" },
+  { label: "间接反射", value: "indirect metal reflector" },
+  { label: "镂空投影", value: "laser-cut shadow-casting shade" },
+  { label: "双层防眩罩", value: "double-layer anti-glare metal shade" },
+];
+
 export function App() {
   const [catalog, setCatalog] = useState<CatalogData | null>(null);
   const [loadError, setLoadError] = useState("");
@@ -756,34 +816,34 @@ export function App() {
               {!isCustomMode &&
                 selectedStructuralMaterialMode.mode !== "regular" && (
                   <div className="material-strategy-fields">
-                    <TextField
-                      label="主金属 / 辅助金属"
+                    <MultiSelectField
+                      label="金属选择"
                       value={selectedMetals}
-                      placeholder="例如：拉丝黄铜、黑铁；或 304 不锈钢"
+                      options={metalOptions}
                       onChange={setSelectedMetals}
                     />
-                    <TextField
+                    <MultiSelectField
                       label="表面处理"
                       value={selectedFinishes}
-                      placeholder="例如：拉丝、喷砂、氧化、奶白喷涂"
+                      options={finishOptions}
                       onChange={setSelectedFinishes}
                     />
-                    <TextField
+                    <MultiSelectField
                       label="制造工艺"
                       value={selectedProcesses}
-                      placeholder="例如：钣金折弯、旋压、铸造、CNC"
+                      options={processOptions}
                       onChange={setSelectedProcesses}
                     />
-                    <TextField
+                    <MultiSelectField
                       label="连接方式"
                       value={connectionLanguage}
-                      placeholder="例如：隐藏连接、外露转轴、精密螺丝"
+                      options={connectionOptions}
                       onChange={setConnectionLanguage}
                     />
-                    <TextField
+                    <MultiSelectField
                       label="灯罩与控光方式"
                       value={shadeStrategy}
-                      placeholder="例如：穿孔金属罩、反射罩、叶片遮光"
+                      options={shadeOptions}
                       onChange={setShadeStrategy}
                     />
                     <SelectField
@@ -3014,6 +3074,81 @@ function TextField({
         onChange={(event) => onChange(event.target.value)}
       />
     </label>
+  );
+}
+
+function MultiSelectField({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: Array<{ label: string; value: string }>;
+  onChange: (value: string) => void;
+}) {
+  const selectedValues = value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+  const selectedSet = new Set(selectedValues);
+  const selectedOptions = options.filter((option) =>
+    selectedSet.has(option.value),
+  );
+
+  function toggle(optionValue: string) {
+    const next = selectedSet.has(optionValue)
+      ? selectedValues.filter((item) => item !== optionValue)
+      : [...selectedValues, optionValue];
+    onChange(next.join(", "));
+  }
+
+  return (
+    <div className="field multi-select-field">
+      <span>{label}（可多选）</span>
+      <details>
+        <summary>
+          {selectedOptions.length > 0
+            ? `已选 ${selectedOptions.length} 项`
+            : "点击选择"}
+        </summary>
+        <div className="multi-select-options">
+          {options.map((option) => (
+            <label key={option.value}>
+              <input
+                type="checkbox"
+                checked={selectedSet.has(option.value)}
+                onChange={() => toggle(option.value)}
+              />
+              <span>{option.label}</span>
+            </label>
+          ))}
+        </div>
+      </details>
+      {selectedOptions.length > 0 && (
+        <div className="multi-select-chips">
+          {selectedOptions.map((option) => (
+            <button
+              type="button"
+              key={option.value}
+              title={`移除 ${option.label}`}
+              onClick={() => toggle(option.value)}
+            >
+              {option.label}
+              <span aria-hidden="true">×</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            className="multi-select-clear"
+            onClick={() => onChange("")}
+          >
+            清空
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
 
