@@ -14,6 +14,7 @@ import type {
   ReferenceProductImage,
   ReferenceProductProject,
   StyleModule,
+  StructuralMaterialModeModule,
 } from "../domain/schema";
 
 export async function fetchCatalog(): Promise<CatalogData> {
@@ -103,6 +104,19 @@ export async function saveOutputMode(
 
 export async function deleteOutputMode(id: string): Promise<void> {
   await request(`/api/output-modes/${id}`, { method: "DELETE" });
+}
+
+export async function saveStructuralMaterialMode(
+  mode: StructuralMaterialModeModule,
+): Promise<StructuralMaterialModeModule> {
+  return request<StructuralMaterialModeModule>(
+    `/api/structural-material-modes/${mode.id}`,
+    { method: "PUT", body: JSON.stringify(mode) },
+  );
+}
+
+export async function deleteStructuralMaterialMode(id: string): Promise<void> {
+  await request(`/api/structural-material-modes/${id}`, { method: "DELETE" });
 }
 
 export async function saveCustomPrompt(
@@ -260,6 +274,7 @@ function historyPath(kind: ModuleHistoryKind): string {
   if (kind === "emotional_tones") return "emotional-tones";
   if (kind === "photography_profiles") return "photography-profiles";
   if (kind === "output_modes") return "output-modes";
+  if (kind === "structural_material_modes") return "structural-material-modes";
   if (kind === "custom_prompts") return "custom-prompts";
   if (kind === "product_projects") return "product-projects";
   if (kind === "element_assets") return "element-assets";

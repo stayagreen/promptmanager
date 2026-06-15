@@ -134,5 +134,6 @@
     "Oversized audio-equipment motifs"
   ],
   "enabled": true,
-  "sortOrder": 2
+  "sortOrder": 2,
+  "metalTranslationPrompt": "Use authentic Mid-Century Modern metal language: tapered cone or dome shades, slim tubular arms, compact spherical joints, warm brushed brass, aged bronze, blackened steel, and walnut-toned powder coating expressed as metal finish rather than wood."
 }

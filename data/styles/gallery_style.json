@@ -3,11 +3,51 @@
   "displayName": "画廊风",
   "englishName": "Gallery Style",
   "stylePrompt": "Create a completely original Gallery Style lighting product that treats light as a curatorial instrument and the lamp itself as a collectible object. Prioritize precise beam control, visual restraint, museum-grade detailing, and a silhouette strong enough to stand alone in an open space. Use contrast between illuminated subject and quiet background. The design should support focusing, aiming, dimming, and glare control without looking merely technical.",
-  "inspirationSources": ["Museum Spotlights", "White Cube Galleries", "Sculpture Pedestals", "Framing Devices", "Curatorial Track Systems", "Art Storage Hardware", "Shadow Studies", "Optical Instruments"],
-  "specificElements": ["A narrow-beam head with a clean snoot", "A sculptural pedestal base", "A precisely articulated aiming joint", "A frame-like body defining an illuminated void", "A concealed zoom optic", "A dark housing that visually disappears around the beam"],
-  "materials": ["Machined Aluminum", "Powder-Coated Steel", "Optical Glass", "Blackened Brass", "Marble", "Opal Glass", "Microprismatic Lens"],
-  "colors": ["Gallery White", "Matte Black", "Graphite", "Neutral Grey", "Dark Bronze", "Stone White"],
-  "avoid": ["Broad uncontrolled light", "Decorative patterns", "Visible glare", "Bulky commercial track-light appearance", "Excessive furniture-like styling", "Colorful visual noise", "Imprecise joints"],
+  "inspirationSources": [
+    "Museum Spotlights",
+    "White Cube Galleries",
+    "Sculpture Pedestals",
+    "Framing Devices",
+    "Curatorial Track Systems",
+    "Art Storage Hardware",
+    "Shadow Studies",
+    "Optical Instruments"
+  ],
+  "specificElements": [
+    "A narrow-beam head with a clean snoot",
+    "A sculptural pedestal base",
+    "A precisely articulated aiming joint",
+    "A frame-like body defining an illuminated void",
+    "A concealed zoom optic",
+    "A dark housing that visually disappears around the beam"
+  ],
+  "materials": [
+    "Machined Aluminum",
+    "Powder-Coated Steel",
+    "Optical Glass",
+    "Blackened Brass",
+    "Marble",
+    "Opal Glass",
+    "Microprismatic Lens"
+  ],
+  "colors": [
+    "Gallery White",
+    "Matte Black",
+    "Graphite",
+    "Neutral Grey",
+    "Dark Bronze",
+    "Stone White"
+  ],
+  "avoid": [
+    "Broad uncontrolled light",
+    "Decorative patterns",
+    "Visible glare",
+    "Bulky commercial track-light appearance",
+    "Excessive furniture-like styling",
+    "Colorful visual noise",
+    "Imprecise joints"
+  ],
   "sortOrder": 20,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Treat the lamp as a collectible metal art object with one decisive silhouette, sparse components, museum-grade detailing, controlled brushed or blackened finishes, and precise directional light hardware."
 }

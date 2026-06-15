@@ -1,0 +1,11 @@
+{
+  "id": "regular",
+  "displayName": "常规材质",
+  "englishName": "Regular Material Strategy",
+  "mode": "regular",
+  "structurePrompt": "",
+  "manufacturingPrompt": "",
+  "avoidPrompt": [],
+  "enabled": true,
+  "sortOrder": 0
+}

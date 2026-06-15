@@ -3,11 +3,53 @@
   "displayName": "爷辈时髦风",
   "englishName": "Grandpa Chic",
   "stylePrompt": "Create a completely original Grandpa Chic lighting product that combines warmth, memory, and collected character with a sharp contemporary edit. Draw from fringed shades, dark walnut, library lamps, plaid textiles, aged brass, and velvet, then simplify the composition and introduce one modern material or precision detail. The lamp should feel storied, comforting, intelligent, and fashion-aware rather than dusty, kitschy, or nostalgically copied.",
-  "inspirationSources": ["Old Reading Rooms", "Fringed Floor Lamps", "Walnut Cabinets", "Tartan Textiles", "Vintage Smoking Lounges", "Library Desk Lamps", "Aged Brass Objects", "Collected Travel Souvenirs"],
-  "specificElements": ["A restrained fringe beneath a clean shade", "A walnut stem joined to a precise metal base", "A plaid texture abstracted into a perforation grid", "An aged-brass reading arm with modern optics", "A velvet-toned shade paired with a polished steel detail", "A familiar library silhouette with unexpected proportions"],
-  "materials": ["Dark Walnut", "Aged Brass", "Velvet", "Wool Textile", "Opal Glass", "Leather", "Polished Stainless Steel Accent", "Pleated Fabric"],
-  "colors": ["Bottle Green", "Burgundy", "Dark Walnut", "Tobacco Brown", "Aged Brass", "Navy", "Warm Cream"],
-  "avoid": ["Dusty antique reproduction", "Excessive tassels", "Novelty retro props", "Clashing uncontrolled patterns", "Heavy brown monotony", "Cheap faux leather", "Old-fashioned electrical details"],
+  "inspirationSources": [
+    "Old Reading Rooms",
+    "Fringed Floor Lamps",
+    "Walnut Cabinets",
+    "Tartan Textiles",
+    "Vintage Smoking Lounges",
+    "Library Desk Lamps",
+    "Aged Brass Objects",
+    "Collected Travel Souvenirs"
+  ],
+  "specificElements": [
+    "A restrained fringe beneath a clean shade",
+    "A walnut stem joined to a precise metal base",
+    "A plaid texture abstracted into a perforation grid",
+    "An aged-brass reading arm with modern optics",
+    "A velvet-toned shade paired with a polished steel detail",
+    "A familiar library silhouette with unexpected proportions"
+  ],
+  "materials": [
+    "Dark Walnut",
+    "Aged Brass",
+    "Velvet",
+    "Wool Textile",
+    "Opal Glass",
+    "Leather",
+    "Polished Stainless Steel Accent",
+    "Pleated Fabric"
+  ],
+  "colors": [
+    "Bottle Green",
+    "Burgundy",
+    "Dark Walnut",
+    "Tobacco Brown",
+    "Aged Brass",
+    "Navy",
+    "Warm Cream"
+  ],
+  "avoid": [
+    "Dusty antique reproduction",
+    "Excessive tassels",
+    "Novelty retro props",
+    "Clashing uncontrolled patterns",
+    "Heavy brown monotony",
+    "Cheap faux leather",
+    "Old-fashioned electrical details"
+  ],
   "sortOrder": 28,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Use warm aged brass, dark bronze, traditional turned-metal details, restrained pleated-metal shade references, familiar hardware proportions, and one clean contemporary metal accent."
 }

@@ -3,11 +3,52 @@
   "displayName": "色彩浸润风",
   "englishName": "Color Drenching",
   "stylePrompt": "Create a completely original Color Drenching lighting product designed to belong inside a space saturated in one dominant color. Use a confident monochromatic body with subtle shifts in texture, gloss, and depth rather than multiple decorative hues. Let warm localized light carve cinematic contrast against the enveloping color. The lamp should strengthen the room's theatrical atmosphere while remaining legible as a premium product.",
-  "inspirationSources": ["Monochrome Film Sets", "Color Field Painting", "Painted Architectural Rooms", "Theater Lighting", "Deep Forest Interiors", "Lacquered Panels", "Velvet Shadows", "Saturated Photography"],
-  "specificElements": ["A body and shade in one continuous saturated hue", "Gloss and matte surfaces defining form without color change", "A warm aperture glowing against a deep monochrome shell", "A recessed diffuser creating cinematic shadow", "A tone-on-tone joint detail", "A narrow light cut revealing depth inside the colored volume"],
-  "materials": ["Color-Coated Aluminum", "Lacquered Steel", "Colored Glass", "Glazed Ceramic", "Velvet Accent", "Opal Glass", "Tinted Resin"],
-  "colors": ["Deep Forest Green", "Chocolate Brown", "Aubergine", "Burgundy", "Cobalt Blue", "Burnt Orange", "Warm Amber Light"],
-  "avoid": ["Random multicolor accents", "Flat textureless paint", "Weak pastel treatment", "Poor color consistency", "Cold flat illumination", "Busy ornament", "Color obscuring product structure"],
+  "inspirationSources": [
+    "Monochrome Film Sets",
+    "Color Field Painting",
+    "Painted Architectural Rooms",
+    "Theater Lighting",
+    "Deep Forest Interiors",
+    "Lacquered Panels",
+    "Velvet Shadows",
+    "Saturated Photography"
+  ],
+  "specificElements": [
+    "A body and shade in one continuous saturated hue",
+    "Gloss and matte surfaces defining form without color change",
+    "A warm aperture glowing against a deep monochrome shell",
+    "A recessed diffuser creating cinematic shadow",
+    "A tone-on-tone joint detail",
+    "A narrow light cut revealing depth inside the colored volume"
+  ],
+  "materials": [
+    "Color-Coated Aluminum",
+    "Lacquered Steel",
+    "Colored Glass",
+    "Glazed Ceramic",
+    "Velvet Accent",
+    "Opal Glass",
+    "Tinted Resin"
+  ],
+  "colors": [
+    "Deep Forest Green",
+    "Chocolate Brown",
+    "Aubergine",
+    "Burgundy",
+    "Cobalt Blue",
+    "Burnt Orange",
+    "Warm Amber Light"
+  ],
+  "avoid": [
+    "Random multicolor accents",
+    "Flat textureless paint",
+    "Weak pastel treatment",
+    "Poor color consistency",
+    "Cold flat illumination",
+    "Busy ornament",
+    "Color obscuring product structure"
+  ],
   "sortOrder": 27,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Use one dominant saturated powder-coated metal color across shade, arms, canopy, and base, with subtle finish variation and warm localized light creating cinematic depth."
 }

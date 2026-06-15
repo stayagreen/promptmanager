@@ -89,5 +89,6 @@
     "Half-Chinese half-French split design"
   ],
   "sortOrder": 6,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Combine refined French metal proportions with Chinese negative space, magnolia or ruyi-inspired terminals, champagne brass, dark bronze accents, and restrained symmetrical balance."
 }

@@ -8,7 +8,26 @@ export type StyleModule = {
   materials: string[];
   colors: string[];
   avoid: string[];
+  metalTranslationPrompt?: string;
   enabled?: boolean;
+  sortOrder?: number;
+};
+
+export type StructuralMaterialModeType =
+  | "regular"
+  | "all_metal"
+  | "metal_dominant"
+  | "custom";
+
+export type StructuralMaterialModeModule = {
+  id: string;
+  displayName: string;
+  englishName: string;
+  mode: StructuralMaterialModeType;
+  structurePrompt: string;
+  manufacturingPrompt: string;
+  avoidPrompt: string[];
+  enabled: boolean;
   sortOrder?: number;
 };
 
@@ -193,6 +212,7 @@ export type CatalogData = {
   emotionalTones: EmotionalToneModule[];
   photographyProfiles: PhotographyProfileModule[];
   outputModes: OutputModeModule[];
+  structuralMaterialModes: StructuralMaterialModeModule[];
   customPrompts: CustomPromptModule[];
   commonPrompts: CommonPromptModule[];
 };
@@ -204,6 +224,7 @@ export type ModuleHistoryKind =
   | "emotional_tones"
   | "photography_profiles"
   | "output_modes"
+  | "structural_material_modes"
   | "custom_prompts"
   | "product_projects"
   | "element_assets"
@@ -226,6 +247,15 @@ export type PromptBuildRequest = {
   emotionalToneId?: string;
   photographyProfileId?: string;
   customPromptId?: string;
+  structuralMaterialModeId?: string;
+  selectedMetals?: string;
+  selectedFinishes?: string;
+  selectedProcesses?: string;
+  connectionLanguage?: string;
+  shadeStrategy?: string;
+  allowedMaterials?: string;
+  prohibitedMaterials?: string;
+  materialStrictness?: "strict" | "balanced";
   elementAssets?: ElementReferenceAsset[];
   elementSelections?: ProductElementSelection[];
   elementReferenceUsageMode?: ElementReferenceUsageMode;
@@ -253,6 +283,7 @@ export type PromptBuildResult = {
     emotionalToneId: string;
     photographyProfileId: string;
     customPromptId: string;
+    structuralMaterialModeId: string;
     createdAt: string;
   };
 };

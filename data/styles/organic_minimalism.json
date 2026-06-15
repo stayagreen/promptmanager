@@ -3,11 +3,53 @@
   "displayName": "有机极简",
   "englishName": "Organic Minimalism",
   "stylePrompt": "Create a completely original Organic Minimalist lighting product that combines reduction with the irregular vitality of natural growth. Replace rigid geometry with restrained biomorphic curves, sculptural mass, and meaningful asymmetry. References to petals, shells, calla lilies, eroded stone, and bone should remain abstract. The lamp should feel calm yet alive, materially substantial, and simple enough to reveal every proportion and surface.",
-  "inspirationSources": ["Magnolia Petals", "Calla Lily Curves", "Shell Ridges", "Eroded Stone", "Bone Structure", "Seed Forms", "Wind-Carved Dunes", "River Channels"],
-  "specificElements": ["A thick plaster shade shaped by one petal-like fold", "An off-center opening in a stone volume", "A shell-inspired rib controlling light", "A calla-lily curve reduced to a continuous plane", "A base that appears naturally eroded", "A sculptural body with no strict front view"],
-  "materials": ["Plaster", "Lime Composite", "Raw Stone", "Travertine", "Matte Ceramic", "Cast Paper Pulp", "Opal Glass", "Textured Aluminum"],
-  "colors": ["Chalk White", "Limestone", "Bone", "Sand", "Warm Grey", "Clay", "Muted Charcoal"],
-  "avoid": ["Perfect bilateral symmetry", "Thin decorative curls", "Glossy plastic", "Random blob forms", "Bright artificial colors", "Excessive components", "Literal flower replicas"],
+  "inspirationSources": [
+    "Magnolia Petals",
+    "Calla Lily Curves",
+    "Shell Ridges",
+    "Eroded Stone",
+    "Bone Structure",
+    "Seed Forms",
+    "Wind-Carved Dunes",
+    "River Channels"
+  ],
+  "specificElements": [
+    "A thick plaster shade shaped by one petal-like fold",
+    "An off-center opening in a stone volume",
+    "A shell-inspired rib controlling light",
+    "A calla-lily curve reduced to a continuous plane",
+    "A base that appears naturally eroded",
+    "A sculptural body with no strict front view"
+  ],
+  "materials": [
+    "Plaster",
+    "Lime Composite",
+    "Raw Stone",
+    "Travertine",
+    "Matte Ceramic",
+    "Cast Paper Pulp",
+    "Opal Glass",
+    "Textured Aluminum"
+  ],
+  "colors": [
+    "Chalk White",
+    "Limestone",
+    "Bone",
+    "Sand",
+    "Warm Grey",
+    "Clay",
+    "Muted Charcoal"
+  ],
+  "avoid": [
+    "Perfect bilateral symmetry",
+    "Thin decorative curls",
+    "Glossy plastic",
+    "Random blob forms",
+    "Bright artificial colors",
+    "Excessive components",
+    "Literal flower replicas"
+  ],
   "sortOrder": 19,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Use sculptural all-metal biomorphic volumes, softly folded petal planes, shell-like curves, non-symmetrical balance, matte mineral-toned coatings, and thick believable metal edges."
 }

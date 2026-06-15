@@ -18,6 +18,9 @@ const ratios = getActiveRatios(catalog);
 const emotionalTones = getActiveEmotionalTones(catalog);
 const photographyProfiles = getActivePhotographyProfiles(catalog);
 const outputModes = getActiveOutputModes(catalog);
+const structuralMaterialModes = catalog.structuralMaterialModes.filter(
+  (mode) => mode.enabled,
+);
 const prompts = buildAllPrompts(catalog);
 const expectedCount = styles.length * lightingTypes.length * ratios.length;
 const invalidPrompts = prompts.filter((prompt) => !prompt.validation.valid);
@@ -211,9 +214,42 @@ if (allEmotionalPrompts.length !== expectedEmotionalCount) {
   );
 }
 
+const allMetalMode = structuralMaterialModes.find(
+  (mode) => mode.mode === "all_metal",
+);
+if (!allMetalMode) {
+  throw new Error("An active all-metal structural material mode is required.");
+}
+
+const allMetalPrompt = buildPrompt(catalog, {
+  styleId: "cream_style",
+  lightingTypeId: "table_lamp",
+  ratioId: "1_1",
+  outputModeId: "single_hero_shot",
+  structuralMaterialModeId: allMetalMode.id,
+  selectedMetals: "ivory powder-coated aluminum and brushed brass",
+  selectedProcesses: "metal spinning and sheet-metal forming",
+  materialStrictness: "strict",
+});
+[
+  "STRICT ALL-METAL PRODUCT LOCK",
+  "STYLE-SPECIFIC METAL FORM TRANSLATION",
+  "METAL MANUFACTURING DIRECTION",
+].forEach((keyword) => {
+  if (!allMetalPrompt.promptText.includes(keyword)) {
+    throw new Error(`All-metal prompt missing: ${keyword}.`);
+  }
+});
+if (allMetalPrompt.promptText.includes("Possible materials include:")) {
+  throw new Error("Regular style material list leaked into all-metal mode.");
+}
+if (allMetalPrompt.metadata.structuralMaterialModeId !== allMetalMode.id) {
+  throw new Error("All-metal mode metadata mismatch.");
+}
+
 console.log(`Verified ${prompts.length} prompts.`);
 console.log(
-  `Styles: ${styles.length}, lighting types: ${lightingTypes.length}, ratios: ${ratios.length}, emotional tones: ${emotionalTones.length}, photography profiles: ${photographyProfiles.length}, output modes: ${outputModes.length}.`,
+  `Styles: ${styles.length}, lighting types: ${lightingTypes.length}, ratios: ${ratios.length}, emotional tones: ${emotionalTones.length}, photography profiles: ${photographyProfiles.length}, output modes: ${outputModes.length}, structural material modes: ${structuralMaterialModes.length}.`,
 );
 console.log(`Sample: ${prompts[0].filename}`);
 

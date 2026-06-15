@@ -3,11 +3,53 @@
   "displayName": "新禅意",
   "englishName": "Modern Zen",
   "stylePrompt": "Create a completely original Modern Zen lighting product that transforms East Asian spatial philosophy into a quiet contemporary object. Use disciplined negative space, poised asymmetry, restrained botanical curves, and calm natural materials. References to magnolia, calla lily, silk, paper, stone, and ink should be abstract and structural, never literal decoration. The lamp must feel breathable, contemplative, refined, and suited to modern urban interiors.",
-  "inspirationSources": ["Magnolia Buds", "Calla Lily Curves", "Ink Wash Empty Space", "Scholar Stones", "Paper Screens", "Quiet Courtyards", "Silk Drapery", "Meditation Platforms"],
-  "specificElements": ["A magnolia-petal diffuser reduced to one pure curve", "A calla-lily stem translated into a slim support", "A luminous paper plane floating beside stone", "An asymmetrical composition balanced by empty space", "A concealed light washing across textured silk", "A low horizontal form inspired by a meditation platform"],
-  "materials": ["Matte Walnut", "Ash Wood", "Silk", "Washi Paper", "Opal Glass", "Natural Marble", "Mother of Pearl", "Darkened Brass"],
-  "colors": ["Rice White", "Ink Black", "Warm Walnut", "Jade Grey", "Mist Beige", "Muted Celadon", "Stone White"],
-  "avoid": ["Red-and-gold traditional styling", "Literal Chinese symbols", "Heavy carved wood", "Temple lantern replicas", "Crowded ornament", "Glossy synthetic surfaces", "Overly rustic styling"],
+  "inspirationSources": [
+    "Magnolia Buds",
+    "Calla Lily Curves",
+    "Ink Wash Empty Space",
+    "Scholar Stones",
+    "Paper Screens",
+    "Quiet Courtyards",
+    "Silk Drapery",
+    "Meditation Platforms"
+  ],
+  "specificElements": [
+    "A magnolia-petal diffuser reduced to one pure curve",
+    "A calla-lily stem translated into a slim support",
+    "A luminous paper plane floating beside stone",
+    "An asymmetrical composition balanced by empty space",
+    "A concealed light washing across textured silk",
+    "A low horizontal form inspired by a meditation platform"
+  ],
+  "materials": [
+    "Matte Walnut",
+    "Ash Wood",
+    "Silk",
+    "Washi Paper",
+    "Opal Glass",
+    "Natural Marble",
+    "Mother of Pearl",
+    "Darkened Brass"
+  ],
+  "colors": [
+    "Rice White",
+    "Ink Black",
+    "Warm Walnut",
+    "Jade Grey",
+    "Mist Beige",
+    "Muted Celadon",
+    "Stone White"
+  ],
+  "avoid": [
+    "Red-and-gold traditional styling",
+    "Literal Chinese symbols",
+    "Heavy carved wood",
+    "Temple lantern replicas",
+    "Crowded ornament",
+    "Glossy synthetic surfaces",
+    "Overly rustic styling"
+  ],
   "sortOrder": 15,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Use matte bronze, darkened stainless steel, quiet circular or mountain-line silhouettes, broad calm curves, concealed joints, and sparse metal planes with strong negative space."
 }

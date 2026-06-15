@@ -17,6 +17,7 @@ import type {
   ReferenceProductImage,
   ReferenceProductProject,
   StyleModule,
+  StructuralMaterialModeModule,
 } from "../src/domain/schema";
 
 const rootDir = process.cwd();
@@ -27,6 +28,7 @@ const ratiosDir = join(dataDir, "ratios");
 const emotionalTonesDir = join(dataDir, "emotional_tones");
 const photographyProfilesDir = join(dataDir, "photography_profiles");
 const outputModesDir = join(dataDir, "output_modes");
+const structuralMaterialModesDir = join(dataDir, "structural_material_modes");
 const customPromptsDir = join(dataDir, "custom_prompts");
 const productProjectsDir = join(dataDir, "product_projects");
 const elementAssetsDir = join(dataDir, "element_assets");
@@ -45,6 +47,7 @@ export async function loadCatalog(): Promise<CatalogData> {
     emotionalTones,
     photographyProfiles,
     outputModes,
+    structuralMaterialModes,
     customPrompts,
     commonPrompts,
   ] = await Promise.all([
@@ -54,6 +57,7 @@ export async function loadCatalog(): Promise<CatalogData> {
       readJsonDirectory<EmotionalToneModule>(emotionalTonesDir),
       readJsonDirectory<PhotographyProfileModule>(photographyProfilesDir),
       readJsonDirectory<OutputModeModule>(outputModesDir),
+      readJsonDirectory<StructuralMaterialModeModule>(structuralMaterialModesDir),
       readJsonDirectory<CustomPromptModule>(customPromptsDir),
       readCommonPrompts(),
     ]);
@@ -65,6 +69,7 @@ export async function loadCatalog(): Promise<CatalogData> {
     emotionalTones: sortModules(emotionalTones),
     photographyProfiles: sortModules(photographyProfiles),
     outputModes: sortModules(outputModes),
+    structuralMaterialModes: sortModules(structuralMaterialModes),
     customPrompts: sortModules(customPrompts),
     commonPrompts,
   };
@@ -255,6 +260,31 @@ export async function deleteOutputMode(id: string): Promise<void> {
     throw new Error("The default output mode cannot be deleted.");
   }
   await deleteJsonFileWithCheckpoint("output_modes", id, filePath);
+}
+
+export async function saveStructuralMaterialMode(
+  mode: StructuralMaterialModeModule,
+): Promise<StructuralMaterialModeModule> {
+  assertSafeId(mode.id);
+  await writeJsonFileWithCheckpoint(
+    "structural_material_modes",
+    mode.id,
+    join(structuralMaterialModesDir, `${mode.id}.json`),
+    mode,
+  );
+  return mode;
+}
+
+export async function deleteStructuralMaterialMode(id: string): Promise<void> {
+  assertSafeId(id);
+  if (id === "regular") {
+    throw new Error("The regular structural material mode cannot be deleted.");
+  }
+  await deleteJsonFileWithCheckpoint(
+    "structural_material_modes",
+    id,
+    join(structuralMaterialModesDir, `${id}.json`),
+  );
 }
 
 export async function saveCustomPrompt(
@@ -643,6 +673,16 @@ export async function restoreHistoryCheckpoint(
     return;
   }
 
+  if (moduleKind === "structural_material_modes") {
+    await restoreJsonSnapshot(
+      moduleKind,
+      moduleId,
+      join(structuralMaterialModesDir, `${moduleId}.json`),
+      checkpoint.snapshot as StructuralMaterialModeModule,
+    );
+    return;
+  }
+
   if (moduleKind === "custom_prompts") {
     await restoreJsonSnapshot(
       moduleKind,
@@ -690,6 +730,7 @@ async function ensureDataDirectories(): Promise<void> {
     mkdir(emotionalTonesDir, { recursive: true }),
     mkdir(photographyProfilesDir, { recursive: true }),
     mkdir(outputModesDir, { recursive: true }),
+    mkdir(structuralMaterialModesDir, { recursive: true }),
     mkdir(customPromptsDir, { recursive: true }),
     mkdir(productProjectsDir, { recursive: true }),
     mkdir(elementAssetsDir, { recursive: true }),

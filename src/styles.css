@@ -1064,8 +1064,20 @@ input:disabled {
 
 .metrics-strip {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 10px;
+}
+
+.material-strategy-fields {
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid #c7b178;
+  border-radius: 7px;
+  background: #fffbef;
+}
+
+.material-strategy-fields .field:first-child {
+  margin-top: 0;
 }
 
 .metrics-strip.custom {

@@ -93,5 +93,6 @@
     "Heavy French ornamentation"
   ],
   "sortOrder": 5,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Combine softened French curves with hand-worked metal imperfection: oxidized brass, chalky warm-grey powder coating, shallow hammered surfaces, irregular but controlled edges, and sparse poetic ornament."
 }

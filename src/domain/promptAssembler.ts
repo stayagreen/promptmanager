@@ -11,6 +11,7 @@ import type {
   PromptValidationResult,
   RatioModule,
   StyleModule,
+  StructuralMaterialModeModule,
 } from "./schema";
 import { buildElementItems, resolveElementAssets } from "./elementPrompt";
 
@@ -239,6 +240,27 @@ export function getCustomPrompt(
   return customPrompt;
 }
 
+export function getDefaultStructuralMaterialMode(
+  catalog: CatalogData,
+): StructuralMaterialModeModule {
+  const mode =
+    catalog.structuralMaterialModes.find(
+      (item) => item.id === "regular" && item.enabled,
+    ) ?? getActiveStructuralMaterialModes(catalog)[0];
+  if (!mode) throw new Error("No structural material mode configured.");
+  return mode;
+}
+
+export function getStructuralMaterialMode(
+  catalog: CatalogData,
+  id?: string,
+): StructuralMaterialModeModule {
+  return (
+    getActiveStructuralMaterialModes(catalog).find((item) => item.id === id) ??
+    getDefaultStructuralMaterialMode(catalog)
+  );
+}
+
 export function buildPrompt(
   catalog: CatalogData,
   request: PromptBuildRequest,
@@ -257,13 +279,21 @@ export function buildPrompt(
     catalog,
     request.photographyProfileId,
   );
+  const structuralMaterialMode = getStructuralMaterialMode(
+    catalog,
+    request.structuralMaterialModeId,
+  );
   const emotionalToneEnabled =
     outputMode.category === "photographic" &&
     emotionalTone.id !== "none" &&
     emotionalTone.enabled !== false;
   const photographyProfileEnabled = outputMode.category === "photographic";
   const ratioLabel = formatRatioForFilename(ratio);
-  const baseTitle = `${style.displayName}_${lightingType.displayName}_${ratioLabel}_${outputMode.displayName}`;
+  const materialSuffix =
+    structuralMaterialMode.mode === "regular"
+      ? ""
+      : `_${structuralMaterialMode.displayName}`;
+  const baseTitle = `${style.displayName}_${lightingType.displayName}_${ratioLabel}_${outputMode.displayName}${materialSuffix}`;
   const title = emotionalToneEnabled
     ? `${baseTitle}_${emotionalTone.displayName}`
     : baseTitle;
@@ -293,9 +323,13 @@ export function buildPrompt(
       getCommonPrompt(catalog, "base_role"),
       lightingType.typePrompt,
       style.stylePrompt,
+      buildStructuralMaterialSection(style, structuralMaterialMode, request),
       elementSection,
       buildInspirationSection(style),
-      buildMaterialSection(style),
+      structuralMaterialMode.mode === "regular" ||
+      structuralMaterialMode.mode === "metal_dominant"
+        ? buildMaterialSection(style)
+        : "",
       buildColorSection(style, outputMode),
       buildAvoidSection(style),
       isTechnicalOutput ? "" : buildEmotionalToneSection(emotionalTone),
@@ -329,6 +363,7 @@ export function buildPrompt(
       `灯具类型：${lightingType.displayName}`,
       `比例：${ratio.displayName}`,
       `输出方式：${outputMode.displayName}`,
+      `结构材质：${structuralMaterialMode.displayName}`,
       isTechnicalOutput
         ? `情绪增强：${emotionalTone.displayName}（技术类不参与）`
         : `情绪增强：${emotionalTone.displayName}`,
@@ -350,6 +385,7 @@ export function buildPrompt(
       emotionalToneId: emotionalTone.id,
       photographyProfileId: photographyProfile.id,
       customPromptId: "none",
+      structuralMaterialModeId: structuralMaterialMode.id,
       createdAt: new Date().toISOString(),
     },
   };
@@ -408,9 +444,67 @@ export function buildCustomPrompt(
       emotionalToneId: "none",
       photographyProfileId: "",
       customPromptId: customPrompt.id,
+      structuralMaterialModeId: "regular",
       createdAt: new Date().toISOString(),
     },
   };
+}
+
+function buildStructuralMaterialSection(
+  style: StyleModule,
+  mode: StructuralMaterialModeModule,
+  request: PromptBuildRequest,
+): string {
+  if (mode.mode === "regular") return "";
+  const userParts = [
+    request.selectedMetals?.trim()
+      ? `Selected metals: ${request.selectedMetals.trim()}`
+      : "",
+    request.selectedFinishes?.trim()
+      ? `Selected finishes: ${request.selectedFinishes.trim()}`
+      : "",
+    request.selectedProcesses?.trim()
+      ? `Preferred manufacturing processes: ${request.selectedProcesses.trim()}`
+      : "",
+    request.connectionLanguage?.trim()
+      ? `Connection language: ${request.connectionLanguage.trim()}`
+      : "",
+    request.shadeStrategy?.trim()
+      ? `Metal shade and light-control strategy: ${request.shadeStrategy.trim()}`
+      : "",
+    request.allowedMaterials?.trim()
+      ? `Allowed visible materials: ${request.allowedMaterials.trim()}`
+      : "",
+    request.prohibitedMaterials?.trim()
+      ? `Prohibited visible materials: ${request.prohibitedMaterials.trim()}`
+      : "",
+  ].filter(Boolean);
+  const strictness =
+    request.materialStrictness === "balanced"
+      ? "Apply the material boundary with balanced flexibility only where safety and lighting performance require it."
+      : "Apply the material boundary strictly. Do not silently substitute or introduce other visible materials.";
+
+  return `STRUCTURAL MATERIAL STRATEGY — ${mode.englishName}
+
+${mode.structurePrompt}
+
+STYLE-SPECIFIC METAL FORM TRANSLATION
+
+${style.metalTranslationPrompt || `Translate ${style.englishName} into a distinctive manufacturable metal form.`}
+
+USER MATERIAL DIRECTION
+
+${userParts.join("\n") || "Use a coherent metal palette, finish, process, connection language, and shade strategy appropriate to the selected style."}
+
+${strictness}
+
+METAL MANUFACTURING DIRECTION
+
+${mode.manufacturingPrompt}
+
+MATERIAL STRATEGY AVOID LIST
+
+${mode.avoidPrompt.join("\n")}`;
 }
 
 export function buildAllPrompts(
@@ -423,6 +517,15 @@ export function buildAllPrompts(
     | "elementSelections"
     | "elementReferenceUsageMode"
     | "elementRandomToken"
+    | "structuralMaterialModeId"
+    | "selectedMetals"
+    | "selectedFinishes"
+    | "selectedProcesses"
+    | "connectionLanguage"
+    | "shadeStrategy"
+    | "allowedMaterials"
+    | "prohibitedMaterials"
+    | "materialStrictness"
   > = {},
 ): PromptBuildResult[] {
   return getActiveStyles(catalog).flatMap((style) =>
@@ -449,6 +552,15 @@ export function buildAllEmotionalPrompts(
     | "elementSelections"
     | "elementReferenceUsageMode"
     | "elementRandomToken"
+    | "structuralMaterialModeId"
+    | "selectedMetals"
+    | "selectedFinishes"
+    | "selectedProcesses"
+    | "connectionLanguage"
+    | "shadeStrategy"
+    | "allowedMaterials"
+    | "prohibitedMaterials"
+    | "materialStrictness"
   > = {},
 ): PromptBuildResult[] {
   return getActiveEmotionalTones(catalog).flatMap((emotionalTone) =>
@@ -698,6 +810,12 @@ export function getActivePhotographyProfiles(
 
 export function getActiveOutputModes(catalog: CatalogData): OutputModeModule[] {
   return catalog.outputModes.filter((mode) => mode.enabled !== false);
+}
+
+export function getActiveStructuralMaterialModes(
+  catalog: CatalogData,
+): StructuralMaterialModeModule[] {
+  return catalog.structuralMaterialModes.filter((mode) => mode.enabled);
 }
 
 export function getActiveCustomPrompts(

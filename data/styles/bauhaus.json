@@ -76,5 +76,6 @@
     "Non-functional decorative parts"
   ],
   "sortOrder": 3,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Use disciplined Bauhaus metal geometry: circles, cylinders, hemispheres, tubular steel, primary structural colors as powder coating, visible functional relationships, and economical repeatable components."
 }

@@ -3,11 +3,52 @@
   "displayName": "意外红理论",
   "englishName": "The Unexpected Red Theory",
   "stylePrompt": "Create a completely original lighting product based on the Unexpected Red Theory. Build a coherent, restrained object in a non-red neutral or contrasting palette, then introduce one deliberate pure-red component that disrupts and completes the composition. The red detail must feel surprising, photographically powerful, and structurally meaningful rather than randomly applied. Keep all other forms and colors disciplined so the visual tension remains precise.",
-  "inspirationSources": ["Red Architectural Hardware", "Emergency Controls", "Constructivist Graphics", "A Single Red Chair", "Red Picture Frames", "Industrial Switches", "Color Accent Photography", "Japanese Vermilion Details"],
-  "specificElements": ["One red pivot on an otherwise monochrome arm", "A red cable emerging from a neutral body", "A red inner diffuser visible only when viewed from below", "A single red mounting plate", "A red adjustment knob with real function", "A red frame intersecting a dark geometric shade"],
-  "materials": ["Powder-Coated Steel", "Anodized Aluminum", "Opal Glass", "Matte Ceramic", "Walnut", "Optical Acrylic", "Red Silicone"],
-  "colors": ["Signal Red", "Neutral Grey", "Forest Green", "Matte Black", "Warm White", "Dark Walnut", "Muted Blue"],
-  "avoid": ["Multiple competing red elements", "Red gradients", "Valentine styling", "Random decorative accents", "Red-and-black gaming aesthetic", "Unbalanced color distribution", "Non-functional red details"],
+  "inspirationSources": [
+    "Red Architectural Hardware",
+    "Emergency Controls",
+    "Constructivist Graphics",
+    "A Single Red Chair",
+    "Red Picture Frames",
+    "Industrial Switches",
+    "Color Accent Photography",
+    "Japanese Vermilion Details"
+  ],
+  "specificElements": [
+    "One red pivot on an otherwise monochrome arm",
+    "A red cable emerging from a neutral body",
+    "A red inner diffuser visible only when viewed from below",
+    "A single red mounting plate",
+    "A red adjustment knob with real function",
+    "A red frame intersecting a dark geometric shade"
+  ],
+  "materials": [
+    "Powder-Coated Steel",
+    "Anodized Aluminum",
+    "Opal Glass",
+    "Matte Ceramic",
+    "Walnut",
+    "Optical Acrylic",
+    "Red Silicone"
+  ],
+  "colors": [
+    "Signal Red",
+    "Neutral Grey",
+    "Forest Green",
+    "Matte Black",
+    "Warm White",
+    "Dark Walnut",
+    "Muted Blue"
+  ],
+  "avoid": [
+    "Multiple competing red elements",
+    "Red gradients",
+    "Valentine styling",
+    "Random decorative accents",
+    "Red-and-black gaming aesthetic",
+    "Unbalanced color distribution",
+    "Non-functional red details"
+  ],
   "sortOrder": 25,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Keep the primary metal palette restrained, then introduce exactly one small vivid red powder-coated metal component such as a joint, finial, switch, frame, or shade accent with no matching red elsewhere."
 }

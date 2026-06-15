@@ -1,0 +1,15 @@
+{
+  "id": "custom_lock",
+  "displayName": "自定义材质锁定",
+  "englishName": "Custom Material Lock",
+  "mode": "custom",
+  "structurePrompt": "CUSTOM MATERIAL LOCK. Use only the user-authorized visible materials and strictly exclude every prohibited material. The material boundary overrides the style module's default material suggestions.",
+  "manufacturingPrompt": "Keep every selected material physically accurate, commercially available, structurally appropriate, and connected through believable production methods.",
+  "avoidPrompt": [
+    "Any material outside the user-authorized list",
+    "Material substitutions",
+    "Ambiguous or physically impossible material behavior"
+  ],
+  "enabled": true,
+  "sortOrder": 30
+}

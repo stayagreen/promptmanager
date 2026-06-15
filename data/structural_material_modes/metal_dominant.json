@@ -1,0 +1,16 @@
+{
+  "id": "metal_dominant",
+  "displayName": "金属主导",
+  "englishName": "Metal-Dominant Construction",
+  "mode": "metal_dominant",
+  "structurePrompt": "METAL-DOMINANT PRODUCT STRATEGY. Metal must define the primary silhouette, load-bearing structure, visible frame, joints, canopy, base, and major decorative language. A restrained secondary material may be used only where it improves light diffusion, tactile quality, or premium contrast.",
+  "manufacturingPrompt": "Use production-realistic metalworking and precise material transitions. Keep secondary materials subordinate, limited in area, and clearly connected through manufacturable interfaces.",
+  "avoidPrompt": [
+    "Secondary materials visually overpowering the metal structure",
+    "Unclear material transitions",
+    "Fake metallic paint replacing real structural metal",
+    "Excessive material variety"
+  ],
+  "enabled": true,
+  "sortOrder": 20
+}

@@ -9,6 +9,7 @@ import {
   deleteLightingType,
   deleteHistoryCheckpoint,
   deleteOutputMode,
+  deleteStructuralMaterialMode,
   deletePhotographyProfile,
   deleteRatio,
   deleteStyle,
@@ -28,6 +29,7 @@ import {
   saveEmotionalTone,
   saveLightingType,
   saveOutputMode,
+  saveStructuralMaterialMode,
   savePhotographyProfile,
   saveRatio,
   saveStyle,
@@ -56,6 +58,8 @@ import type {
   ProductElementSelection,
   SavedReferencePrompt,
   StyleModule,
+  StructuralMaterialModeModule,
+  StructuralMaterialModeType,
 } from "../src/domain/schema";
 
 const app = express();
@@ -236,6 +240,28 @@ app.delete(
   "/api/output-modes/:id",
   asyncHandler(async (request, response) => {
     await deleteOutputMode(request.params.id);
+    response.json({ ok: true });
+  }),
+);
+
+app.put(
+  "/api/structural-material-modes/:id",
+  asyncHandler(async (request, response) => {
+    response.json(
+      await saveStructuralMaterialMode(
+        normalizeStructuralMaterialMode({
+          ...request.body,
+          id: request.params.id,
+        }),
+      ),
+    );
+  }),
+);
+
+app.delete(
+  "/api/structural-material-modes/:id",
+  asyncHandler(async (request, response) => {
+    await deleteStructuralMaterialMode(request.params.id);
     response.json({ ok: true });
   }),
 );
@@ -487,6 +513,7 @@ function normalizeStyle(input: Partial<StyleModule>): StyleModule {
     materials: normalizeTextArray(input.materials),
     colors: normalizeTextArray(input.colors),
     avoid: normalizeTextArray(input.avoid),
+    metalTranslationPrompt: normalizeOptionalText(input.metalTranslationPrompt),
     enabled: input.enabled ?? true,
     sortOrder: normalizeOptionalNumber(input.sortOrder),
   };
@@ -523,6 +550,40 @@ function normalizeRatio(input: Partial<RatioModule>): RatioModule {
     enabled: input.enabled ?? true,
     sortOrder: normalizeOptionalNumber(input.sortOrder),
   };
+}
+
+function normalizeStructuralMaterialMode(
+  input: Partial<StructuralMaterialModeModule>,
+): StructuralMaterialModeModule {
+  requireText(input.id, "id");
+  requireText(input.displayName, "displayName");
+  requireText(input.englishName, "englishName");
+  const isRegular = input.id.trim() === "regular";
+  return {
+    id: input.id.trim(),
+    displayName: input.displayName.trim(),
+    englishName: input.englishName.trim(),
+    mode: isRegular ? "regular" : normalizeStructuralMaterialModeType(input.mode),
+    structurePrompt: normalizeOptionalText(input.structurePrompt),
+    manufacturingPrompt: normalizeOptionalText(input.manufacturingPrompt),
+    avoidPrompt: normalizeTextArray(input.avoidPrompt),
+    enabled: isRegular ? true : (input.enabled ?? true),
+    sortOrder: normalizeOptionalNumber(input.sortOrder),
+  };
+}
+
+function normalizeStructuralMaterialModeType(
+  value: unknown,
+): StructuralMaterialModeType {
+  if (
+    value === "regular" ||
+    value === "all_metal" ||
+    value === "metal_dominant" ||
+    value === "custom"
+  ) {
+    return value;
+  }
+  throw new Error("Unknown structural material mode.");
 }
 
 function normalizeEmotionalTone(
@@ -852,6 +913,7 @@ function parseHistoryKind(kind: string): ModuleHistoryKind {
   if (kind === "emotional-tones") return "emotional_tones";
   if (kind === "photography-profiles") return "photography_profiles";
   if (kind === "output-modes") return "output_modes";
+  if (kind === "structural-material-modes") return "structural_material_modes";
   if (kind === "custom-prompts") return "custom_prompts";
   if (kind === "product-projects") return "product_projects";
   if (kind === "element-assets") return "element_assets";

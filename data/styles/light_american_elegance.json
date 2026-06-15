@@ -154,5 +154,6 @@
     "Overly complex manufacturing structure"
   ],
   "enabled": true,
-  "sortOrder": 7
+  "sortOrder": 7,
+  "metalTranslationPrompt": "Use tailored American metalwork with balanced arms, substantial but clean proportions, aged brass, warm bronze, crisp collars, turned-metal details, and quiet architectural symmetry."
 }

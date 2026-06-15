@@ -1,0 +1,18 @@
+{
+  "id": "all_metal",
+  "displayName": "严格全五金",
+  "englishName": "Strict All-Metal Construction",
+  "mode": "all_metal",
+  "structurePrompt": "STRICT ALL-METAL PRODUCT LOCK. Except for the light bulb, concealed electrical insulation, concealed wiring, and safety-critical internal components, every visible part of the lamp must be made from metal. This includes the shade, arms, stem, base, canopy, frame, joints, connectors, decorative elements, fasteners, reflectors, and visible control hardware. Do not introduce visible glass, wood, stone, ceramic, fabric, paper, rattan, resin, acrylic, or plastic.",
+  "manufacturingPrompt": "Translate the chosen style into realistic metal construction using sheet-metal forming, spinning, stamping, casting, extrusion, tube bending, laser cutting, welding, brazing, CNC machining, perforation, mesh fabrication, or precision hardware assembly. Use believable metal thickness, load paths, heat dissipation, glare control, assembly access, stable mounting, and production-ready joints.",
+  "avoidPrompt": [
+    "Visible non-metal shades or decorative components",
+    "Metal behaving like transparent glass or soft fabric",
+    "Impossible floating structures without supports",
+    "Razor-thin unsafe sheet metal",
+    "Poor heat dissipation around the bulb",
+    "Decorative mechanisms with no structural logic"
+  ],
+  "enabled": true,
+  "sortOrder": 10
+}

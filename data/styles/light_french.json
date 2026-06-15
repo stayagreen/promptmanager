@@ -83,5 +83,6 @@
     "Generic luxury showroom style"
   ],
   "enabled": true,
-  "sortOrder": 4
+  "sortOrder": 4,
+  "metalTranslationPrompt": "Translate light French elegance into metal through slim champagne-brass frames, softly fluted sheet-metal shades, restrained scroll curves, delicate but manufacturable floral terminals, and pale ivory powder coating."
 }

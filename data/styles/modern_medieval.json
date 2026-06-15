@@ -3,11 +3,53 @@
   "displayName": "现代中世纪风",
   "englishName": "Modern Medieval",
   "stylePrompt": "Create a completely original Modern Medieval lighting product that combines the physical weight, permanence, and tactile honesty of ancient fortifications with contemporary reduction. Use rough stone, forged iron, deep apertures, and heavy draped or shield-like forms without copying historical torches, castles, or heraldry. The lamp should feel grounded, protective, monumental, and timeless while using safe modern optics and credible manufacturing.",
-  "inspirationSources": ["Stone Vaults", "Fortress Openings", "Forged Iron Hinges", "Heavy Drapery", "Monolithic Altars", "Weathered Shields", "Romanesque Arches", "Ancient Masonry"],
-  "specificElements": ["A deep stone aperture holding concealed light", "A forged iron arm with a simplified hinge", "A heavy arch reduced to a clean silhouette", "A shield-like plate washing light onto the wall", "A monolithic base with one narrow luminous cut", "A thick textile shade with architectural drape"],
-  "materials": ["Rough Limestone", "Slate", "Forged Iron", "Blackened Steel", "Cast Bronze", "Heavy Linen", "Smoked Glass", "Dark Oak"],
-  "colors": ["Stone Grey", "Iron Black", "Oxidized Bronze", "Deep Brown", "Parchment", "Charcoal", "Warm Firelight"],
-  "avoid": ["Literal castle replicas", "Torch flames", "Gothic fantasy motifs", "Heraldic symbols", "Fake foam stone", "Overly ornate ironwork", "Unsafe excessive weight"],
+  "inspirationSources": [
+    "Stone Vaults",
+    "Fortress Openings",
+    "Forged Iron Hinges",
+    "Heavy Drapery",
+    "Monolithic Altars",
+    "Weathered Shields",
+    "Romanesque Arches",
+    "Ancient Masonry"
+  ],
+  "specificElements": [
+    "A deep stone aperture holding concealed light",
+    "A forged iron arm with a simplified hinge",
+    "A heavy arch reduced to a clean silhouette",
+    "A shield-like plate washing light onto the wall",
+    "A monolithic base with one narrow luminous cut",
+    "A thick textile shade with architectural drape"
+  ],
+  "materials": [
+    "Rough Limestone",
+    "Slate",
+    "Forged Iron",
+    "Blackened Steel",
+    "Cast Bronze",
+    "Heavy Linen",
+    "Smoked Glass",
+    "Dark Oak"
+  ],
+  "colors": [
+    "Stone Grey",
+    "Iron Black",
+    "Oxidized Bronze",
+    "Deep Brown",
+    "Parchment",
+    "Charcoal",
+    "Warm Firelight"
+  ],
+  "avoid": [
+    "Literal castle replicas",
+    "Torch flames",
+    "Gothic fantasy motifs",
+    "Heraldic symbols",
+    "Fake foam stone",
+    "Overly ornate ironwork",
+    "Unsafe excessive weight"
+  ],
   "sortOrder": 26,
-  "enabled": true
+  "enabled": true,
+  "metalTranslationPrompt": "Use weighty forged iron, dark bronze, thick plate metal, substantial rings, shield-like or arching silhouettes, deep hammered texture, and modernized fortress-scale stability without theatrical props."
 }

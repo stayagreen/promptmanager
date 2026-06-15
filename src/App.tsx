@@ -33,6 +33,7 @@ import {
   getActivePhotographyProfiles,
   getActiveRatios,
   getActiveStyles,
+  getActiveStructuralMaterialModes,
   getDefaultEmotionalTone,
   getDefaultOutputMode,
   getDefaultPhotographyProfile,
@@ -54,6 +55,7 @@ import type {
   PromptBuildResult,
   RatioModule,
   StyleModule,
+  StructuralMaterialModeModule,
 } from "./domain/schema";
 import {
   deleteCustomPrompt,
@@ -76,6 +78,8 @@ import {
   savePhotographyProfile,
   saveRatio,
   saveStyle,
+  saveStructuralMaterialMode,
+  deleteStructuralMaterialMode,
   translateText,
 } from "./utils/api";
 import {
@@ -96,6 +100,7 @@ type ManageSection =
   | "emotionalTones"
   | "photographyProfiles"
   | "outputModes"
+  | "structuralMaterialModes"
   | "customPrompts"
   | "common";
 type ExportJob =
@@ -126,6 +131,17 @@ export function App() {
     "premium_editorial_home",
   );
   const [customPromptId, setCustomPromptId] = useState("none");
+  const [structuralMaterialModeId, setStructuralMaterialModeId] =
+    useState("regular");
+  const [selectedMetals, setSelectedMetals] = useState("");
+  const [selectedFinishes, setSelectedFinishes] = useState("");
+  const [selectedProcesses, setSelectedProcesses] = useState("");
+  const [connectionLanguage, setConnectionLanguage] = useState("");
+  const [shadeStrategy, setShadeStrategy] = useState("");
+  const [allowedMaterials, setAllowedMaterials] = useState("");
+  const [prohibitedMaterials, setProhibitedMaterials] = useState("");
+  const [materialStrictness, setMaterialStrictness] =
+    useState<"strict" | "balanced">("strict");
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "failed">("idle");
   const [exporting, setExporting] = useState<ExportJob | null>(null);
   const [outputLanguage, setOutputLanguage] = useState<OutputLanguage>("english");
@@ -170,6 +186,8 @@ export function App() {
     const activePhotographyProfiles = getActivePhotographyProfiles(catalog);
     const activeOutputModes = getActiveOutputModes(catalog);
     const activeCustomPrompts = getActiveCustomPrompts(catalog);
+    const activeStructuralMaterialModes =
+      getActiveStructuralMaterialModes(catalog);
 
     if (!activeStyles.some((style) => style.id === styleId)) {
       setStyleId(activeStyles[0]?.id ?? "");
@@ -199,6 +217,17 @@ export function App() {
     ) {
       setCustomPromptId("none");
     }
+    if (
+      !activeStructuralMaterialModes.some(
+        (item) => item.id === structuralMaterialModeId,
+      )
+    ) {
+      setStructuralMaterialModeId(
+        activeStructuralMaterialModes.find((item) => item.id === "regular")?.id ??
+          activeStructuralMaterialModes[0]?.id ??
+          "",
+      );
+    }
   }, [
     catalog,
     customPromptId,
@@ -208,6 +237,7 @@ export function App() {
     photographyProfileId,
     ratioId,
     styleId,
+    structuralMaterialModeId,
   ]);
 
   const activeStyles = catalog ? getActiveStyles(catalog) : [];
@@ -219,6 +249,9 @@ export function App() {
     : [];
   const activeOutputModes = catalog ? getActiveOutputModes(catalog) : [];
   const activeCustomPrompts = catalog ? getActiveCustomPrompts(catalog) : [];
+  const activeStructuralMaterialModes = catalog
+    ? getActiveStructuralMaterialModes(catalog)
+    : [];
 
   const prompt = useMemo(() => {
     if (
@@ -235,6 +268,15 @@ export function App() {
       emotionalToneId,
       photographyProfileId,
       customPromptId,
+      structuralMaterialModeId,
+      selectedMetals,
+      selectedFinishes,
+      selectedProcesses,
+      connectionLanguage,
+      shadeStrategy,
+      allowedMaterials,
+      prohibitedMaterials,
+      materialStrictness,
       elementAssets,
       elementSelections,
       elementReferenceUsageMode: elementUsageMode,
@@ -253,6 +295,15 @@ export function App() {
     photographyProfileId,
     ratioId,
     styleId,
+    structuralMaterialModeId,
+    selectedMetals,
+    selectedFinishes,
+    selectedProcesses,
+    connectionLanguage,
+    shadeStrategy,
+    allowedMaterials,
+    prohibitedMaterials,
+    materialStrictness,
   ]);
 
   const selectedStyleForPrompt = activeStyles.find((style) => style.id === styleId);
@@ -272,6 +323,10 @@ export function App() {
   const selectedCustomPromptForPrompt = activeCustomPrompts.find(
     (customPrompt) => customPrompt.id === customPromptId,
   );
+  const selectedStructuralMaterialMode =
+    activeStructuralMaterialModes.find(
+      (item) => item.id === structuralMaterialModeId,
+    ) ?? activeStructuralMaterialModes[0]!;
   const promptFallbackTranslation =
     prompt && selectedCustomPromptForPrompt
       ? translateToChineseReference(prompt.promptText)
@@ -346,6 +401,17 @@ export function App() {
   const selectedOutputMode =
     selectedOutputModeForPrompt ?? getDefaultOutputMode(catalog);
   const selectedCustomPrompt = selectedCustomPromptForPrompt ?? null;
+  const materialRequest = {
+    structuralMaterialModeId,
+    selectedMetals,
+    selectedFinishes,
+    selectedProcesses,
+    connectionLanguage,
+    shadeStrategy,
+    allowedMaterials,
+    prohibitedMaterials,
+    materialStrictness,
+  };
   const isCustomMode = selectedCustomPrompt !== null;
   const isTechnicalOutput = selectedOutputMode.category === "technical";
   const chinesePromptText = formatChinesePromptReference(promptTranslation.text);
@@ -398,6 +464,7 @@ export function App() {
         ratioId: selectedRatio.id,
         outputModeId: "four_panel_storyboard",
         emotionalToneId: selectedEmotionalTone.id,
+        ...materialRequest,
         elementAssets,
         elementSelections,
         elementReferenceUsageMode: elementUsageMode,
@@ -412,6 +479,7 @@ export function App() {
         ratioId: ratio.id,
         outputModeId: "four_panel_storyboard",
         emotionalToneId: selectedEmotionalTone.id,
+        ...materialRequest,
         elementAssets,
         elementSelections,
         elementReferenceUsageMode: elementUsageMode,
@@ -427,6 +495,7 @@ export function App() {
           ratioId: selectedRatio.id,
           outputModeId: "four_panel_storyboard",
           emotionalToneId: selectedEmotionalTone.id,
+          ...materialRequest,
           elementAssets,
           elementSelections,
           elementReferenceUsageMode: elementUsageMode,
@@ -543,6 +612,7 @@ export function App() {
                       elementSelections,
                       elementReferenceUsageMode: elementUsageMode,
                       elementRandomToken,
+                      ...materialRequest,
                     },
                   ),
                   buildLibraryZipName(
@@ -571,6 +641,7 @@ export function App() {
                     elementSelections,
                     elementReferenceUsageMode: elementUsageMode,
                     elementRandomToken,
+                    ...materialRequest,
                   }),
                   `灯具提示词库_全部情绪_${activeEmotionalTones.length}版本.zip`,
                 )
@@ -670,6 +741,81 @@ export function App() {
               </SelectField>
 
               <SelectField
+                label="结构材质模式"
+                value={structuralMaterialModeId}
+                onChange={setStructuralMaterialModeId}
+                disabled={isCustomMode}
+              >
+                {activeStructuralMaterialModes.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.displayName}
+                  </option>
+                ))}
+              </SelectField>
+
+              {!isCustomMode &&
+                selectedStructuralMaterialMode.mode !== "regular" && (
+                  <div className="material-strategy-fields">
+                    <TextField
+                      label="主金属 / 辅助金属"
+                      value={selectedMetals}
+                      placeholder="例如：拉丝黄铜、黑铁；或 304 不锈钢"
+                      onChange={setSelectedMetals}
+                    />
+                    <TextField
+                      label="表面处理"
+                      value={selectedFinishes}
+                      placeholder="例如：拉丝、喷砂、氧化、奶白喷涂"
+                      onChange={setSelectedFinishes}
+                    />
+                    <TextField
+                      label="制造工艺"
+                      value={selectedProcesses}
+                      placeholder="例如：钣金折弯、旋压、铸造、CNC"
+                      onChange={setSelectedProcesses}
+                    />
+                    <TextField
+                      label="连接方式"
+                      value={connectionLanguage}
+                      placeholder="例如：隐藏连接、外露转轴、精密螺丝"
+                      onChange={setConnectionLanguage}
+                    />
+                    <TextField
+                      label="灯罩与控光方式"
+                      value={shadeStrategy}
+                      placeholder="例如：穿孔金属罩、反射罩、叶片遮光"
+                      onChange={setShadeStrategy}
+                    />
+                    <SelectField
+                      label="材质锁定程度"
+                      value={materialStrictness}
+                      onChange={(value) =>
+                        setMaterialStrictness(value as "strict" | "balanced")
+                      }
+                    >
+                      <option value="strict">严格锁定</option>
+                      <option value="balanced">安全与光学需要时可放宽</option>
+                    </SelectField>
+                    {selectedStructuralMaterialMode.mode === "custom" && (
+                      <>
+                        <TextField
+                          label="允许的可见材质"
+                          value={allowedMaterials}
+                          placeholder="例如：铁、黄铜、不锈钢"
+                          onChange={setAllowedMaterials}
+                        />
+                        <TextField
+                          label="禁止的可见材质"
+                          value={prohibitedMaterials}
+                          placeholder="例如：玻璃、木材、石材、塑料"
+                          onChange={setProhibitedMaterials}
+                        />
+                      </>
+                    )}
+                  </div>
+                )}
+
+              <SelectField
                 label="比例"
                 value={ratioId}
                 onChange={setRatioId}
@@ -762,6 +908,7 @@ export function App() {
           selectedOutputMode={selectedOutputMode}
           selectedEmotionalTone={selectedEmotionalTone}
           selectedPhotographyProfile={selectedPhotographyProfile}
+          selectedStructuralMaterialMode={selectedStructuralMaterialMode}
           selectedCustomPrompt={selectedCustomPrompt}
         />
       ) : (
@@ -783,6 +930,7 @@ function PromptPreview({
   selectedEmotionalTone,
   selectedPhotographyProfile,
   selectedCustomPrompt,
+  selectedStructuralMaterialMode,
 }: {
   prompt: PromptBuildResult;
   chinesePromptText: string;
@@ -794,6 +942,7 @@ function PromptPreview({
   selectedEmotionalTone: EmotionalToneModule;
   selectedPhotographyProfile: PhotographyProfileModule;
   selectedCustomPrompt: CustomPromptModule | null;
+  selectedStructuralMaterialMode: StructuralMaterialModeModule;
 }) {
   const [previewLanguage, setPreviewLanguage] = useState<"bilingual" | OutputLanguage>(
     "bilingual",
@@ -827,6 +976,10 @@ function PromptPreview({
           <>
             <Metric label="风格" value={selectedStyle.displayName} />
             <Metric label="类型" value={selectedType.displayName} />
+            <Metric
+              label="结构材质"
+              value={selectedStructuralMaterialMode.displayName}
+            />
             <Metric label="比例" value={selectedRatio.ratioValue} />
             <Metric label="输出" value={selectedOutputMode.displayName} />
             <Metric
@@ -1007,6 +1160,13 @@ function ManagementView({
         </button>
         <button
           type="button"
+          className={section === "structuralMaterialModes" ? "active" : ""}
+          onClick={() => setSection("structuralMaterialModes")}
+        >
+          结构材质
+        </button>
+        <button
+          type="button"
           className={section === "customPrompts" ? "active" : ""}
           onClick={() => setSection("customPrompts")}
         >
@@ -1039,6 +1199,12 @@ function ManagementView({
       )}
       {section === "outputModes" && (
         <OutputModeManager catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+      {section === "structuralMaterialModes" && (
+        <StructuralMaterialModeManager
+          catalog={catalog}
+          reloadCatalog={reloadCatalog}
+        />
       )}
       {section === "customPrompts" && (
         <CustomPromptManager catalog={catalog} reloadCatalog={reloadCatalog} />
@@ -1164,6 +1330,18 @@ function StyleManager({
         value={draft.stylePrompt}
         onChange={(value) => setDraft({ ...draft, stylePrompt: value })}
         translationText={translateToChineseReference(draft.stylePrompt, styleTranslationPairs)}
+      />
+      <TextareaField
+        label="全五金造型转译"
+        value={draft.metalTranslationPrompt ?? ""}
+        onChange={(value) =>
+          setDraft({ ...draft, metalTranslationPrompt: value })
+        }
+        translationText={translateToChineseReference(
+          draft.metalTranslationPrompt ?? "",
+          styleTranslationPairs,
+        )}
+        tall
       />
       <TextareaField
         label="灵感来源，每行一个"
@@ -2149,6 +2327,184 @@ function OutputModeManager({
   );
 }
 
+function StructuralMaterialModeManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const first = catalog.structuralMaterialModes[0] ?? createEmptyStructuralMaterialMode();
+  const [selectedId, setSelectedId] = useState(first.id);
+  const [isNew, setIsNew] = useState(false);
+  const [draft, setDraft] = useState<StructuralMaterialModeModule>(() => ({
+    ...first,
+  }));
+  const [avoidDraft, setAvoidDraft] = useState(first.avoidPrompt.join("\n"));
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected =
+      catalog.structuralMaterialModes.find((item) => item.id === selectedId) ??
+      catalog.structuralMaterialModes[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+      setAvoidDraft(selected.avoidPrompt.join("\n"));
+    }
+  }, [catalog.structuralMaterialModes, isNew, selectedId]);
+
+  async function handleSave() {
+    if (!validateId(draft.id)) return;
+    if (
+      isNew &&
+      catalog.structuralMaterialModes.some((item) => item.id === draft.id)
+    ) {
+      window.alert("这个结构材质模式 ID 已存在。");
+      return;
+    }
+    const saved = await saveStructuralMaterialMode({
+      ...draft,
+      avoidPrompt: linesToArray(avoidDraft),
+    });
+    await reloadCatalog();
+    setSelectedId(saved.id);
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/structural_material_modes/${saved.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew || draft.id === "regular") return;
+    if (!window.confirm(`确定删除结构材质模式：${draft.displayName}？`)) return;
+    await deleteStructuralMaterialMode(draft.id);
+    await reloadCatalog();
+    setSelectedId("regular");
+    setStatus("结构材质模式已删除。");
+  }
+
+  const translationPairs = buildModuleTranslationPairs(
+    draft.displayName,
+    draft.englishName,
+  );
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="结构材质模式"
+        selectLabel="选择模式"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.structuralMaterialModes.map((item) => ({
+          id: item.id,
+          label: item.displayName,
+        }))}
+        isNew={isNew}
+        onNew={() => {
+          const empty = createEmptyStructuralMaterialMode();
+          setIsNew(true);
+          setDraft(empty);
+          setAvoidDraft("");
+          setStatus("");
+        }}
+      />
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="中文名称"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <TextField
+          label="英文名称"
+          value={draft.englishName}
+          onChange={(value) => setDraft({ ...draft, englishName: value })}
+        />
+        <SelectField
+          label="模式类型"
+          value={draft.mode}
+          onChange={(value) =>
+            setDraft({
+              ...draft,
+              mode: value as StructuralMaterialModeModule["mode"],
+            })
+          }
+        >
+          <option value="regular">常规</option>
+          <option value="all_metal">全五金</option>
+          <option value="metal_dominant">金属主导</option>
+          <option value="custom">自定义锁定</option>
+        </SelectField>
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+      <CheckboxField
+        label="启用"
+        checked={draft.enabled}
+        disabled={draft.id === "regular"}
+        onChange={(enabled) => setDraft({ ...draft, enabled })}
+      />
+      <TextareaField
+        label="结构材质约束"
+        value={draft.structurePrompt}
+        onChange={(value) => setDraft({ ...draft, structurePrompt: value })}
+        translationText={translateToChineseReference(
+          draft.structurePrompt,
+          translationPairs,
+        )}
+        tall
+      />
+      <TextareaField
+        label="制造工艺约束"
+        value={draft.manufacturingPrompt}
+        onChange={(value) => setDraft({ ...draft, manufacturingPrompt: value })}
+        translationText={translateToChineseReference(
+          draft.manufacturingPrompt,
+          translationPairs,
+        )}
+      />
+      <TextareaField
+        label="避免事项，每行一个"
+        value={avoidDraft}
+        onChange={setAvoidDraft}
+        translationText={translateToChineseReference(
+          avoidDraft,
+          translationPairs,
+        )}
+      />
+      <EditorActions
+        isNew={isNew}
+        canDelete={draft.id !== "regular"}
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+      {draft.id && (
+        <HistoryPanel
+          kind="structural_material_modes"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
 function CustomPromptManager({
   catalog,
   reloadCatalog,
@@ -2640,11 +2996,13 @@ function TextField({
   value,
   onChange,
   disabled,
+  placeholder,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  placeholder?: string;
 }) {
   return (
     <label className="field">
@@ -2652,6 +3010,7 @@ function TextField({
       <input
         value={value}
         disabled={disabled}
+        placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
       />
     </label>
@@ -2924,6 +3283,7 @@ function createEmptyStyle(): StyleModule {
     materials: [],
     colors: [],
     avoid: [],
+    metalTranslationPrompt: "",
     enabled: true,
   };
 }
@@ -2993,6 +3353,19 @@ function createEmptyOutputMode(): OutputModeModule {
     consistencyPrompt: "",
     layoutPrompt: "",
     avoidPrompt: [],
+  };
+}
+
+function createEmptyStructuralMaterialMode(): StructuralMaterialModeModule {
+  return {
+    id: "",
+    displayName: "",
+    englishName: "",
+    mode: "all_metal",
+    structurePrompt: "",
+    manufacturingPrompt: "",
+    avoidPrompt: [],
+    enabled: true,
   };
 }
 
