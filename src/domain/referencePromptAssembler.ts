@@ -16,6 +16,7 @@ export type ReferenceTaskId =
   | "dimension_diagram"
   | "selling_points"
   | "material_closeup"
+  | "reference_four_panel_storyboard"
   | "hoikei_ecommerce_10"
   | "xiaohongshu_cover"
   | "xiaohongshu_note_set";
@@ -87,6 +88,12 @@ export const referenceTasks: ReferenceTask[] = [
     displayName: "材质工艺特写",
     prompt:
       "Create premium macro and close-up product photography emphasizing the actual materials, surface finish, edge treatment, joints, and diffuser texture visible in the reference images.",
+  },
+  {
+    id: "reference_four_panel_storyboard",
+    displayName: "参考图2×2四宫格产品摄影",
+    prompt:
+      "Generate a single image divided into a seamless 2×2 product photography storyboard grid, using the uploaded reference images as the product identity source. The image must contain four panels in one canvas. All four panels must show the EXACT SAME reference lamp. Preserve the lamp's silhouette, material, color, proportion, lampshade details, arms, base, mounting, visible joints, light source logic, and construction details across all four panels. Only camera angle, lighting condition, distance, background, and photographic composition may change within the allowed presentation rules. Panel 1: daytime interior context shot, lighting off, the lamp is the main subject, occupies a significant portion of the frame, and remains sharp while the recognizable background is softly blurred with natural bokeh. Panel 2: macro craftsmanship detail shot, showing actual material texture, surface treatment, connection details, diffuser or shade details, and construction logic visible or reasonably inferred from the references. Panel 3: hero perspective shot, emphasizing silhouette, balance, curves, geometry, proportion, and design language while keeping the exact reference product recognizable. Panel 4: illuminated atmosphere shot, lamp turned on, showing realistic warm ambient lighting, soft shadows, material interaction, light diffusion, and emotional mood. The final image must be a true seamless 2×2 grid: no spacing, no gutters, no margins, no borders, no frames, no separators, no captions, no text, no labels, no logos, and no watermark. Each panel must directly touch adjacent panels, and the grid must occupy 100% of the canvas.",
   },
   {
     id: "hoikei_ecommerce_10",
