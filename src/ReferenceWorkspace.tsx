@@ -16,6 +16,10 @@ import {
 } from "lucide-react";
 import { ElementReferencePanel } from "./ElementReferencePanel";
 import {
+  formatChinesePromptReference,
+  translateToChineseReference,
+} from "./domain/chineseReference";
+import {
   buildReferencePrompt,
   referenceTasks,
   type ReferenceTaskId,
@@ -83,6 +87,9 @@ export function ReferenceWorkspace({
   const [additionalRequirements, setAdditionalRequirements] = useState("");
   const [translation, setTranslation] = useState("");
   const [translating, setTranslating] = useState(false);
+  const [translationSource, setTranslationSource] = useState<"google" | "fallback">(
+    "fallback",
+  );
   const [history, setHistory] = useState<HistoryCheckpoint[]>([]);
   const [elementAssets, setElementAssets] = useState<ElementReferenceAsset[]>([]);
   const [elementRandomToken, setElementRandomToken] = useState(0);
@@ -174,17 +181,29 @@ export function ReferenceWorkspace({
     const text = promptResult?.promptText.trim() ?? "";
     if (!text) {
       setTranslation("");
+      setTranslationSource("fallback");
       return;
     }
+    const fallbackTranslation = formatChinesePromptReference(
+      translateToChineseReference(text),
+    );
     let cancelled = false;
+    setTranslation(fallbackTranslation);
+    setTranslationSource("fallback");
     setTranslating(true);
     const timeout = window.setTimeout(() => {
       translateText(text)
         .then((value) => {
-          if (!cancelled) setTranslation(value);
+          if (!cancelled) {
+            setTranslation(formatChinesePromptReference(value));
+            setTranslationSource("google");
+          }
         })
         .catch(() => {
-          if (!cancelled) setTranslation("中文翻译暂时不可用，请稍后重试。");
+          if (!cancelled) {
+            setTranslation(fallbackTranslation);
+            setTranslationSource("fallback");
+          }
         })
         .finally(() => {
           if (!cancelled) setTranslating(false);
@@ -685,6 +704,7 @@ export function ReferenceWorkspace({
                   english={promptResult.promptText}
                   chinese={translation}
                   translating={translating}
+                  translationSource={translationSource}
                 />
               </section>
             )}
@@ -846,10 +866,12 @@ function SyncedPromptPair({
   english,
   chinese,
   translating,
+  translationSource,
 }: {
   english: string;
   chinese: string;
   translating: boolean;
+  translationSource: "google" | "fallback";
 }) {
   const leftRef = useRef<HTMLTextAreaElement | null>(null);
   const rightRef = useRef<HTMLTextAreaElement | null>(null);
@@ -877,7 +899,13 @@ function SyncedPromptPair({
         />
       </label>
       <label>
-        <span>{translating ? "中文参考 · 翻译中" : "中文参考 · 不保存"}</span>
+        <span>
+          {translating
+            ? "中文参考 · 翻译中"
+            : translationSource === "google"
+              ? "中文参考 · Google · 不保存"
+              : "中文参考 · 本地回退 · 不保存"}
+        </span>
         <textarea
           ref={rightRef}
           readOnly
