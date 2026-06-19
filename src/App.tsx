@@ -300,6 +300,21 @@ export function App() {
     structuralMaterialModeId,
   ]);
 
+  useEffect(() => {
+    if (!catalog || outputModeId !== "botanical_still_life_5") return;
+    const activeRatios = getActiveRatios(catalog);
+    const activePhotographyProfiles = getActivePhotographyProfiles(catalog);
+    if (activeRatios.some((ratio) => ratio.id === "3_4") && ratioId !== "3_4") {
+      setRatioId("3_4");
+    }
+    if (
+      activePhotographyProfiles.some((profile) => profile.id === "mobile_still_life_lamp") &&
+      photographyProfileId !== "mobile_still_life_lamp"
+    ) {
+      setPhotographyProfileId("mobile_still_life_lamp");
+    }
+  }, [catalog, outputModeId, photographyProfileId, ratioId]);
+
   const activeStyles = catalog ? getActiveStyles(catalog) : [];
   const activeLightingTypes = catalog ? getActiveLightingTypes(catalog) : [];
   const activeRatios = catalog ? getActiveRatios(catalog) : [];

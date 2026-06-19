@@ -323,6 +323,7 @@ export function buildPrompt(
       getCommonPrompt(catalog, "base_role"),
       lightingType.typePrompt,
       style.stylePrompt,
+      buildBotanicalStillLifeSection(outputMode, lightingType),
       buildStructuralMaterialSection(style, structuralMaterialMode, request),
       elementSection,
       buildInspirationSection(style),
@@ -505,6 +506,127 @@ ${mode.manufacturingPrompt}
 MATERIAL STRATEGY AVOID LIST
 
 ${mode.avoidPrompt.join("\n")}`;
+}
+
+function buildBotanicalStillLifeSection(
+  outputMode: OutputModeModule,
+  lightingType: LightingTypeModule,
+): string {
+  if (outputMode.id !== "botanical_still_life_5") return "";
+
+  return `BOTANICAL INSPIRATION LAB LOCK
+
+This output mode is a controlled botanical-form lighting experiment for the selected lighting type: ${lightingType.englishName}.
+
+Keep the selected lighting type explicit. If the selected type is not a table lamp, translate the botanical language into that exact lighting category's shade, diffuser, arm, canopy, wall mount, pendant body, chandelier cluster, or base logic. Do not accidentally change it into a table lamp, pendant lamp, wall lamp, floor lamp, ceiling lamp, or another type that was not selected.
+
+HIGHEST-PRIORITY EXECUTION
+
+Generate exactly five independent images in this order:
+
+Image 1 - Single Lamp Cover
+Image 2 - Daylight Off
+Image 3 - Daylight On
+Image 4 - Flower Form Detail
+Image 5 - Quiet Home Scene
+
+Each image must be 3:4 vertical. Generate one image at a time and continue automatically until all five independent images are complete.
+
+BOTANICAL DESIGN FAMILY SELECTION
+
+Before generation, internally choose one clear Botanical Design Family for this run. Keep the same family across all five images. For a new generation run, choose a visibly different family whenever possible.
+
+Choose one uncommon family from this list:
+
+A. Bell Shade Family: fritillaria, snake's head fritillary, lily of the valley, snowdrop, campanula, downward hellebore bloom, foxglove bell. Translate as downward frosted glass bell shade, small warm core, thin brass bend, compact stone or ceramic grounding.
+B. Star / Clematis Family: clematis, astrantia, nigella flower, scabiosa, Japanese anemone, windflower. Translate as star-shaped translucent petal diffuser, visible brass vein ribs, asymmetric petal spacing, one petal slightly lower or rotated.
+C. Folded Iris Family: bearded iris, Japanese iris, Siberian iris, gloriosa, cymbidium, folded hellebore petal. Translate as folded glass or porcelain shade, curled petal edge, warm light grazing along folds, patinated brass support.
+D. Layered Petal Family: butterfly ranunculus, Japanese ranunculus, tree peony, anemone, camellia, magnolia bud. Translate as restrained layered frosted glass petals, handmade uneven rim, warm core visible through petal layers.
+E. Pod / Seed Family: lotus pod, nigella pod, scabiosa pod, poppy seed pod, allium seed head, papaver pod. Translate as pod-like light core, small perforated warm highlights, ceramic or brass seed detail, simple translucent shade around it.
+F. Cluster Diffuser Family: snowball viburnum, hydrangea, muscari, Queen Anne's lace, feverfew, tiny white filler flowers. Translate as small clustered frosted glass beads, restrained glowing units, compact branch-like support, not chandelier-like unless the selected lighting type is a chandelier.
+G. Line Botanical Family: garlic scapes, allium stems, horsetail reed, papyrus, curly willow, clematis vine, jasmine vine, miscanthus. Translate as curved brass line, asymmetrical but stable silhouette, one small flower shade or diffuser endpoint, clear structural weight.
+H. Orchid Variant Family: peach orange phalaenopsis, small phalaenopsis, vanda, cymbidium, paphiopedilum-like slipper form. Use only as a low-frequency specific variant, never a generic orchid lamp.
+I. Lily Variant Family: white wine lily, speckled lily, tiger lily, Minjiang lily, orange speckled lily, fritillaria-like lily bell. Use only as a low-frequency specific variant, never a generic white lily lamp.
+J. Lotus / Water Plant Family: lotus bud, lotus seed pod, water lily, papyrus, water iris. Use only as a low-frequency specific variant, never a generic white lotus lamp or blue vase lamp.
+
+ANTI-REPETITION LOCK
+
+Choose an uncommon botanical form for this run.
+Avoid defaulting to lily, lotus, orchid, rose, tulip, or generic white flower silhouettes.
+Avoid repeating the same flower silhouette as the previous generation.
+Do not default to a blue glass base or blue vase-base language.
+Botanical inspiration must be recognizable through lamp structure, not through real flowers attached to the lamp.
+Across different runs, vary at least three of these: primary botanical family, shade outline, support line, base or mounting material, pod or petal detail, color temperature, light behavior, and still-life prop.
+
+SAME LAMP IDENTITY CARD
+
+Internally define one identity card before generation and reuse it across all five images:
+
+Selected lighting type: ${lightingType.englishName}
+Botanical Design Family
+Primary flower form
+Secondary line botanical
+Overall scale
+Base, canopy, mounting, or grounding shape appropriate to ${lightingType.englishName}
+Base, canopy, mounting, or grounding material
+Support / stem / arm / suspension / bracket material
+Support curve or structural rhythm
+Shade / petal / diffuser material
+Number of glowing cores
+Switch, dimmer, or control position when visible
+Cable visibility or wiring logic when relevant
+Glow behavior
+Signature handmade detail
+
+MATERIAL AND COLOR SYSTEM
+
+Choose three to five materials and keep them consistent:
+
+warm brushed brass
+dark patinated brass
+frosted glass petals
+translucent milky glass
+pale champagne glass
+tea-brown glass
+smoky grey glass
+warm white porcelain
+handmade ivory ceramic
+alabaster stone
+travertine
+dark walnut
+blackened wood plinth
+matte off-white paper shade
+warm rice-paper diffuser
+pale celadon ceramic, low saturation only
+dark bronze joint detail
+
+Avoid always using white flower plus yellow brass plus white wall. Allow one or two low-saturation details such as warm ivory, pale champagne, smoky grey, tea brown, pale apricot, soft celadon, muted plum, dusty pink, pale butter yellow, or very light green.
+
+BLUE LIMITATION
+
+Blue glass, cobalt blue vase, and bright blue bases must not appear by default. If blue appears, it may only be a tiny cool reflection and never the main body.
+
+MOBILE STILL-LIFE NATURALNESS
+
+Make the image feel like iPhone 15 Pro or iPhone 16 Pro smartphone photography: natural side daylight, realistic phone sharpness, slight handheld framing, clean phone HDR, subtle indoor noise, real contact shadow, readable material thickness, and small handmade irregularity.
+
+Avoid CGI, 3D render, fantasy concept art, impossible flower-lamp structure, over-perfect symmetry, over-smooth plastic petals, floating glow without weight, fake studio bokeh, cinematic orange-blue lighting, too much bloom, overexposed core, hotel render, showroom catalog look, and ultra glossy material everywhere.
+
+ANTI-GREY CLARITY
+
+Allow clean grey-white wall, soft neutral grey shadow, and natural indoor grey. Avoid grey veil, hazy matte filter, dirty grey cast, muddy beige shadows, washed-out beige cast, flat grey lighting, dusty overlay, underexposed room, weak black point, and no white highlight.
+
+Every image should include at least one real black point from tabletop, base, furniture, wall bracket, canopy, shadow, or grounding structure and at least one clean highlight on glass, metal, ceramic, paper, diffuser edge, or shade edge.
+
+STILL-LIFE DETAILS
+
+Use only one or two quiet details when appropriate: unreadable open book, old paperback with no readable title, folded pale cloth, cream paper sheet, one fallen petal, ceramic cup without logo, small dark bowl, subtle curtain shadow, small window-frame shadow, or barely visible power cord.
+
+Never let props steal attention. Avoid readable book text, brand logos, coffee-shop clutter, big labels, tags, and decorative overload.
+
+NO TEXT RULE
+
+The image content must contain zero text: no Chinese, no English, no pinyin, no brand name, no platform name, no account name, no watermark, no poster typography, no tutorial text, no readable book title, and no AI-related words inside the image.`;
 }
 
 export function buildAllPrompts(
@@ -854,6 +976,10 @@ function buildRatioSection(
     return `Generate four separate images. Aspect Ratio ${ratio.ratioValue} for each image. Each image must fill its entire canvas.`;
   }
 
+  if (outputMode.id === "botanical_still_life_5") {
+    return "Generate five separate images. Aspect Ratio 3:4 for each image. Each image must fill its entire vertical canvas. Do not combine the five images into one canvas.";
+  }
+
   const orientation = ratio.ratioValue === "9:16" ? " vertical" : "";
   return `Generate a single${orientation} image. Aspect Ratio ${ratio.ratioValue}. The output must fill the entire canvas.`;
 }
@@ -875,6 +1001,9 @@ Preserve accurate proportions, recognizable silhouette, structural logic, mounti
     return subjectPriority;
   }
   if (outputMode.id === "four_separate_photos") {
+    return subjectPriority.replace("In every panel:", "In every image:");
+  }
+  if (outputMode.id === "botanical_still_life_5") {
     return subjectPriority.replace("In every panel:", "In every image:");
   }
   return subjectPriority.replace("In every panel:", "In the image:");
@@ -951,6 +1080,23 @@ function validateOutputMode(
       "four separate product photography images",
       "not a 2×2 grid",
       "not a collage",
+    ].forEach((keyword) => {
+      if (!promptText.includes(keyword)) missingKeywords.push(keyword);
+    });
+  }
+
+  if (outputMode.id === "botanical_still_life_5") {
+    [
+      "Generate five separate images",
+      "BOTANICAL INSPIRATION LAB LOCK",
+      "Botanical Design Family",
+      "Image 1 - Single Lamp Cover",
+      "Image 2 - Daylight Off",
+      "Image 3 - Daylight On",
+      "Image 4 - Flower Form Detail",
+      "Image 5 - Quiet Home Scene",
+      "No 2×2 grid",
+      "No collage",
     ].forEach((keyword) => {
       if (!promptText.includes(keyword)) missingKeywords.push(keyword);
     });
