@@ -96,6 +96,19 @@ export type OutputModeModule = {
   sortOrder?: number;
 };
 
+export type BotanicalFormModule = {
+  id: string;
+  displayName: string;
+  englishName: string;
+  family: string;
+  formPrompt: string;
+  translationPrompt: string;
+  placementPrompt: string;
+  avoidPrompt: string[];
+  enabled?: boolean;
+  sortOrder?: number;
+};
+
 export type CustomPromptModule = {
   id: string;
   displayName: string;
@@ -212,6 +225,7 @@ export type CatalogData = {
   emotionalTones: EmotionalToneModule[];
   photographyProfiles: PhotographyProfileModule[];
   outputModes: OutputModeModule[];
+  botanicalForms: BotanicalFormModule[];
   structuralMaterialModes: StructuralMaterialModeModule[];
   customPrompts: CustomPromptModule[];
   commonPrompts: CommonPromptModule[];
@@ -224,6 +238,7 @@ export type ModuleHistoryKind =
   | "emotional_tones"
   | "photography_profiles"
   | "output_modes"
+  | "botanical_forms"
   | "structural_material_modes"
   | "custom_prompts"
   | "product_projects"
@@ -260,6 +275,10 @@ export type PromptBuildRequest = {
   elementSelections?: ProductElementSelection[];
   elementReferenceUsageMode?: ElementReferenceUsageMode;
   elementRandomToken?: number;
+  botanicalFormMode?: "random" | "specified";
+  selectedBotanicalFormId?: string;
+  excludedBotanicalFormIds?: string[];
+  botanicalRandomToken?: number;
 };
 
 export type PromptValidationResult = {

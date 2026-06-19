@@ -1,0 +1,17 @@
+{
+  "id": "speckled_lily",
+  "displayName": "斑点百合变体",
+  "englishName": "Speckled Lily Variant",
+  "family": "Lily Variant Family",
+  "formPrompt": "Use a specific speckled lily variant, not a generic lily: long petal diffuser, subtle speckles or brass dots, visible stamen-like light core, and controlled graceful curve.",
+  "translationPrompt": "Translate it into a long petal glass diffuser with tiny low-contrast speckles or brass dot details and a warm internal core, avoiding a default white flower lamp.",
+  "placementPrompt": "Best for elongated shade, pendant body, sconce diffuser, or detail close-up.",
+  "avoidPrompt": [
+    "generic white lily",
+    "same lily lamp every time",
+    "overly literal flower",
+    "real stamen sticking out"
+  ],
+  "enabled": true,
+  "sortOrder": 9
+}

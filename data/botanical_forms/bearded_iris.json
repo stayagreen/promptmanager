@@ -1,0 +1,17 @@
+{
+  "id": "bearded_iris",
+  "displayName": "鸢尾",
+  "englishName": "Bearded Iris",
+  "family": "Folded Iris Family",
+  "formPrompt": "Use bearded iris as the primary botanical form: folded petals, curling edges, layered vertical rhythm, and a natural sculptural bend.",
+  "translationPrompt": "Translate it into folded glass or porcelain shade planes with curled petal edges, warm light grazing along the folds, and patinated brass ribs or supports.",
+  "placementPrompt": "Best for sculptural shade, diffuser edge, side profile, support rhythm, or close-up detail.",
+  "avoidPrompt": [
+    "ordinary orchid shape",
+    "fabric ruffle",
+    "overly theatrical fantasy petals",
+    "plastic flower texture"
+  ],
+  "enabled": true,
+  "sortOrder": 3
+}

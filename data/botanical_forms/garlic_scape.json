@@ -1,0 +1,17 @@
+{
+  "id": "garlic_scape",
+  "displayName": "蒜薹线条",
+  "englishName": "Garlic Scape",
+  "family": "Line Botanical Family",
+  "formPrompt": "Use garlic scape as the primary botanical line: long curling stem, gentle spiral motion, asymmetrical but stable gesture, and one small terminal bloom.",
+  "translationPrompt": "Translate it into a curved brass line or metal support with a small flower-form diffuser at the end, balanced by a visibly weighted base, canopy, or wall mount.",
+  "placementPrompt": "Best for support curve, wall sconce arm, pendant suspension, table-lamp stem, or floor-lamp gesture.",
+  "avoidPrompt": [
+    "random curly wire",
+    "unstable structure",
+    "decorative vine clutter",
+    "plant stem without lamp function"
+  ],
+  "enabled": true,
+  "sortOrder": 7
+}

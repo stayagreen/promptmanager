@@ -1,0 +1,17 @@
+{
+  "id": "ranunculus",
+  "displayName": "花毛茛",
+  "englishName": "Butterfly Ranunculus",
+  "family": "Layered Petal Family",
+  "formPrompt": "Use butterfly ranunculus as the primary botanical form: restrained layered petals, soft overlapping rhythm, handmade uneven rim, and a delicate open center.",
+  "translationPrompt": "Translate it into layered frosted glass petals around a warm core, with a limited petal count, real material thickness, and subtle handmade irregularity.",
+  "placementPrompt": "Best for layered shade, tabletop lamp diffuser, chandelier bloom module, or close detail image.",
+  "avoidPrompt": [
+    "generic rose lamp",
+    "too many petals",
+    "wedding bouquet feeling",
+    "plastic floral ornament"
+  ],
+  "enabled": true,
+  "sortOrder": 4
+}

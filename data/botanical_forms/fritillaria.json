@@ -1,0 +1,17 @@
+{
+  "id": "fritillaria",
+  "displayName": "贝母花",
+  "englishName": "Fritillaria",
+  "family": "Bell Shade Family",
+  "formPrompt": "Use fritillaria as the primary botanical form: a small downward bell flower with a slightly tapered profile, quiet drooping posture, delicate rim, and subtle natural irregularity.",
+  "translationPrompt": "Translate it into a downward frosted glass or porcelain bell diffuser with a hidden warm core, a thin brass support bending gently, and a compact weighted base or mounting structure.",
+  "placementPrompt": "Best for shade, pendant body, sconce diffuser, small chandelier units, or table-lamp flower shade.",
+  "avoidPrompt": [
+    "generic lily lamp",
+    "large fantasy flower head",
+    "real flowers attached to lamp",
+    "plastic bell flower"
+  ],
+  "enabled": true,
+  "sortOrder": 1
+}

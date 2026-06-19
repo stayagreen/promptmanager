@@ -1,0 +1,17 @@
+{
+  "id": "clematis",
+  "displayName": "铁线莲",
+  "englishName": "Clematis",
+  "family": "Star / Clematis Family",
+  "formPrompt": "Use clematis as the primary botanical form: star-shaped radial petals, visible linear rhythm, open but not flat geometry, and one petal subtly lower or rotated.",
+  "translationPrompt": "Translate it into a translucent star-petal diffuser with brass vein ribs, asymmetric petal spacing, restrained thickness, and a warm central light core.",
+  "placementPrompt": "Best for diffuser, shade face, wall sconce flower plate, chandelier module, or decorative light head.",
+  "avoidPrompt": [
+    "flat graphic flower",
+    "generic daisy",
+    "perfect plastic symmetry",
+    "real flower pasted onto lamp"
+  ],
+  "enabled": true,
+  "sortOrder": 2
+}

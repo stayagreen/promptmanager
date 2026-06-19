@@ -1,0 +1,17 @@
+{
+  "id": "nigella_pod",
+  "displayName": "黑种草种荚",
+  "englishName": "Nigella Pod",
+  "family": "Pod / Seed Family",
+  "formPrompt": "Use nigella pod as the primary botanical form: small seed-pod core, ribbed capsule, tiny perforation logic, and unusual contained volume.",
+  "translationPrompt": "Translate it into a pod-like light core with small perforated warm highlights, ceramic or brass seed details, and a simple translucent shade surrounding it.",
+  "placementPrompt": "Best for light core, finial, switch detail, diffuser center, or repeated small lamp heads.",
+  "avoidPrompt": [
+    "lotus pod cliche",
+    "insect-like object",
+    "overly dense holes",
+    "biological horror feeling"
+  ],
+  "enabled": true,
+  "sortOrder": 5
+}

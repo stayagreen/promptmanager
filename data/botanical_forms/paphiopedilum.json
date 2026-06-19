@@ -1,0 +1,17 @@
+{
+  "id": "paphiopedilum",
+  "displayName": "兜兰变体",
+  "englishName": "Paphiopedilum Slipper Orchid",
+  "family": "Orchid Variant Family",
+  "formPrompt": "Use paphiopedilum as a specific low-frequency orchid variant: slipper-like pouch, asymmetric side petals, restrained exotic silhouette, and soft organic volume.",
+  "translationPrompt": "Translate it into an asymmetric translucent porcelain or glass diffuser with one warm core, a pouch-like shade volume, and refined brass connection detail.",
+  "placementPrompt": "Best for asymmetric shade, sculptural diffuser, wall sconce bloom, or table-lamp detail.",
+  "avoidPrompt": [
+    "generic moth orchid",
+    "ordinary orchid lamp",
+    "plastic tropical flower",
+    "overly colorful orchid"
+  ],
+  "enabled": true,
+  "sortOrder": 8
+}

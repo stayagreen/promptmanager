@@ -5,6 +5,7 @@ import type {
   CatalogData,
   CommonPromptModule,
   CustomPromptModule,
+  BotanicalFormModule,
   ElementReferenceAsset,
   ElementReferenceImage,
   EmotionalToneModule,
@@ -28,6 +29,7 @@ const ratiosDir = join(dataDir, "ratios");
 const emotionalTonesDir = join(dataDir, "emotional_tones");
 const photographyProfilesDir = join(dataDir, "photography_profiles");
 const outputModesDir = join(dataDir, "output_modes");
+const botanicalFormsDir = join(dataDir, "botanical_forms");
 const structuralMaterialModesDir = join(dataDir, "structural_material_modes");
 const customPromptsDir = join(dataDir, "custom_prompts");
 const productProjectsDir = join(dataDir, "product_projects");
@@ -47,6 +49,7 @@ export async function loadCatalog(): Promise<CatalogData> {
     emotionalTones,
     photographyProfiles,
     outputModes,
+    botanicalForms,
     structuralMaterialModes,
     customPrompts,
     commonPrompts,
@@ -57,6 +60,7 @@ export async function loadCatalog(): Promise<CatalogData> {
       readJsonDirectory<EmotionalToneModule>(emotionalTonesDir),
       readJsonDirectory<PhotographyProfileModule>(photographyProfilesDir),
       readJsonDirectory<OutputModeModule>(outputModesDir),
+      readJsonDirectory<BotanicalFormModule>(botanicalFormsDir),
       readJsonDirectory<StructuralMaterialModeModule>(structuralMaterialModesDir),
       readJsonDirectory<CustomPromptModule>(customPromptsDir),
       readCommonPrompts(),
@@ -69,6 +73,7 @@ export async function loadCatalog(): Promise<CatalogData> {
     emotionalTones: sortModules(emotionalTones),
     photographyProfiles: sortModules(photographyProfiles),
     outputModes: sortModules(outputModes),
+    botanicalForms: sortModules(botanicalForms),
     structuralMaterialModes: sortModules(structuralMaterialModes),
     customPrompts: sortModules(customPrompts),
     commonPrompts,
@@ -260,6 +265,28 @@ export async function deleteOutputMode(id: string): Promise<void> {
     throw new Error("The default output mode cannot be deleted.");
   }
   await deleteJsonFileWithCheckpoint("output_modes", id, filePath);
+}
+
+export async function saveBotanicalForm(
+  form: BotanicalFormModule,
+): Promise<BotanicalFormModule> {
+  assertSafeId(form.id);
+  await writeJsonFileWithCheckpoint(
+    "botanical_forms",
+    form.id,
+    join(botanicalFormsDir, `${form.id}.json`),
+    form,
+  );
+  return form;
+}
+
+export async function deleteBotanicalForm(id: string): Promise<void> {
+  assertSafeId(id);
+  await deleteJsonFileWithCheckpoint(
+    "botanical_forms",
+    id,
+    join(botanicalFormsDir, `${id}.json`),
+  );
 }
 
 export async function saveStructuralMaterialMode(
@@ -673,6 +700,16 @@ export async function restoreHistoryCheckpoint(
     return;
   }
 
+  if (moduleKind === "botanical_forms") {
+    await restoreJsonSnapshot(
+      moduleKind,
+      moduleId,
+      join(botanicalFormsDir, `${moduleId}.json`),
+      checkpoint.snapshot as BotanicalFormModule,
+    );
+    return;
+  }
+
   if (moduleKind === "structural_material_modes") {
     await restoreJsonSnapshot(
       moduleKind,
@@ -730,6 +767,7 @@ async function ensureDataDirectories(): Promise<void> {
     mkdir(emotionalTonesDir, { recursive: true }),
     mkdir(photographyProfilesDir, { recursive: true }),
     mkdir(outputModesDir, { recursive: true }),
+    mkdir(botanicalFormsDir, { recursive: true }),
     mkdir(structuralMaterialModesDir, { recursive: true }),
     mkdir(customPromptsDir, { recursive: true }),
     mkdir(productProjectsDir, { recursive: true }),

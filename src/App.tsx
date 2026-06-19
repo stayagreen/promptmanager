@@ -26,6 +26,7 @@ import {
   buildAllPrompts,
   buildPrompt,
   formatRatioForFilename,
+  getActiveBotanicalForms,
   getActiveCustomPrompts,
   getActiveEmotionalTones,
   getActiveLightingTypes,
@@ -40,6 +41,7 @@ import {
   getDefaultRatio,
 } from "./domain/promptAssembler";
 import type {
+  BotanicalFormModule,
   CatalogData,
   CommonPromptModule,
   CustomPromptModule,
@@ -58,6 +60,7 @@ import type {
   StructuralMaterialModeModule,
 } from "./domain/schema";
 import {
+  deleteBotanicalForm,
   deleteCustomPrompt,
   deleteEmotionalTone,
   deleteCheckpoint,
@@ -70,6 +73,7 @@ import {
   fetchCatalog,
   fetchElementAssets,
   restoreCheckpoint,
+  saveBotanicalForm,
   saveCommonPrompt,
   saveCustomPrompt,
   saveEmotionalTone,
@@ -100,6 +104,7 @@ type ManageSection =
   | "emotionalTones"
   | "photographyProfiles"
   | "outputModes"
+  | "botanicalForms"
   | "structuralMaterialModes"
   | "customPrompts"
   | "common";
@@ -210,6 +215,13 @@ export function App() {
   const [elementUsageMode, setElementUsageMode] =
     useState<ElementReferenceUsageMode>("text_only");
   const [elementRandomToken, setElementRandomToken] = useState(0);
+  const [botanicalFormMode, setBotanicalFormMode] =
+    useState<"random" | "specified">("random");
+  const [selectedBotanicalFormId, setSelectedBotanicalFormId] = useState("");
+  const [excludedBotanicalFormIds, setExcludedBotanicalFormIds] = useState<
+    string[]
+  >([]);
+  const [botanicalRandomToken, setBotanicalRandomToken] = useState(0);
 
   async function reloadCatalog() {
     try {
@@ -323,10 +335,22 @@ export function App() {
     ? getActivePhotographyProfiles(catalog)
     : [];
   const activeOutputModes = catalog ? getActiveOutputModes(catalog) : [];
+  const activeBotanicalForms = catalog ? getActiveBotanicalForms(catalog) : [];
   const activeCustomPrompts = catalog ? getActiveCustomPrompts(catalog) : [];
   const activeStructuralMaterialModes = catalog
     ? getActiveStructuralMaterialModes(catalog)
     : [];
+
+  useEffect(() => {
+    if (!catalog) return;
+    const activeIds = new Set(getActiveBotanicalForms(catalog).map((form) => form.id));
+    if (selectedBotanicalFormId && !activeIds.has(selectedBotanicalFormId)) {
+      setSelectedBotanicalFormId("");
+    }
+    setExcludedBotanicalFormIds((current) =>
+      current.filter((id) => activeIds.has(id)),
+    );
+  }, [catalog, selectedBotanicalFormId]);
 
   const prompt = useMemo(() => {
     if (
@@ -356,8 +380,14 @@ export function App() {
       elementSelections,
       elementReferenceUsageMode: elementUsageMode,
       elementRandomToken,
+      botanicalFormMode,
+      selectedBotanicalFormId,
+      excludedBotanicalFormIds,
+      botanicalRandomToken,
     });
   }, [
+    botanicalFormMode,
+    botanicalRandomToken,
     catalog,
     customPromptId,
     emotionalToneId,
@@ -365,6 +395,7 @@ export function App() {
     elementRandomToken,
     elementSelections,
     elementUsageMode,
+    excludedBotanicalFormIds,
     lightingTypeId,
     outputModeId,
     photographyProfileId,
@@ -374,6 +405,7 @@ export function App() {
     selectedMetals,
     selectedFinishes,
     selectedProcesses,
+    selectedBotanicalFormId,
     connectionLanguage,
     shadeStrategy,
     allowedMaterials,
@@ -916,6 +948,64 @@ export function App() {
                 ))}
               </SelectField>
 
+              {!isCustomMode && outputModeId === "botanical_still_life_5" && (
+                <div className="botanical-controls">
+                  <SelectField
+                    label="花型模式"
+                    value={botanicalFormMode}
+                    onChange={(value) =>
+                      setBotanicalFormMode(value as "random" | "specified")
+                    }
+                  >
+                    <option value="random">随机花型</option>
+                    <option value="specified">指定花型</option>
+                  </SelectField>
+                  <SelectField
+                    label="指定花型"
+                    value={selectedBotanicalFormId}
+                    onChange={setSelectedBotanicalFormId}
+                    disabled={botanicalFormMode !== "specified"}
+                  >
+                    <option value="">自动选择</option>
+                    {activeBotanicalForms.map((form) => (
+                      <option key={form.id} value={form.id}>
+                        {form.displayName} / {form.englishName}
+                      </option>
+                    ))}
+                  </SelectField>
+                  <div className="botanical-exclusions">
+                    <span>随机时排除</span>
+                    <div className="botanical-chip-grid">
+                      {activeBotanicalForms.map((form) => (
+                        <label key={form.id} className="mini-check">
+                          <input
+                            type="checkbox"
+                            checked={excludedBotanicalFormIds.includes(form.id)}
+                            disabled={botanicalFormMode !== "random"}
+                            onChange={(event) =>
+                              setExcludedBotanicalFormIds((current) =>
+                                event.target.checked
+                                  ? [...current, form.id]
+                                  : current.filter((id) => id !== form.id),
+                              )
+                            }
+                          />
+                          <span>{form.displayName}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="secondary"
+                    disabled={botanicalFormMode !== "random"}
+                    onClick={() => setBotanicalRandomToken((value) => value + 1)}
+                  >
+                    重新随机花型
+                  </button>
+                </div>
+              )}
+
               <SelectField
                 label="情绪增强"
                 value={emotionalToneId}
@@ -1235,6 +1325,13 @@ function ManagementView({
         </button>
         <button
           type="button"
+          className={section === "botanicalForms" ? "active" : ""}
+          onClick={() => setSection("botanicalForms")}
+        >
+          花型库
+        </button>
+        <button
+          type="button"
           className={section === "structuralMaterialModes" ? "active" : ""}
           onClick={() => setSection("structuralMaterialModes")}
         >
@@ -1274,6 +1371,9 @@ function ManagementView({
       )}
       {section === "outputModes" && (
         <OutputModeManager catalog={catalog} reloadCatalog={reloadCatalog} />
+      )}
+      {section === "botanicalForms" && (
+        <BotanicalFormManager catalog={catalog} reloadCatalog={reloadCatalog} />
       )}
       {section === "structuralMaterialModes" && (
         <StructuralMaterialModeManager
@@ -2402,6 +2502,172 @@ function OutputModeManager({
   );
 }
 
+function BotanicalFormManager({
+  catalog,
+  reloadCatalog,
+}: {
+  catalog: CatalogData;
+  reloadCatalog: () => Promise<void>;
+}) {
+  const first = catalog.botanicalForms[0] ?? createEmptyBotanicalForm();
+  const [selectedId, setSelectedId] = useState(first.id);
+  const [isNew, setIsNew] = useState(false);
+  const [draft, setDraft] = useState<BotanicalFormModule>(() => ({ ...first }));
+  const [avoidDraft, setAvoidDraft] = useState(first.avoidPrompt.join("\n"));
+  const [status, setStatus] = useState("");
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  useEffect(() => {
+    if (isNew) return;
+    const selected =
+      catalog.botanicalForms.find((form) => form.id === selectedId) ??
+      catalog.botanicalForms[0];
+    if (selected) {
+      setSelectedId(selected.id);
+      setDraft({ ...selected });
+      setAvoidDraft(selected.avoidPrompt.join("\n"));
+    }
+  }, [catalog.botanicalForms, isNew, selectedId]);
+
+  async function handleSave() {
+    const formToSave: BotanicalFormModule = {
+      ...draft,
+      avoidPrompt: linesToArray(avoidDraft),
+    };
+    if (!validateId(formToSave.id)) return;
+    if (
+      isNew &&
+      catalog.botanicalForms.some((form) => form.id === formToSave.id)
+    ) {
+      window.alert("这个花型 ID 已存在，请换一个 ID。");
+      return;
+    }
+    const saved = await saveBotanicalForm(formToSave);
+    await reloadCatalog();
+    setSelectedId(saved.id);
+    setIsNew(false);
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已保存到 data/botanical_forms/${saved.id}.json`);
+  }
+
+  async function handleDelete() {
+    if (isNew) return;
+    if (!window.confirm(`确定删除花型：${draft.displayName}？`)) return;
+    await deleteBotanicalForm(draft.id);
+    await reloadCatalog();
+    setSelectedId(catalog.botanicalForms[0]?.id ?? "");
+    setHistoryRefreshKey((value) => value + 1);
+    setStatus(`已删除 data/botanical_forms/${draft.id}.json`);
+  }
+
+  return (
+    <section className="editor-panel">
+      <EditorToolbar
+        title="花型库"
+        selectLabel="选择花型"
+        selectedId={selectedId}
+        onSelectedId={setSelectedId}
+        items={catalog.botanicalForms.map((form) => ({
+          id: form.id,
+          label: form.displayName,
+        }))}
+        isNew={isNew}
+        onNew={() => {
+          setIsNew(true);
+          setDraft(createEmptyBotanicalForm());
+          setAvoidDraft("");
+          setStatus("");
+        }}
+      />
+
+      <div className="editor-grid">
+        <TextField
+          label="ID"
+          value={draft.id}
+          disabled={!isNew}
+          onChange={(value) => setDraft({ ...draft, id: value })}
+        />
+        <TextField
+          label="中文名称"
+          value={draft.displayName}
+          onChange={(value) => setDraft({ ...draft, displayName: value })}
+        />
+        <TextField
+          label="英文名称"
+          value={draft.englishName}
+          onChange={(value) => setDraft({ ...draft, englishName: value })}
+        />
+        <TextField
+          label="花型家族"
+          value={draft.family}
+          onChange={(value) => setDraft({ ...draft, family: value })}
+        />
+        <NumberField
+          label="排序"
+          value={draft.sortOrder}
+          onChange={(value) => setDraft({ ...draft, sortOrder: value })}
+        />
+      </div>
+
+      <div className="checkbox-row">
+        <CheckboxField
+          label="启用"
+          checked={draft.enabled !== false}
+          onChange={(checked) => setDraft({ ...draft, enabled: checked })}
+        />
+      </div>
+
+      <TextareaField
+        label="花型特征（英文）"
+        value={draft.formPrompt}
+        onChange={(value) => setDraft({ ...draft, formPrompt: value })}
+        translationText={translateToChineseReference(draft.formPrompt)}
+        tall
+      />
+      <TextareaField
+        label="灯具转译方式（英文）"
+        value={draft.translationPrompt}
+        onChange={(value) => setDraft({ ...draft, translationPrompt: value })}
+        translationText={translateToChineseReference(draft.translationPrompt)}
+        tall
+      />
+      <TextareaField
+        label="适合应用位置（英文）"
+        value={draft.placementPrompt}
+        onChange={(value) => setDraft({ ...draft, placementPrompt: value })}
+        translationText={translateToChineseReference(draft.placementPrompt)}
+      />
+      <TextareaField
+        label="避免项（每行一个）"
+        value={avoidDraft}
+        onChange={setAvoidDraft}
+        translationText={translateToChineseReference(avoidDraft)}
+      />
+
+      <EditorActions
+        isNew={isNew}
+        canDelete
+        status={status}
+        onSave={() => void handleSave()}
+        onDelete={() => void handleDelete()}
+      />
+
+      {draft.id && (
+        <HistoryPanel
+          kind="botanical_forms"
+          moduleId={draft.id}
+          refreshKey={historyRefreshKey}
+          onRestore={async () => {
+            await reloadCatalog();
+            setHistoryRefreshKey((value) => value + 1);
+            setStatus("已恢复到选中的历史检查点");
+          }}
+        />
+      )}
+    </section>
+  );
+}
+
 function StructuralMaterialModeManager({
   catalog,
   reloadCatalog,
@@ -3503,6 +3769,20 @@ function createEmptyOutputMode(): OutputModeModule {
     consistencyPrompt: "",
     layoutPrompt: "",
     avoidPrompt: [],
+  };
+}
+
+function createEmptyBotanicalForm(): BotanicalFormModule {
+  return {
+    id: "",
+    displayName: "",
+    englishName: "",
+    family: "",
+    formPrompt: "",
+    translationPrompt: "",
+    placementPrompt: "",
+    avoidPrompt: [],
+    enabled: true,
   };
 }
 

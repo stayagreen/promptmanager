@@ -1,6 +1,7 @@
 import type { CommonPromptId } from "./commonPromptMeta";
 import type {
   CatalogData,
+  BotanicalFormModule,
   CustomPromptModule,
   EmotionalToneModule,
   LightingTypeModule,
@@ -274,6 +275,7 @@ export function buildPrompt(
   const lightingType = getLightingType(catalog, request.lightingTypeId);
   const ratio = getRatio(catalog, request.ratioId);
   const outputMode = getOutputMode(catalog, request.outputModeId);
+  const botanicalForm = resolveBotanicalForm(catalog, request, outputMode);
   const emotionalTone = getEmotionalTone(catalog, request.emotionalToneId);
   const photographyProfile = getPhotographyProfile(
     catalog,
@@ -323,7 +325,7 @@ export function buildPrompt(
       getCommonPrompt(catalog, "base_role"),
       lightingType.typePrompt,
       style.stylePrompt,
-      buildBotanicalStillLifeSection(outputMode, lightingType),
+      buildBotanicalStillLifeSection(outputMode, lightingType, botanicalForm),
       buildStructuralMaterialSection(style, structuralMaterialMode, request),
       elementSection,
       buildInspirationSection(style),
@@ -511,8 +513,36 @@ ${mode.avoidPrompt.join("\n")}`;
 function buildBotanicalStillLifeSection(
   outputMode: OutputModeModule,
   lightingType: LightingTypeModule,
+  botanicalForm: BotanicalFormModule | null,
 ): string {
   if (outputMode.id !== "botanical_still_life_5") return "";
+  const selectedFormSection = botanicalForm
+    ? `SELECTED BOTANICAL FORM LOCK
+
+Use this exact botanical form for this run:
+
+Chinese name: ${botanicalForm.displayName}
+English name: ${botanicalForm.englishName}
+Family: ${botanicalForm.family}
+
+FORM CHARACTER
+
+${botanicalForm.formPrompt}
+
+LIGHTING TRANSLATION
+
+${botanicalForm.translationPrompt}
+
+PLACEMENT
+
+${botanicalForm.placementPrompt}
+
+SELECTED FORM AVOID LIST
+
+${botanicalForm.avoidPrompt.join("\n")}`
+    : `SELECTED BOTANICAL FORM LOCK
+
+No specific botanical form was selected. Internally choose one enabled botanical form that is not excluded by the user, then keep it consistent across all five images.`;
 
   return `BOTANICAL INSPIRATION LAB LOCK
 
@@ -535,6 +565,8 @@ Each image must be 3:4 vertical. Generate one image at a time and continue autom
 BOTANICAL DESIGN FAMILY SELECTION
 
 Before generation, internally choose one clear Botanical Design Family for this run. Keep the same family across all five images. For a new generation run, choose a visibly different family whenever possible.
+
+${selectedFormSection}
 
 Choose one uncommon family from this list:
 
@@ -627,6 +659,34 @@ Never let props steal attention. Avoid readable book text, brand logos, coffee-s
 NO TEXT RULE
 
 The image content must contain zero text: no Chinese, no English, no pinyin, no brand name, no platform name, no account name, no watermark, no poster typography, no tutorial text, no readable book title, and no AI-related words inside the image.`;
+}
+
+function resolveBotanicalForm(
+  catalog: CatalogData,
+  request: PromptBuildRequest,
+  outputMode: OutputModeModule,
+): BotanicalFormModule | null {
+  if (outputMode.id !== "botanical_still_life_5") return null;
+  const forms = getActiveBotanicalForms(catalog);
+  if (forms.length === 0) return null;
+
+  if (request.botanicalFormMode === "specified" && request.selectedBotanicalFormId) {
+    return forms.find((form) => form.id === request.selectedBotanicalFormId) ?? forms[0];
+  }
+
+  const excluded = new Set(request.excludedBotanicalFormIds ?? []);
+  const candidates = forms.filter((form) => !excluded.has(form.id));
+  const pool = candidates.length > 0 ? candidates : forms;
+  const seed = `${request.styleId}:${request.lightingTypeId}:${request.botanicalRandomToken ?? 0}`;
+  return pool[hashString(seed) % pool.length];
+}
+
+function hashString(value: string): number {
+  let hash = 0;
+  for (let index = 0; index < value.length; index += 1) {
+    hash = (hash * 31 + value.charCodeAt(index)) >>> 0;
+  }
+  return hash;
 }
 
 export function buildAllPrompts(
@@ -932,6 +992,12 @@ export function getActivePhotographyProfiles(
 
 export function getActiveOutputModes(catalog: CatalogData): OutputModeModule[] {
   return catalog.outputModes.filter((mode) => mode.enabled !== false);
+}
+
+export function getActiveBotanicalForms(
+  catalog: CatalogData,
+): BotanicalFormModule[] {
+  return (catalog.botanicalForms ?? []).filter((form) => form.enabled !== false);
 }
 
 export function getActiveStructuralMaterialModes(

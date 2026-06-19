@@ -1,5 +1,6 @@
 import type {
   CatalogData,
+  BotanicalFormModule,
   CommonPromptModule,
   CustomPromptModule,
   ElementReferenceAsset,
@@ -104,6 +105,19 @@ export async function saveOutputMode(
 
 export async function deleteOutputMode(id: string): Promise<void> {
   await request(`/api/output-modes/${id}`, { method: "DELETE" });
+}
+
+export async function saveBotanicalForm(
+  form: BotanicalFormModule,
+): Promise<BotanicalFormModule> {
+  return request<BotanicalFormModule>(`/api/botanical-forms/${form.id}`, {
+    method: "PUT",
+    body: JSON.stringify(form),
+  });
+}
+
+export async function deleteBotanicalForm(id: string): Promise<void> {
+  await request(`/api/botanical-forms/${id}`, { method: "DELETE" });
 }
 
 export async function saveStructuralMaterialMode(
@@ -274,6 +288,7 @@ function historyPath(kind: ModuleHistoryKind): string {
   if (kind === "emotional_tones") return "emotional-tones";
   if (kind === "photography_profiles") return "photography-profiles";
   if (kind === "output_modes") return "output-modes";
+  if (kind === "botanical_forms") return "botanical-forms";
   if (kind === "structural_material_modes") return "structural-material-modes";
   if (kind === "custom_prompts") return "custom-prompts";
   if (kind === "product_projects") return "product-projects";

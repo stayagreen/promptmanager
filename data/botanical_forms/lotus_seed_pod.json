@@ -1,0 +1,17 @@
+{
+  "id": "lotus_seed_pod",
+  "displayName": "莲蓬种荚",
+  "englishName": "Lotus Seed Pod",
+  "family": "Lotus / Water Plant Family",
+  "formPrompt": "Use lotus seed pod as a low-frequency water-plant form: quiet pod geometry, small recessed seed details, and a grounded sculptural center.",
+  "translationPrompt": "Translate it into a pod detail used as light core, switch, finial, or diffuser center, paired with a dark stone or ceramic base and never a blue vase body.",
+  "placementPrompt": "Best for light core, switch detail, finial, base detail, or sculptural diffuser center.",
+  "avoidPrompt": [
+    "generic lotus lamp",
+    "white lotus every time",
+    "blue vase base",
+    "fantasy pond lamp"
+  ],
+  "enabled": true,
+  "sortOrder": 10
+}

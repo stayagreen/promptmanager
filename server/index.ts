@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
   deleteCustomPrompt,
+  deleteBotanicalForm,
   deleteElementAsset,
   deleteElementAssetImage,
   deleteEmotionalTone,
@@ -23,6 +24,7 @@ import {
   loadProductProjects,
   restoreHistoryCheckpoint,
   saveCommonPrompt,
+  saveBotanicalForm,
   saveElementAsset,
   saveElementAssetImage,
   saveCustomPrompt,
@@ -39,6 +41,7 @@ import {
 import { translateToChinese } from "./translator";
 import type {
   CustomPromptModule,
+  BotanicalFormModule,
   ElementAssetCategory,
   ElementFusionMode,
   ElementInfluenceStrength,
@@ -240,6 +243,25 @@ app.delete(
   "/api/output-modes/:id",
   asyncHandler(async (request, response) => {
     await deleteOutputMode(request.params.id);
+    response.json({ ok: true });
+  }),
+);
+
+app.put(
+  "/api/botanical-forms/:id",
+  asyncHandler(async (request, response) => {
+    const form = normalizeBotanicalForm({
+      ...request.body,
+      id: request.params.id,
+    });
+    response.json(await saveBotanicalForm(form));
+  }),
+);
+
+app.delete(
+  "/api/botanical-forms/:id",
+  asyncHandler(async (request, response) => {
+    await deleteBotanicalForm(request.params.id);
     response.json({ ok: true });
   }),
 );
@@ -680,6 +702,30 @@ function normalizeOutputMode(input: Partial<OutputModeModule>): OutputModeModule
   };
 }
 
+function normalizeBotanicalForm(
+  input: Partial<BotanicalFormModule>,
+): BotanicalFormModule {
+  requireText(input.id, "id");
+  requireText(input.displayName, "displayName");
+  requireText(input.englishName, "englishName");
+  requireText(input.family, "family");
+  requireText(input.formPrompt, "formPrompt");
+  requireText(input.translationPrompt, "translationPrompt");
+
+  return {
+    id: input.id.trim(),
+    displayName: input.displayName.trim(),
+    englishName: input.englishName.trim(),
+    family: input.family.trim(),
+    formPrompt: input.formPrompt.trim(),
+    translationPrompt: input.translationPrompt.trim(),
+    placementPrompt: normalizeOptionalText(input.placementPrompt),
+    avoidPrompt: normalizeTextArray(input.avoidPrompt),
+    enabled: input.enabled ?? true,
+    sortOrder: normalizeOptionalNumber(input.sortOrder),
+  };
+}
+
 function normalizeCustomPrompt(
   input: Partial<CustomPromptModule>,
 ): CustomPromptModule {
@@ -913,6 +959,7 @@ function parseHistoryKind(kind: string): ModuleHistoryKind {
   if (kind === "emotional-tones") return "emotional_tones";
   if (kind === "photography-profiles") return "photography_profiles";
   if (kind === "output-modes") return "output_modes";
+  if (kind === "botanical-forms") return "botanical_forms";
   if (kind === "structural-material-modes") return "structural_material_modes";
   if (kind === "custom-prompts") return "custom_prompts";
   if (kind === "product-projects") return "product_projects";

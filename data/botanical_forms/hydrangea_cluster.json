@@ -1,0 +1,17 @@
+{
+  "id": "hydrangea_cluster",
+  "displayName": "绣球小簇",
+  "englishName": "Hydrangea Cluster",
+  "family": "Cluster Diffuser Family",
+  "formPrompt": "Use a restrained hydrangea cluster as the primary botanical form: small grouped diffuser units, soft round cluster rhythm, and quiet floral density.",
+  "translationPrompt": "Translate it into three to seven small frosted glass diffuser beads or cups on a compact branch-like support, restrained and not chandelier-like unless a chandelier is selected.",
+  "placementPrompt": "Best for small cluster diffusers, multi-light heads, table-lamp shade cluster, or chandelier modules.",
+  "avoidPrompt": [
+    "overcrowded bouquet",
+    "crystal chandelier look",
+    "too many glowing balls",
+    "fake plastic hydrangea"
+  ],
+  "enabled": true,
+  "sortOrder": 6
+}
