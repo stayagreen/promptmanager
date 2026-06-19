@@ -121,6 +121,14 @@ type TranslationStatus = "idle" | "loading" | "google" | "fallback";
 const clientTranslationCache = new Map<string, string>();
 
 const idPattern = /^[a-z0-9_]+$/;
+const botanicalStillLifeOutputIds = [
+  "botanical_still_life_5",
+  "botanical_still_life_5_pure",
+];
+
+function isBotanicalStillLifeOutputId(id: string): boolean {
+  return botanicalStillLifeOutputIds.includes(id);
+}
 
 const metalOptions = [
   { label: "铁", value: "iron" },
@@ -313,7 +321,7 @@ export function App() {
   ]);
 
   useEffect(() => {
-    if (!catalog || outputModeId !== "botanical_still_life_5") return;
+    if (!catalog || !isBotanicalStillLifeOutputId(outputModeId)) return;
     const activeRatios = getActiveRatios(catalog);
     const activePhotographyProfiles = getActivePhotographyProfiles(catalog);
     if (activeRatios.some((ratio) => ratio.id === "3_4") && ratioId !== "3_4") {
@@ -948,8 +956,13 @@ export function App() {
                 ))}
               </SelectField>
 
-              {!isCustomMode && outputModeId === "botanical_still_life_5" && (
+              {!isCustomMode && isBotanicalStillLifeOutputId(outputModeId) && (
                 <div className="botanical-controls">
+                  {outputModeId === "botanical_still_life_5_pure" && (
+                    <p className="technical-mode-note">
+                      原MD纯净版会忽略当前风格、情绪增强、摄影风格和结构材质，只保留灯具类型与花型库。
+                    </p>
+                  )}
                   <SelectField
                     label="花型模式"
                     value={botanicalFormMode}

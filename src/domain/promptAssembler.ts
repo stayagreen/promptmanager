@@ -47,6 +47,26 @@ const photographicRequiredKeywords = [
   "The lighting fixture is always the primary visual subject.",
 ];
 
+const pureBotanicalRequiredKeywords = [
+  "Generate five separate images",
+  "BOTANICAL INSPIRATION LAB LOCK",
+  "ORIGINAL MD PURE MODE LOCK",
+  "ORIGINAL V20 PURE QUALITY LOCK",
+  "STYLE QUARANTINE",
+  "clean grey-white wall",
+  "dark tabletop",
+  "Image 2 - Daylight Off",
+  "Image 3 - Daylight On",
+  "iPhone 15 Pro",
+  "iPhone 16 Pro",
+  "ABSOLUTELY NO CGI RENDER LOOK",
+  "ABSOLUTELY NO 3D VISUALIZATION LOOK",
+  "No text",
+  "No logos",
+  "No watermark",
+  "Manufacturing realism priority: Maximum",
+];
+
 const technicalRequiredKeywords = [
   "TECHNICAL OUTPUT CLARITY REQUIREMENTS",
   "No decorative text",
@@ -104,6 +124,19 @@ Overly decorative styling
 Unrealistic assembly
 Unclear outlines
 Random fantasy details`;
+
+const botanicalStillLifeOutputIds = [
+  "botanical_still_life_5",
+  "botanical_still_life_5_pure",
+];
+
+function isBotanicalStillLifeOutput(outputMode: OutputModeModule): boolean {
+  return botanicalStillLifeOutputIds.includes(outputMode.id);
+}
+
+function isPureBotanicalStillLifeOutput(outputMode: OutputModeModule): boolean {
+  return outputMode.id === "botanical_still_life_5_pure";
+}
 
 export function getDefaultRatio(catalog: CatalogData): RatioModule {
   const activeRatios = getActiveRatios(catalog);
@@ -285,17 +318,26 @@ export function buildPrompt(
     catalog,
     request.structuralMaterialModeId,
   );
+  const isPureBotanicalOutput = isPureBotanicalStillLifeOutput(outputMode);
   const emotionalToneEnabled =
+    !isPureBotanicalOutput &&
     outputMode.category === "photographic" &&
     emotionalTone.id !== "none" &&
     emotionalTone.enabled !== false;
-  const photographyProfileEnabled = outputMode.category === "photographic";
+  const photographyProfileEnabled =
+    outputMode.category === "photographic" && !isPureBotanicalOutput;
   const ratioLabel = formatRatioForFilename(ratio);
   const materialSuffix =
-    structuralMaterialMode.mode === "regular"
+    isPureBotanicalOutput || structuralMaterialMode.mode === "regular"
       ? ""
       : `_${structuralMaterialMode.displayName}`;
-  const baseTitle = `${style.displayName}_${lightingType.displayName}_${ratioLabel}_${outputMode.displayName}${materialSuffix}`;
+  const botanicalFormSuffix =
+    isPureBotanicalOutput && botanicalForm
+      ? `_${botanicalForm.displayName}`
+      : "";
+  const baseTitle = isPureBotanicalOutput
+    ? `${lightingType.displayName}_${ratioLabel}_${outputMode.displayName}${botanicalFormSuffix}`
+    : `${style.displayName}_${lightingType.displayName}_${ratioLabel}_${outputMode.displayName}${materialSuffix}`;
   const title = emotionalToneEnabled
     ? `${baseTitle}_${emotionalTone.displayName}`
     : baseTitle;
@@ -317,36 +359,46 @@ export function buildPrompt(
     isTechnicalOutput,
   );
 
+  const promptSections = isPureBotanicalOutput
+    ? [
+        buildRatioSection(ratio, outputMode),
+        buildOutputModeSection(outputMode),
+        buildPureLightingTypeSection(lightingType),
+        buildBotanicalStillLifeSection(outputMode, lightingType, botanicalForm),
+        elementSection,
+        buildPureBotanicalFinalQualitySection(),
+        buildGlobalProhibitionSection(catalog, outputMode),
+      ]
+    : [
+        `Act as a world-class Luxury Lighting Designer specializing in ${style.englishName}.`,
+        buildRatioSection(ratio, outputMode),
+        buildOutputModeSection(outputMode),
+        getCommonPrompt(catalog, "base_role"),
+        lightingType.typePrompt,
+        style.stylePrompt,
+        buildBotanicalStillLifeSection(outputMode, lightingType, botanicalForm),
+        buildStructuralMaterialSection(style, structuralMaterialMode, request),
+        elementSection,
+        buildInspirationSection(style),
+        structuralMaterialMode.mode === "regular" ||
+        structuralMaterialMode.mode === "metal_dominant"
+          ? buildMaterialSection(style)
+          : "",
+        buildColorSection(style, outputMode),
+        buildAvoidSection(style),
+        isTechnicalOutput ? "" : buildEmotionalToneSection(emotionalTone),
+        isTechnicalOutput ? "" : buildPhotographyProfileSection(photographyProfile),
+        buildSubjectPrioritySection(catalog, outputMode),
+        getCommonPrompt(catalog, "manufacturing"),
+        isTechnicalOutput
+          ? technicalClarityPrompt
+          : getCommonPrompt(catalog, "photography"),
+        buildGlobalProhibitionSection(catalog, outputMode),
+        buildFinalQualitySection(outputMode),
+      ];
+
   const promptText = finalizePromptText(
-    [
-      `Act as a world-class Luxury Lighting Designer specializing in ${style.englishName}.`,
-      buildRatioSection(ratio, outputMode),
-      buildOutputModeSection(outputMode),
-      getCommonPrompt(catalog, "base_role"),
-      lightingType.typePrompt,
-      style.stylePrompt,
-      buildBotanicalStillLifeSection(outputMode, lightingType, botanicalForm),
-      buildStructuralMaterialSection(style, structuralMaterialMode, request),
-      elementSection,
-      buildInspirationSection(style),
-      structuralMaterialMode.mode === "regular" ||
-      structuralMaterialMode.mode === "metal_dominant"
-        ? buildMaterialSection(style)
-        : "",
-      buildColorSection(style, outputMode),
-      buildAvoidSection(style),
-      isTechnicalOutput ? "" : buildEmotionalToneSection(emotionalTone),
-      isTechnicalOutput ? "" : buildPhotographyProfileSection(photographyProfile),
-      buildSubjectPrioritySection(catalog, outputMode),
-      getCommonPrompt(catalog, "manufacturing"),
-      isTechnicalOutput
-        ? technicalClarityPrompt
-        : getCommonPrompt(catalog, "photography"),
-      buildGlobalProhibitionSection(catalog, outputMode),
-      buildFinalQualitySection(outputMode),
-    ]
-      .filter(Boolean)
-      .join("\n\n"),
+    promptSections.filter(Boolean).join("\n\n"),
   );
 
   const validation = validatePrompt(
@@ -362,23 +414,32 @@ export function buildPrompt(
     promptText,
     wordCount: countWords(promptText),
     moduleSources: [
-      `风格：${style.displayName}`,
+      isPureBotanicalOutput
+        ? `风格：${style.displayName}（原MD纯净版不参与画面）`
+        : `风格：${style.displayName}`,
       `灯具类型：${lightingType.displayName}`,
       `比例：${ratio.displayName}`,
       `输出方式：${outputMode.displayName}`,
-      `结构材质：${structuralMaterialMode.displayName}`,
-      isTechnicalOutput
+      isPureBotanicalOutput
+        ? `结构材质：${structuralMaterialMode.displayName}（原MD纯净版不参与）`
+        : `结构材质：${structuralMaterialMode.displayName}`,
+      isPureBotanicalOutput
+        ? `情绪增强：${emotionalTone.displayName}（原MD纯净版不参与）`
+        : isTechnicalOutput
         ? `情绪增强：${emotionalTone.displayName}（技术类不参与）`
         : `情绪增强：${emotionalTone.displayName}`,
-      isTechnicalOutput
+      isPureBotanicalOutput
+        ? `摄影风格：${photographyProfile.displayName}（原MD纯净版不参与）`
+        : isTechnicalOutput
         ? `摄影风格：${photographyProfile.displayName}（技术类不参与）`
         : `摄影风格：${photographyProfile.displayName}`,
+      botanicalForm ? `花型：${botanicalForm.displayName}` : "",
       ...resolvedElements.map((asset) => `附加元素：${asset.displayName}`),
       "通用：角色定位",
       "通用：主体优先",
       isTechnicalOutput ? "通用：技术清晰度与量产要求" : "通用：摄影与量产要求",
       "通用：无文字/Logo/水印",
-    ],
+    ].filter((source): source is string => Boolean(source)),
     validation,
     metadata: {
       styleId: style.id,
@@ -453,6 +514,64 @@ export function buildCustomPrompt(
   };
 }
 
+function buildPureLightingTypeSection(lightingType: LightingTypeModule): string {
+  return `SELECTED LIGHTING TYPE LOCK
+
+Selected lighting type: ${lightingType.englishName}.
+
+Use only this selected lighting type. Preserve its practical mounting, scale, support, base, canopy, arm, bracket, or suspension logic as appropriate.
+
+In pure MD mode, the selected lighting type is allowed to shape the object, but interior style, mood style, luxury editorial language, and generic product-catalog language must not override the mobile still-life look.`;
+}
+
+function buildPureBotanicalFinalQualitySection(): string {
+  return `ORIGINAL V20 PURE QUALITY LOCK
+
+This prompt must stay close to the original V20 MD template:
+
+smartphone photo, handheld but composed
+one lighting object only
+real home tabletop or quiet home surface
+clean grey-white wall, not pure white studio
+dark tabletop, black cabinet top, black shelf, dark stone, or another real black point
+quiet side daylight from a window
+warm lamp glow only when the lamp is switched on
+small still-life detail, never clutter
+slightly imperfect handmade object
+realistic scale and touchable material
+useful lamp, not fantasy sculpture
+no dramatic fantasy atmosphere
+no perfect CG symmetry
+
+STYLE QUARANTINE
+
+The selected UI style is metadata only in this pure mode. Do not apply its interior style, color palette, luxury scene, cultural motif, decorative mood, or brand-like visual language.
+
+The selected UI style must not change:
+
+clean grey-white wall
+dark tabletop or dark grounding surface
+smartphone still-life look
+daylight off and daylight on structure
+same lamp across all five images
+low-clutter real home feeling
+anti-CGI naturalness
+
+If any style instruction conflicts with this pure MD mode, ignore the style instruction and follow the pure MD mode.
+
+ABSOLUTELY NO CGI RENDER LOOK.
+ABSOLUTELY NO 3D VISUALIZATION LOOK.
+ABSOLUTELY NO CONCEPT ART STYLE.
+ABSOLUTELY NO COMMERCIAL CATALOGUE LOOK.
+ABSOLUTELY NO LUXURY HOTEL RENDER LOOK.
+
+Use iPhone 15 Pro or iPhone 16 Pro smartphone photography, 1x or 2x camera feel, clean phone HDR, natural indoor side daylight, realistic phone-camera sharpness, subtle indoor noise, very slight handheld framing, readable material thickness, real contact shadow, and crisp but not overprocessed highlights.
+
+Maintain clean clarity: 55% to 65% clean natural midtones, 20% to 30% deep but readable dark tabletop or shadow, 5% to 10% crisp highlights, at least one real black point, and at least one clean white or material highlight.
+
+Manufacturing realism priority: Maximum.`;
+}
+
 function buildStructuralMaterialSection(
   style: StyleModule,
   mode: StructuralMaterialModeModule,
@@ -515,7 +634,8 @@ function buildBotanicalStillLifeSection(
   lightingType: LightingTypeModule,
   botanicalForm: BotanicalFormModule | null,
 ): string {
-  if (outputMode.id !== "botanical_still_life_5") return "";
+  if (!isBotanicalStillLifeOutput(outputMode)) return "";
+  const isPureMode = isPureBotanicalStillLifeOutput(outputMode);
   const selectedFormSection = botanicalForm
     ? `SELECTED BOTANICAL FORM LOCK
 
@@ -543,10 +663,30 @@ ${botanicalForm.avoidPrompt.join("\n")}`
     : `SELECTED BOTANICAL FORM LOCK
 
 No specific botanical form was selected. Internally choose one enabled botanical form that is not excluded by the user, then keep it consistent across all five images.`;
+  const modePuritySection = isPureMode
+    ? `ORIGINAL MD PURE MODE LOCK
+
+This is the original V20 pure mobile still-life mode. The image quality and composition must stay closer to the old MD file than to the general style-combination system.
+
+Do not let any selected style, mood preset, luxury design language, interior decoration trend, or photography profile contaminate this mode. The image should feel like a real phone photo of one handmade botanical lamp in a quiet home setting, not a styled product campaign.
+
+Core visual purity:
+
+natural smartphone still life
+clean grey-white wall
+dark tabletop or dark grounding surface
+daylight off and daylight on both included
+same lamp identity across all five images
+one or two quiet props only
+no hotel render
+no catalogue render
+no editorial campaign feeling
+no heavy style atmosphere`
+    : `This output mode is a controlled botanical-form lighting experiment for the selected lighting type: ${lightingType.englishName}.`;
 
   return `BOTANICAL INSPIRATION LAB LOCK
 
-This output mode is a controlled botanical-form lighting experiment for the selected lighting type: ${lightingType.englishName}.
+${modePuritySection}
 
 Keep the selected lighting type explicit. If the selected type is not a table lamp, translate the botanical language into that exact lighting category's shade, diffuser, arm, canopy, wall mount, pendant body, chandelier cluster, or base logic. Do not accidentally change it into a table lamp, pendant lamp, wall lamp, floor lamp, ceiling lamp, or another type that was not selected.
 
@@ -666,7 +806,7 @@ function resolveBotanicalForm(
   request: PromptBuildRequest,
   outputMode: OutputModeModule,
 ): BotanicalFormModule | null {
-  if (outputMode.id !== "botanical_still_life_5") return null;
+  if (!isBotanicalStillLifeOutput(outputMode)) return null;
   const forms = getActiveBotanicalForms(catalog);
   if (forms.length === 0) return null;
 
@@ -766,9 +906,13 @@ export function validatePrompt(
     .map((check) => check.label);
 
   const isTechnicalOutput = outputMode?.category === "technical";
+  const isPureBotanicalOutput =
+    outputMode !== undefined && isPureBotanicalStillLifeOutput(outputMode);
   const requiredKeywords = [
-    ...commonRequiredKeywords,
-    ...(isTechnicalOutput
+    ...(isPureBotanicalOutput ? [] : commonRequiredKeywords),
+    ...(isPureBotanicalOutput
+      ? pureBotanicalRequiredKeywords
+      : isTechnicalOutput
       ? technicalRequiredKeywords
       : photographicRequiredKeywords),
   ];
@@ -777,6 +921,7 @@ export function validatePrompt(
   );
 
   if (
+    isPureBotanicalOutput ||
     isTechnicalOutput ||
     !emotionalTone ||
     emotionalTone.id === "none" ||
@@ -799,7 +944,7 @@ export function validatePrompt(
     }
   }
 
-  if (photographyProfile && !isTechnicalOutput) {
+  if (photographyProfile && !isTechnicalOutput && !isPureBotanicalOutput) {
     const photographyHeaderCount = photographyProfileHeaders.filter((header) =>
       promptText.includes(header),
     ).length;
@@ -1042,7 +1187,7 @@ function buildRatioSection(
     return `Generate four separate images. Aspect Ratio ${ratio.ratioValue} for each image. Each image must fill its entire canvas.`;
   }
 
-  if (outputMode.id === "botanical_still_life_5") {
+  if (isBotanicalStillLifeOutput(outputMode)) {
     return "Generate five separate images. Aspect Ratio 3:4 for each image. Each image must fill its entire vertical canvas. Do not combine the five images into one canvas.";
   }
 
@@ -1069,7 +1214,7 @@ Preserve accurate proportions, recognizable silhouette, structural logic, mounti
   if (outputMode.id === "four_separate_photos") {
     return subjectPriority.replace("In every panel:", "In every image:");
   }
-  if (outputMode.id === "botanical_still_life_5") {
+  if (isBotanicalStillLifeOutput(outputMode)) {
     return subjectPriority.replace("In every panel:", "In every image:");
   }
   return subjectPriority.replace("In every panel:", "In the image:");
@@ -1151,7 +1296,7 @@ function validateOutputMode(
     });
   }
 
-  if (outputMode.id === "botanical_still_life_5") {
+  if (isBotanicalStillLifeOutput(outputMode)) {
     [
       "Generate five separate images",
       "BOTANICAL INSPIRATION LAB LOCK",

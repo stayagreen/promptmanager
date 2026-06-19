@@ -425,6 +425,11 @@ input:disabled {
   background: #fbfaf6;
 }
 
+.botanical-controls .technical-mode-note {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
 .botanical-exclusions {
   grid-column: 1 / -1;
   display: grid;
