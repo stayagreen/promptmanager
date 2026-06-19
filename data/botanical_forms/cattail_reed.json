@@ -1,0 +1,17 @@
+{
+  "id": "cattail_reed",
+  "displayName": "香蒲",
+  "englishName": "Cattail Reed",
+  "family": "Reed Cylinder Family",
+  "formPrompt": "Use cattail reed as the primary botanical form: slim vertical reed, compact brown cylinder seed head, calm wetland rhythm, and minimal natural silhouette.",
+  "translationPrompt": "Translate it into narrow cylindrical diffusers or warm opaque tubes on slender stems, grouped with varied heights.",
+  "placementPrompt": "Best for floor lamps, linear sconces, landscape-inspired pendants, or quiet restaurant lighting.",
+  "avoidPrompt": [
+    "literal marsh scene",
+    "brown stick bundle",
+    "rustic craft decor",
+    "random vertical rods"
+  ],
+  "enabled": true,
+  "sortOrder": 52
+}

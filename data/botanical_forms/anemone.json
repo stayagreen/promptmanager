@@ -1,0 +1,17 @@
+{
+  "id": "anemone",
+  "displayName": "银莲花",
+  "englishName": "Anemone",
+  "family": "Dark Center Petal Family",
+  "formPrompt": "Use anemone as the primary botanical form: delicate open petals around a dark central eye, graphic contrast, and a clean poetic silhouette.",
+  "translationPrompt": "Translate it into pale glass or ceramic petals around a small dark metal center with hidden warm light leaking from behind.",
+  "placementPrompt": "Best for wall sconces, pendant lamps, gallery lighting, or refined table lamps.",
+  "avoidPrompt": [
+    "flat black dot flower",
+    "cartoon daisy",
+    "excessive contrast",
+    "literal floral sticker"
+  ],
+  "enabled": true,
+  "sortOrder": 30
+}

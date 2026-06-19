@@ -1,0 +1,17 @@
+{
+  "id": "scabiosa_pod",
+  "displayName": "松虫草种荚",
+  "englishName": "Scabiosa Pod",
+  "family": "Pincushion Pod Family",
+  "formPrompt": "Use scabiosa pod as the primary botanical form: small round pincushion head, honeycomb seed pockets, delicate radial stems, and dry botanical elegance.",
+  "translationPrompt": "Translate it into a small perforated metal or ceramic diffuser with honeycomb dimples and fine support stems.",
+  "placementPrompt": "Best for table lamps, small pendants, wall sconces, or clustered detail elements on chandeliers.",
+  "avoidPrompt": [
+    "disease-like texture",
+    "random polka dots",
+    "cheap dried flower",
+    "oversized seed ball"
+  ],
+  "enabled": true,
+  "sortOrder": 43
+}

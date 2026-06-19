@@ -1,0 +1,17 @@
+{
+  "id": "foxglove_bell",
+  "displayName": "毛地黄钟花",
+  "englishName": "Foxglove Bell",
+  "family": "Hanging Bell Family",
+  "formPrompt": "Use foxglove bell as the primary botanical form: tubular downward bells arranged along a vertical stem, soft flared lips, and a quiet botanical rhythm.",
+  "translationPrompt": "Translate it into repeated frosted glass bell diffusers on a slim vertical metal stem, with each bell hiding a warm inner glow.",
+  "placementPrompt": "Best for wall lights, vertical chandeliers, pendant clusters, or bedside lamps.",
+  "avoidPrompt": [
+    "medical foxglove reference",
+    "literal flower stalk",
+    "country garden decor",
+    "plastic bell flowers"
+  ],
+  "enabled": true,
+  "sortOrder": 44
+}

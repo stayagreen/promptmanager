@@ -1,0 +1,17 @@
+{
+  "id": "anthurium_spathe",
+  "displayName": "红掌",
+  "englishName": "Anthurium Spathe",
+  "family": "Glossy Shield Family",
+  "formPrompt": "Use anthurium spathe as the primary botanical form: a glossy heart-shaped shield, central spike, smooth curled surface, and bold graphic outline.",
+  "translationPrompt": "Translate it into a polished lacquer, colored glass, or metal reflector plate with a small linear luminous core inspired by the spadix.",
+  "placementPrompt": "Best for accent wall lamps, decorative table lamps, gallery pendants, or bold pop-art lighting.",
+  "avoidPrompt": [
+    "plastic tropical flower",
+    "too much kitsch",
+    "literal red flower",
+    "flat heart icon"
+  ],
+  "enabled": true,
+  "sortOrder": 15
+}

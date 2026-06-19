@@ -1,0 +1,17 @@
+{
+  "id": "grape_tendril",
+  "displayName": "葡萄卷须",
+  "englishName": "Grape Vine Tendril",
+  "family": "Curling Tendril Family",
+  "formPrompt": "Use grape vine tendril as the primary botanical form: thin curling tendrils, loose vine rhythm, small nodes, and elegant spiral movement.",
+  "translationPrompt": "Translate it into fine bronze or blackened metal spirals carrying tiny hidden light points or small glass buds.",
+  "placementPrompt": "Best for wall lights, wine-bar pendants, decorative chandeliers, or organic line-based lamps.",
+  "avoidPrompt": [
+    "literal grape bunch",
+    "Tuscan restaurant cliché",
+    "messy vine tangle",
+    "fake plant decor"
+  ],
+  "enabled": true,
+  "sortOrder": 55
+}

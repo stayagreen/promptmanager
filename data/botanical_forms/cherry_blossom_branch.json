@@ -1,0 +1,17 @@
+{
+  "id": "cherry_blossom_branch",
+  "displayName": "樱花枝",
+  "englishName": "Cherry Blossom Branch",
+  "family": "Branch Blossom Family",
+  "formPrompt": "Use cherry blossom branch as the primary botanical form: slender branching lines, small five-petal blossoms, sparse rhythm, and a light spring-like silhouette.",
+  "translationPrompt": "Translate it into a fine metal branch structure with tiny frosted glass blossom diffusers distributed irregularly along the branches.",
+  "placementPrompt": "Best for wall lights, linear chandeliers, decorative sconces, or delicate pendant installations.",
+  "avoidPrompt": [
+    "pink cartoon sakura",
+    "dense fake tree",
+    "anime decoration",
+    "printed blossom pattern"
+  ],
+  "enabled": true,
+  "sortOrder": 22
+}

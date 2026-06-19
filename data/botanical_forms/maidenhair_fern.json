@@ -1,0 +1,17 @@
+{
+  "id": "maidenhair_fern",
+  "displayName": "铁线蕨",
+  "englishName": "Maidenhair Fern",
+  "family": "Fine Stem Leaflet Family",
+  "formPrompt": "Use maidenhair fern as the primary botanical form: extremely thin dark stems, small fan-shaped leaflets, airy branching, and delicate negative space.",
+  "translationPrompt": "Translate it into hair-thin blackened metal branches with tiny translucent fan diffusers or reflectors, keeping the structure light and sparse.",
+  "placementPrompt": "Best for delicate wall sconces, poetic table lamps, small pendants, or minimal biophilic fixtures.",
+  "avoidPrompt": [
+    "fragile messy wires",
+    "fake potted fern",
+    "overdense leaflets",
+    "flat botanical illustration"
+  ],
+  "enabled": true,
+  "sortOrder": 38
+}

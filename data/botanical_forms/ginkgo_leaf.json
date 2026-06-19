@@ -1,0 +1,17 @@
+{
+  "id": "ginkgo_leaf",
+  "displayName": "银杏叶",
+  "englishName": "Ginkgo Leaf",
+  "family": "Fan Leaf Family",
+  "formPrompt": "Use ginkgo leaf as the primary botanical form: fan-shaped leaf, subtle split at the top, delicate vein rhythm, and elegant Art Deco potential.",
+  "translationPrompt": "Translate it into fan-shaped brass, glass, or mica panels with fine ribbing and warm light grazing across the veins.",
+  "placementPrompt": "Best for wall sconces, Art Deco pendants, table lamps, or repeated chandelier leaves.",
+  "avoidPrompt": [
+    "flat souvenir leaf",
+    "overly gold cliché",
+    "printed leaf pattern",
+    "busy fan decoration"
+  ],
+  "enabled": true,
+  "sortOrder": 35
+}

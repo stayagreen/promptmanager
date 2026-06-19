@@ -1,0 +1,17 @@
+{
+  "id": "bird_of_paradise",
+  "displayName": "鹤望兰",
+  "englishName": "Bird of Paradise",
+  "family": "Angular Tropical Family",
+  "formPrompt": "Use bird of paradise as the primary botanical form: sharp orange-blue bracts, crane-like angular profile, layered spear shapes, and a dramatic directional gesture.",
+  "translationPrompt": "Translate it into folded metal or colored glass fins with a linear hidden light, emphasizing angular precision and sculptural motion.",
+  "placementPrompt": "Best for statement floor lamps, wall lights, gallery pendants, or hotel feature fixtures.",
+  "avoidPrompt": [
+    "literal bird shape",
+    "cheap tropical resort decor",
+    "too colorful carnival look",
+    "fake flower arrangement"
+  ],
+  "enabled": true,
+  "sortOrder": 48
+}

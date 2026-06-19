@@ -1,0 +1,17 @@
+{
+  "id": "wheat_stalk",
+  "displayName": "麦穗",
+  "englishName": "Wheat Stalk",
+  "family": "Grain Spike Family",
+  "formPrompt": "Use wheat stalk as the primary botanical form: slim grain spike, repeated small kernels, fine awns, and a golden linear rhythm.",
+  "translationPrompt": "Translate it into fine brass or bronze ribs with small warm luminous grains, keeping the form refined and architectural.",
+  "placementPrompt": "Best for dining chandeliers, wall lights, hospitality lamps, or warm rustic-modern pendants.",
+  "avoidPrompt": [
+    "farmhouse cliché",
+    "literal harvest bundle",
+    "messy straw",
+    "cheap gold ornament"
+  ],
+  "enabled": true,
+  "sortOrder": 53
+}

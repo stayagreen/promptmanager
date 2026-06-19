@@ -1,0 +1,17 @@
+{
+  "id": "banksia_cone",
+  "displayName": "班克木果序",
+  "englishName": "Banksia Cone",
+  "family": "Textured Cone Family",
+  "formPrompt": "Use banksia cone as the primary botanical form: cylindrical seed cone, dense cellular texture, small organic openings, and a rugged natural rhythm.",
+  "translationPrompt": "Translate it into a perforated ceramic, cast metal, or resin diffuser with irregular cellular apertures casting soft dotted shadows.",
+  "placementPrompt": "Best for table lamps, floor lamps, textured pendant shades, or biophilic wall lights.",
+  "avoidPrompt": [
+    "pineapple shape",
+    "random holes without rhythm",
+    "rough craft object",
+    "burnt wood prop"
+  ],
+  "enabled": true,
+  "sortOrder": 17
+}

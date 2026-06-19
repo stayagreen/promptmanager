@@ -1,0 +1,17 @@
+{
+  "id": "magnolia_blossom",
+  "displayName": "玉兰花",
+  "englishName": "Magnolia Blossom",
+  "family": "Sculptural Petal Family",
+  "formPrompt": "Use magnolia blossom as the primary botanical form: large waxy petals opening upward, thick petal edges, calm asymmetry, and a noble sculptural silhouette.",
+  "translationPrompt": "Translate it into layered porcelain, alabaster, or matte glass petal diffusers with a warm concealed core and a refined brass or stone support.",
+  "placementPrompt": "Best for chandelier petals, table-lamp shade, wall sconce diffuser, or sculptural pendant body.",
+  "avoidPrompt": [
+    "generic flower lamp",
+    "flat printed petals",
+    "overly cute floral decoration",
+    "real magnolia attached to lamp"
+  ],
+  "enabled": true,
+  "sortOrder": 11
+}

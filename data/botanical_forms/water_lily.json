@@ -1,0 +1,17 @@
+{
+  "id": "water_lily",
+  "displayName": "睡莲",
+  "englishName": "Water Lily",
+  "family": "Floating Petal Family",
+  "formPrompt": "Use water lily as the primary botanical form: flat floating petals, calm radial opening, low horizontal silhouette, and a quiet pond-like softness.",
+  "translationPrompt": "Translate it into low layered glass petals with a concealed center glow, using reflective metal or stone surfaces to suggest water and shadow.",
+  "placementPrompt": "Best for low table lamps, ceiling medallion lights, wall features, or hospitality lounge pendants.",
+  "avoidPrompt": [
+    "cartoon pond scene",
+    "visible water",
+    "literal lily pad prop",
+    "cheap spa decor"
+  ],
+  "enabled": true,
+  "sortOrder": 21
+}

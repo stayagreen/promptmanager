@@ -1,0 +1,17 @@
+{
+  "id": "maple_samara",
+  "displayName": "枫树翅果",
+  "englishName": "Maple Samara",
+  "family": "Wing Seed Family",
+  "formPrompt": "Use maple samara as the primary botanical form: paired winged seeds, thin translucent wing, slight twist, and floating rotational movement.",
+  "translationPrompt": "Translate it into paired glass or metal wing diffusers suspended lightly, with warm light catching the thin curved edges.",
+  "placementPrompt": "Best for mobile chandeliers, pendant clusters, wall lights, or airy ceiling installations.",
+  "avoidPrompt": [
+    "literal helicopter toy",
+    "flat propeller",
+    "too mechanical fan",
+    "random wing shapes"
+  ],
+  "enabled": true,
+  "sortOrder": 39
+}

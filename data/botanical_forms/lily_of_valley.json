@@ -1,0 +1,17 @@
+{
+  "id": "lily_of_valley",
+  "displayName": "铃兰",
+  "englishName": "Lily of the Valley",
+  "family": "Miniature Bell Garland Family",
+  "formPrompt": "Use lily of the valley as the primary botanical form: small rounded bell flowers hanging from a curved stem, tiny scalloped rims, and a gentle cascading rhythm.",
+  "translationPrompt": "Translate it into miniature frosted glass bell diffusers suspended along a slim arcing arm, each with a soft hidden light.",
+  "placementPrompt": "Best for wall sconces, bedside lamps, delicate chandeliers, or small pendant clusters.",
+  "avoidPrompt": [
+    "wedding bouquet cliché",
+    "fake flower garland",
+    "overly sweet cottage style",
+    "plastic bells"
+  ],
+  "enabled": true,
+  "sortOrder": 46
+}

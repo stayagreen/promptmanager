@@ -1,0 +1,17 @@
+{
+  "id": "allium_sphere",
+  "displayName": "葱属花球",
+  "englishName": "Allium Sphere",
+  "family": "Orb Blossom Family",
+  "formPrompt": "Use allium sphere as the primary botanical form: spherical flower head made of many tiny star blooms, thin radiating stems, and airy dotted volume.",
+  "translationPrompt": "Translate it into a constellation-like orb of small glowing tips or glass beads on fine metal rods, with disciplined spacing.",
+  "placementPrompt": "Best for chandeliers, pendant clusters, stairwell lights, or playful gallery lamps.",
+  "avoidPrompt": [
+    "generic sputnik lamp",
+    "random ball of bulbs",
+    "messy fireworks",
+    "literal onion flower"
+  ],
+  "enabled": true,
+  "sortOrder": 42
+}

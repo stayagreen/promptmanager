@@ -1,0 +1,17 @@
+{
+  "id": "protea",
+  "displayName": "帝王花",
+  "englishName": "King Protea",
+  "family": "Architectural Bract Family",
+  "formPrompt": "Use king protea as the primary botanical form: radial bracts, armored layered crown, strong central cup, and a dramatic architectural silhouette.",
+  "translationPrompt": "Translate it into faceted metal or ceramic bracts surrounding a diffused central glow, with a bold sculptural body and precise radial rhythm.",
+  "placementPrompt": "Best for large pendant lamps, hotel lobby chandeliers, art chandeliers, or sculptural floor lamps.",
+  "avoidPrompt": [
+    "fantasy monster flower",
+    "overcrowded petals",
+    "real dried flower",
+    "cheap tropical decor"
+  ],
+  "enabled": true,
+  "sortOrder": 16
+}

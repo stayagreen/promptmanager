@@ -1,0 +1,17 @@
+{
+  "id": "pampas_plume",
+  "displayName": "蒲苇羽穗",
+  "englishName": "Pampas Grass Plume",
+  "family": "Soft Plume Family",
+  "formPrompt": "Use pampas grass plume as the primary botanical form: tall feathery plume, soft vertical volume, warm dry texture, and gentle blurred edges.",
+  "translationPrompt": "Translate it into layered translucent fibers, brushed metal strands, or textured fabric diffusers around a concealed linear light.",
+  "placementPrompt": "Best for floor lamps, soft wall lights, hotel lounge features, or poetic pendant clusters.",
+  "avoidPrompt": [
+    "dusty dried bouquet",
+    "boho cliché",
+    "messy fibers",
+    "flammable real grass"
+  ],
+  "enabled": true,
+  "sortOrder": 51
+}

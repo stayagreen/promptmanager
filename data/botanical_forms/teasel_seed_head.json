@@ -1,0 +1,17 @@
+{
+  "id": "teasel_seed_head",
+  "displayName": "起绒草种头",
+  "englishName": "Teasel Seed Head",
+  "family": "Spiked Seed Head Family",
+  "formPrompt": "Use teasel seed head as the primary botanical form: elongated oval seed head, fine bristled texture, vertical posture, and dry sculptural delicacy.",
+  "translationPrompt": "Translate it into a perforated or ribbed metal diffuser with fine raised pins or etched lines, creating controlled dotted light.",
+  "placementPrompt": "Best for table lamps, narrow pendants, wall lights, or textured floor-lamp heads.",
+  "avoidPrompt": [
+    "dangerous sharp spikes",
+    "pineapple look",
+    "literal dried weed",
+    "messy bristles"
+  ],
+  "enabled": true,
+  "sortOrder": 33
+}

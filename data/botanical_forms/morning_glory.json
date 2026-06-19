@@ -1,0 +1,17 @@
+{
+  "id": "morning_glory",
+  "displayName": "牵牛花",
+  "englishName": "Morning Glory",
+  "family": "Trumpet Bloom Family",
+  "formPrompt": "Use morning glory as the primary botanical form: flared trumpet flower, thin wavy rim, soft funnel shape, and a climbing vine gesture.",
+  "translationPrompt": "Translate it into flared glass or spun metal trumpet shades on slender vine-like arms, with the light hidden deep inside the funnel.",
+  "placementPrompt": "Best for sconces, playful pendants, garden-room lamps, or compact chandelier clusters.",
+  "avoidPrompt": [
+    "cartoon trumpet",
+    "literal garden vine",
+    "plastic flower cup",
+    "overly sweet pastel style"
+  ],
+  "enabled": true,
+  "sortOrder": 25
+}

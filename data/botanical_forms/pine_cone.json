@@ -1,0 +1,17 @@
+{
+  "id": "pine_cone",
+  "displayName": "松果",
+  "englishName": "Pine Cone",
+  "family": "Layered Scale Cone Family",
+  "formPrompt": "Use pine cone as the primary botanical form: overlapping woody scales, tapered oval cone, natural spiral rhythm, and a protective layered shell.",
+  "translationPrompt": "Translate it into layered metal, wood, or ceramic scales wrapping a hidden warm diffuser, with light escaping through the scale gaps.",
+  "placementPrompt": "Best for cabin-modern pendants, table lamps, wall lights, or nature-inspired chandeliers.",
+  "avoidPrompt": [
+    "Christmas ornament",
+    "literal pinecone prop",
+    "too rustic souvenir",
+    "heavy brown mass"
+  ],
+  "enabled": true,
+  "sortOrder": 57
+}

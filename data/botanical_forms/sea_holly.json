@@ -1,0 +1,17 @@
+{
+  "id": "sea_holly",
+  "displayName": "蓝刺芹",
+  "englishName": "Sea Holly",
+  "family": "Star Bract Family",
+  "formPrompt": "Use sea holly as the primary botanical form: spiky star bracts, small textured cone center, cool metallic character, and crisp sculptural geometry.",
+  "translationPrompt": "Translate it into brushed metal star bracts around a textured diffuser core, using controlled cool highlights and precise edges.",
+  "placementPrompt": "Best for techno-minimal pendants, wall lights, art lamps, or sculptural chandelier nodes.",
+  "avoidPrompt": [
+    "dangerous sharp spikes",
+    "sea creature look",
+    "messy thorn ball",
+    "cheap blue plastic"
+  ],
+  "enabled": true,
+  "sortOrder": 41
+}

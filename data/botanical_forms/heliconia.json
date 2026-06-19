@@ -1,0 +1,17 @@
+{
+  "id": "heliconia",
+  "displayName": "赫蕉",
+  "englishName": "Heliconia",
+  "family": "Stacked Bract Family",
+  "formPrompt": "Use heliconia as the primary botanical form: stacked angular bracts, strong zigzag vertical rhythm, tropical geometry, and bold sculptural tiers.",
+  "translationPrompt": "Translate it into repeated folded metal or colored glass shades stepping along a vertical support, each bract catching concealed light.",
+  "placementPrompt": "Best for vertical chandeliers, hotel wall features, statement sconces, or large pendants.",
+  "avoidPrompt": [
+    "tacky tropical decor",
+    "literal banana plant",
+    "overly saturated colors",
+    "plastic flower stack"
+  ],
+  "enabled": true,
+  "sortOrder": 49
+}

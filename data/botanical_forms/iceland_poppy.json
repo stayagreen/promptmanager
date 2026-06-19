@@ -1,0 +1,17 @@
+{
+  "id": "iceland_poppy",
+  "displayName": "冰岛虞美人",
+  "englishName": "Iceland Poppy",
+  "family": "Paper Petal Family",
+  "formPrompt": "Use Iceland poppy as the primary botanical form: thin translucent crinkled petals, delicate open cup, visible central seed disk, and airy fragile movement.",
+  "translationPrompt": "Translate it into thin frosted glass, resin, or parchment-like diffusers with softly wrinkled edges and a warm central glow.",
+  "placementPrompt": "Best for bedside lamps, poetic pendants, soft sconces, or delicate chandelier clusters.",
+  "avoidPrompt": [
+    "flat paper craft",
+    "red memorial poppy cliché",
+    "fake flower stem",
+    "overly fragile unsafe structure"
+  ],
+  "enabled": true,
+  "sortOrder": 19
+}

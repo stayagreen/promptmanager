@@ -1,0 +1,17 @@
+{
+  "id": "wisteria_raceme",
+  "displayName": "紫藤花序",
+  "englishName": "Wisteria Raceme",
+  "family": "Cascading Blossom Family",
+  "formPrompt": "Use wisteria raceme as the primary botanical form: hanging clusters of small blossoms, soft cascading rhythm, tapered droop, and airy vertical movement.",
+  "translationPrompt": "Translate it into suspended glass droplets or petal diffusers on fine cables, descending in layered lengths from a slim ceiling rail.",
+  "placementPrompt": "Best for stairwell chandeliers, hotel lobby installations, dining pendants, or romantic wall features.",
+  "avoidPrompt": [
+    "purple curtain cliché",
+    "dense fake flower garland",
+    "wedding arch decor",
+    "uncontrolled bead curtain"
+  ],
+  "enabled": true,
+  "sortOrder": 24
+}

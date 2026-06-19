@@ -1,0 +1,17 @@
+{
+  "id": "cosmos",
+  "displayName": "波斯菊",
+  "englishName": "Cosmos",
+  "family": "Simple Daisy Family",
+  "formPrompt": "Use cosmos as the primary botanical form: thin open petals, small central disk, light irregular spacing, and a fresh airy meadow character.",
+  "translationPrompt": "Translate it into thin translucent petal diffusers around a small glowing disk, using very fine stems and understated construction.",
+  "placementPrompt": "Best for bedside lamps, small pendants, delicate wall lights, or youthful decorative fixtures.",
+  "avoidPrompt": [
+    "generic daisy icon",
+    "childlike flower",
+    "flat decal pattern",
+    "fake flower stem"
+  ],
+  "enabled": true,
+  "sortOrder": 29
+}

@@ -1,0 +1,17 @@
+{
+  "id": "eucalyptus_leaf",
+  "displayName": "尤加利叶",
+  "englishName": "Eucalyptus Leaf",
+  "family": "Soft Leaf Disc Family",
+  "formPrompt": "Use eucalyptus leaf as the primary botanical form: rounded matte leaves, muted silver-green tone, alternating stem rhythm, and calm soft geometry.",
+  "translationPrompt": "Translate it into overlapping matte glass or metal leaf discs along a fine branch frame, with small hidden LEDs washing each leaf edge.",
+  "placementPrompt": "Best for linear wall lights, soft chandeliers, decorative sconces, or biophilic table lamps.",
+  "avoidPrompt": [
+    "spa cliché",
+    "literal leafy garland",
+    "flat leaf print",
+    "too many leaves"
+  ],
+  "enabled": true,
+  "sortOrder": 34
+}

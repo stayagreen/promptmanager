@@ -1,0 +1,17 @@
+{
+  "id": "banana_blossom",
+  "displayName": "芭蕉花苞",
+  "englishName": "Banana Blossom",
+  "family": "Heavy Bud Family",
+  "formPrompt": "Use banana blossom as the primary botanical form: large hanging teardrop bud, layered waxy bracts, heavy sculptural volume, and a downward ceremonial presence.",
+  "translationPrompt": "Translate it into a large pendant body with layered metal or ceramic bracts wrapping a warm internal diffuser.",
+  "placementPrompt": "Best for large pendants, hospitality chandeliers, sculptural table lamps, or dramatic floor lamps.",
+  "avoidPrompt": [
+    "literal fruit market object",
+    "banana cliché",
+    "too heavy visual mass",
+    "cheap tropical theme"
+  ],
+  "enabled": true,
+  "sortOrder": 50
+}

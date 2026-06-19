@@ -1,0 +1,17 @@
+{
+  "id": "fern_frond",
+  "displayName": "蕨叶",
+  "englishName": "Fern Frond",
+  "family": "Feather Leaf Family",
+  "formPrompt": "Use fern frond as the primary botanical form: long central spine, many small leaflets, gentle arching motion, and feathery shadow rhythm.",
+  "translationPrompt": "Translate it into a slim ribbed metal arm with repeated tiny glass or metal leaflets, using grazing light to produce layered shadows.",
+  "placementPrompt": "Best for wall lights, linear pendants, bedside lamps, or nature-inspired floor lamps.",
+  "avoidPrompt": [
+    "flat fern print",
+    "messy artificial plant",
+    "overly rustic decor",
+    "jungle cliché"
+  ],
+  "enabled": true,
+  "sortOrder": 37
+}

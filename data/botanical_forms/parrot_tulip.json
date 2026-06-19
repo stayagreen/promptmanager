@@ -1,0 +1,17 @@
+{
+  "id": "parrot_tulip",
+  "displayName": "鹦鹉郁金香",
+  "englishName": "Parrot Tulip",
+  "family": "Ruffled Cup Family",
+  "formPrompt": "Use parrot tulip as the primary botanical form: ruffled petal edges, twisted cup silhouette, elegant irregular opening, and sculptural movement.",
+  "translationPrompt": "Translate it into a ruffled glass or folded metal cup shade with softly uneven rim and a concealed warm core.",
+  "placementPrompt": "Best for pendants, bedside lamps, decorative sconces, or clustered chandelier shades.",
+  "avoidPrompt": [
+    "ordinary tulip icon",
+    "overly colorful stripes",
+    "plastic flower cup",
+    "literal flower pot"
+  ],
+  "enabled": true,
+  "sortOrder": 31
+}

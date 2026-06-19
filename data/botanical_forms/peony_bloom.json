@@ -1,0 +1,17 @@
+{
+  "id": "peony_bloom",
+  "displayName": "牡丹",
+  "englishName": "Peony Bloom",
+  "family": "Layered Petal Family",
+  "formPrompt": "Use peony bloom as the primary botanical form: dense layered petals, soft rounded volume, irregular unfolding edges, and a lush but controlled silhouette.",
+  "translationPrompt": "Translate it into stacked translucent glass or folded metal petals around a warm core, keeping the construction refined rather than decorative.",
+  "placementPrompt": "Best for statement pendant, decorative table lamp shade, chandelier cluster, or soft wall light.",
+  "avoidPrompt": [
+    "cheap floral ornament",
+    "overly realistic artificial flower",
+    "wedding bouquet style",
+    "flat rose pattern"
+  ],
+  "enabled": true,
+  "sortOrder": 13
+}

@@ -1,0 +1,17 @@
+{
+  "id": "phalaenopsis_orchid",
+  "displayName": "蝴蝶兰",
+  "englishName": "Phalaenopsis Orchid",
+  "family": "Wing Petal Family",
+  "formPrompt": "Use phalaenopsis orchid as the primary botanical form: broad wing-like petals, a small sculpted lip, gentle bilateral symmetry, and a floating refined posture.",
+  "translationPrompt": "Translate it into thin ceramic or frosted glass wing diffusers with a delicate metal spine and a concealed central light source.",
+  "placementPrompt": "Best for wall sconces, vanity lights, pendant accents, or refined table lamps.",
+  "avoidPrompt": [
+    "tropical resort cliché",
+    "fake orchid pot",
+    "excessive purple color",
+    "literal flower stem"
+  ],
+  "enabled": true,
+  "sortOrder": 14
+}

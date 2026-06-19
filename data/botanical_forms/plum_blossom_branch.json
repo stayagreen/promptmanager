@@ -1,0 +1,17 @@
+{
+  "id": "plum_blossom_branch",
+  "displayName": "梅花枝",
+  "englishName": "Plum Blossom Branch",
+  "family": "Ink Branch Family",
+  "formPrompt": "Use plum blossom branch as the primary botanical form: angular winter branch, small rounded blossoms, sparse resilient rhythm, and poetic negative space.",
+  "translationPrompt": "Translate it into dark bronze or blackened metal branches with small porcelain or glass blossom diffusers, emphasizing asymmetry and restraint.",
+  "placementPrompt": "Best for modern zen sconces, long wall lights, dining chandeliers, or entry feature lamps.",
+  "avoidPrompt": [
+    "red festival decor",
+    "busy floral painting",
+    "fake branch arrangement",
+    "old-fashioned Chinese ornament"
+  ],
+  "enabled": true,
+  "sortOrder": 23
+}

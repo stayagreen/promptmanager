@@ -1,0 +1,17 @@
+{
+  "id": "clover_leaf",
+  "displayName": "三叶草",
+  "englishName": "Clover Leaf",
+  "family": "Rounded Leaf Cluster Family",
+  "formPrompt": "Use clover leaf as the primary botanical form: three rounded leaflets, compact low profile, soft symmetry, and small lucky charm-like geometry.",
+  "translationPrompt": "Translate it into three rounded glass or metal reflectors arranged around a central joint, with light diffused gently from behind.",
+  "placementPrompt": "Best for small wall lights, children-adjacent refined lamps, compact pendants, or decorative table lamps.",
+  "avoidPrompt": [
+    "shamrock logo",
+    "cartoon lucky charm",
+    "flat green icon",
+    "holiday decoration"
+  ],
+  "enabled": true,
+  "sortOrder": 54
+}

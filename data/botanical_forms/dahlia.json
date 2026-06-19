@@ -1,0 +1,17 @@
+{
+  "id": "dahlia",
+  "displayName": "大丽花",
+  "englishName": "Dahlia",
+  "family": "Geometric Petal Family",
+  "formPrompt": "Use dahlia as the primary botanical form: many pointed petals arranged in precise radial layers, a crisp floral geometry, and a rich symmetrical volume.",
+  "translationPrompt": "Translate it into repeated folded metal, acrylic, or porcelain fins around a glowing center, keeping the radial pattern clean and engineered.",
+  "placementPrompt": "Best for statement pendants, ceiling fixtures, wall lights, or decorative chandelier rosettes.",
+  "avoidPrompt": [
+    "flat sunflower look",
+    "messy petal pile",
+    "overly ornate flower",
+    "literal garden bloom"
+  ],
+  "enabled": true,
+  "sortOrder": 18
+}

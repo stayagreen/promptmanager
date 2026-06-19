@@ -1,0 +1,17 @@
+{
+  "id": "snowdrop",
+  "displayName": "雪滴花",
+  "englishName": "Snowdrop",
+  "family": "Small Drooping Bell Family",
+  "formPrompt": "Use snowdrop as the primary botanical form: tiny drooping white bells, narrow folded petals, slender curved stem, and winter-like delicacy.",
+  "translationPrompt": "Translate it into small downward porcelain or frosted glass diffusers on very thin curved metal arms, with a restrained warm glow.",
+  "placementPrompt": "Best for bedside sconces, delicate pendants, small chandelier clusters, or poetic table lamps.",
+  "avoidPrompt": [
+    "Christmas ornament",
+    "literal snow scene",
+    "fake tiny flower",
+    "overly cute miniature"
+  ],
+  "enabled": true,
+  "sortOrder": 45
+}

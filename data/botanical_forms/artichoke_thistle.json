@@ -1,0 +1,17 @@
+{
+  "id": "artichoke_thistle",
+  "displayName": "洋蓟蓟",
+  "englishName": "Artichoke Thistle",
+  "family": "Overlapping Scale Family",
+  "formPrompt": "Use artichoke thistle as the primary botanical form: overlapping protective scales, compact oval bud, sculptural green-gray geometry, and armored softness.",
+  "translationPrompt": "Translate it into layered metal leaves or ceramic scales wrapping around a hidden diffuser, allowing light to escape through scale gaps.",
+  "placementPrompt": "Best for sculptural pendants, table lamps, outdoor-inspired sconces, or organic minimalist fixtures.",
+  "avoidPrompt": [
+    "vegetable literalism",
+    "pinecone confusion",
+    "heavy medieval armor",
+    "rough craft lampshade"
+  ],
+  "enabled": true,
+  "sortOrder": 32
+}

@@ -1,0 +1,17 @@
+{
+  "id": "olive_branch",
+  "displayName": "橄榄枝",
+  "englishName": "Olive Branch",
+  "family": "Slender Leaf Branch Family",
+  "formPrompt": "Use olive branch as the primary botanical form: narrow silver-green leaves, small oval olives, asymmetric branch rhythm, and quiet Mediterranean restraint.",
+  "translationPrompt": "Translate it into slim metal branches with narrow leaf reflectors and tiny diffused glass olive nodes, using subtle warm highlights.",
+  "placementPrompt": "Best for dining room chandeliers, wall sconces, gallery-style lamps, or quiet luxury fixtures.",
+  "avoidPrompt": [
+    "restaurant mural cliché",
+    "literal olive fruit",
+    "fake branch garland",
+    "overly rustic farmhouse"
+  ],
+  "enabled": true,
+  "sortOrder": 56
+}

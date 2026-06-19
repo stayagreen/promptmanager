@@ -1,0 +1,17 @@
+{
+  "id": "spider_chrysanthemum",
+  "displayName": "蜘蛛菊",
+  "englishName": "Spider Chrysanthemum",
+  "family": "Radiating Filament Family",
+  "formPrompt": "Use spider chrysanthemum as the primary botanical form: long curling narrow petals, explosive radial motion, airy filaments, and a dramatic light-catching texture.",
+  "translationPrompt": "Translate it into thin metal or acrylic tendrils radiating around a diffused center, creating delicate shadows without visual clutter.",
+  "placementPrompt": "Best for statement pendants, wall sculptures with light, chandelier clusters, or art lamps.",
+  "avoidPrompt": [
+    "spiky hazard look",
+    "messy fireworks",
+    "cheap tinsel",
+    "literal mum flower"
+  ],
+  "enabled": true,
+  "sortOrder": 28
+}

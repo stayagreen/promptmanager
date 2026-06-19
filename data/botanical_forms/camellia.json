@@ -1,0 +1,17 @@
+{
+  "id": "camellia",
+  "displayName": "山茶花",
+  "englishName": "Camellia",
+  "family": "Polished Petal Family",
+  "formPrompt": "Use camellia as the primary botanical form: glossy rounded petals, compact layered symmetry, refined bloom volume, and a quiet elegant profile.",
+  "translationPrompt": "Translate it into layered ceramic or lacquered metal petals with a soft internal diffuser, balancing floral softness with polished craftsmanship.",
+  "placementPrompt": "Best for decorative wall lamps, refined pendants, table lamps, or quiet luxury chandelier details.",
+  "avoidPrompt": [
+    "rose imitation",
+    "cheap floral applique",
+    "overly romantic bouquet",
+    "flat printed blossom"
+  ],
+  "enabled": true,
+  "sortOrder": 27
+}

@@ -1,0 +1,17 @@
+{
+  "id": "moonflower",
+  "displayName": "月光花",
+  "englishName": "Moonflower",
+  "family": "Night Bloom Trumpet Family",
+  "formPrompt": "Use moonflower as the primary botanical form: large white night-blooming trumpet, smooth luminous funnel, soft folded rim, and quiet nocturnal elegance.",
+  "translationPrompt": "Translate it into a broad satin glass or porcelain funnel shade with a warm concealed core and a dark slender supporting stem.",
+  "placementPrompt": "Best for bedside lamps, nightstand sconces, poetic pendants, or calm hospitality lighting.",
+  "avoidPrompt": [
+    "moon icon",
+    "literal glowing flower",
+    "cheap fantasy bloom",
+    "overly bright white plastic"
+  ],
+  "enabled": true,
+  "sortOrder": 60
+}

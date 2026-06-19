@@ -1,0 +1,17 @@
+{
+  "id": "monstera_leaf",
+  "displayName": "龟背竹叶",
+  "englishName": "Monstera Leaf",
+  "family": "Cutout Leaf Family",
+  "formPrompt": "Use monstera leaf as the primary botanical form: broad split leaf, organic cutout holes, asymmetrical tropical silhouette, and strong graphic shadow potential.",
+  "translationPrompt": "Translate it into a perforated metal or translucent leaf shade that casts elegant botanical shadows without becoming a flat wall decal.",
+  "placementPrompt": "Best for wall sconces, floor lamps, statement pendants, or biophilic decorative lights.",
+  "avoidPrompt": [
+    "tropical wallpaper look",
+    "literal plant leaf",
+    "cheap resort decor",
+    "oversized flat panel"
+  ],
+  "enabled": true,
+  "sortOrder": 36
+}

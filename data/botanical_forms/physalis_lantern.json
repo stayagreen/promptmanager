@@ -1,0 +1,17 @@
+{
+  "id": "physalis_lantern",
+  "displayName": "灯笼果",
+  "englishName": "Physalis Lantern",
+  "family": "Natural Lantern Family",
+  "formPrompt": "Use physalis lantern as the primary botanical form: delicate inflated husk, visible vein cage, suspended oval lantern, and translucent shell texture.",
+  "translationPrompt": "Translate it into a thin ribbed glass, paper, or metal-cage diffuser with a warm glowing core inside the husk volume.",
+  "placementPrompt": "Best for pendant lights, festive but refined table lamps, wall sconces, or clustered chandeliers.",
+  "avoidPrompt": [
+    "Chinese red lantern cliché",
+    "paper festival decor",
+    "literal dried husk",
+    "Halloween pumpkin look"
+  ],
+  "enabled": true,
+  "sortOrder": 40
+}

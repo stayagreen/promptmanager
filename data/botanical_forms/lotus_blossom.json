@@ -1,0 +1,17 @@
+{
+  "id": "lotus_blossom",
+  "displayName": "莲花",
+  "englishName": "Lotus Blossom",
+  "family": "Sacred Petal Bowl Family",
+  "formPrompt": "Use lotus blossom as the primary botanical form: broad upward petals, calm bowl-like center, balanced radial opening, and a serene floating presence.",
+  "translationPrompt": "Translate it into layered alabaster, porcelain, or satin glass petals around a hidden warm light, with a quiet stone or bronze base.",
+  "placementPrompt": "Best for zen table lamps, ceiling pendants, wall sconces, or hospitality feature lighting.",
+  "avoidPrompt": [
+    "religious cliché",
+    "cheap lotus lantern",
+    "overly symmetrical plastic petals",
+    "temple souvenir look"
+  ],
+  "enabled": true,
+  "sortOrder": 20
+}

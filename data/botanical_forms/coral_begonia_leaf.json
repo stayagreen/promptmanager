@@ -1,0 +1,17 @@
+{
+  "id": "coral_begonia_leaf",
+  "displayName": "珊瑚秋海棠叶",
+  "englishName": "Coral Begonia Leaf",
+  "family": "Speckled Asymmetric Leaf Family",
+  "formPrompt": "Use coral begonia leaf as the primary botanical form: asymmetric wing-like leaf, dotted surface, crisp outline, and decorative botanical graphic quality.",
+  "translationPrompt": "Translate it into an asymmetric glass or metal shade with subtle perforations or speckled translucency, casting refined dotted shadows.",
+  "placementPrompt": "Best for wall sconces, table lamps, decorative pendants, or playful gallery lights.",
+  "avoidPrompt": [
+    "polka-dot cartoon",
+    "literal plant leaf",
+    "too much pattern",
+    "cheap tropical print"
+  ],
+  "enabled": true,
+  "sortOrder": 59
+}

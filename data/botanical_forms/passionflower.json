@@ -1,0 +1,17 @@
+{
+  "id": "passionflower",
+  "displayName": "西番莲",
+  "englishName": "Passionflower",
+  "family": "Complex Radial Family",
+  "formPrompt": "Use passionflower as the primary botanical form: layered radial petals, fine filament crown, central sculptural stigma, and intricate exotic geometry.",
+  "translationPrompt": "Translate it into a precise radial lamp with thin metal filaments, layered glass petals, and a small glowing center, keeping the details refined.",
+  "placementPrompt": "Best for gallery wall lights, artistic pendants, showpiece table lamps, or experimental chandeliers.",
+  "avoidPrompt": [
+    "messy alien flower",
+    "overly biological detail",
+    "cheap tropical color",
+    "literal botanical specimen"
+  ],
+  "enabled": true,
+  "sortOrder": 26
+}

@@ -1,0 +1,17 @@
+{
+  "id": "acanthus_leaf",
+  "displayName": "莨苕叶",
+  "englishName": "Acanthus Leaf",
+  "family": "Classical Carved Leaf Family",
+  "formPrompt": "Use acanthus leaf as the primary botanical form: deeply carved leaf lobes, classical ornamental rhythm, curled edges, and architectural relief.",
+  "translationPrompt": "Translate it into carved metal, plaster, or stone-like leaf reliefs with concealed grazing light that reveals the layered veins.",
+  "placementPrompt": "Best for Neo-Art Deco sconces, classical-modern chandeliers, wall lamps, or hotel feature lights.",
+  "avoidPrompt": [
+    "heavy palace ornament",
+    "fake antique carving",
+    "overly baroque clutter",
+    "flat leaf print"
+  ],
+  "enabled": true,
+  "sortOrder": 58
+}

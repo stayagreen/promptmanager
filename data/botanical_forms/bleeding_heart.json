@@ -1,0 +1,17 @@
+{
+  "id": "bleeding_heart",
+  "displayName": "荷包牡丹",
+  "englishName": "Bleeding Heart",
+  "family": "Pendant Heart Bloom Family",
+  "formPrompt": "Use bleeding heart as the primary botanical form: small pendant heart-shaped blossoms, arched stem, inner teardrop detail, and gentle romantic rhythm.",
+  "translationPrompt": "Translate it into small pendant glass or porcelain diffusers hanging from a curved metal rail, with a refined teardrop light core.",
+  "placementPrompt": "Best for romantic minimal sconces, dining pendants, bedside lamps, or decorative chandeliers.",
+  "avoidPrompt": [
+    "literal heart icon",
+    "valentine decoration",
+    "too sentimental",
+    "fake flower string"
+  ],
+  "enabled": true,
+  "sortOrder": 47
+}

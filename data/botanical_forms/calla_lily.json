@@ -1,0 +1,17 @@
+{
+  "id": "calla_lily",
+  "displayName": "马蹄莲",
+  "englishName": "Calla Lily",
+  "family": "Curved Cone Family",
+  "formPrompt": "Use calla lily as the primary botanical form: a single elegant rolled spathe, smooth trumpet curve, slender throat, and graceful upward gesture.",
+  "translationPrompt": "Translate it into a seamless rolled metal or frosted glass cone shade, with a hidden LED line inside the throat and a slim arcing stem.",
+  "placementPrompt": "Best for wall sconces, reading lamps, pendant shades, or clustered chandelier arms.",
+  "avoidPrompt": [
+    "cartoon flower",
+    "oversized wedding bouquet",
+    "visible fake stem",
+    "literal plastic calla lily"
+  ],
+  "enabled": true,
+  "sortOrder": 12
+}
