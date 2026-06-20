@@ -96,7 +96,7 @@ import { ReferenceWorkspace } from "./ReferenceWorkspace";
 import { TextElementSelector } from "./TextElementSelector";
 
 type PageMode = "generate" | "manage";
-type WorkspaceMode = "text" | "reference";
+type WorkspaceMode = "text" | "reference" | "botanical";
 type ManageSection =
   | "styles"
   | "lightingTypes"
@@ -446,6 +446,18 @@ export function App() {
     ? getActivePhotographyProfiles(catalog)
     : [];
   const activeOutputModes = catalog ? getActiveOutputModes(catalog) : [];
+  const textOutputModes = activeOutputModes.filter(
+    (outputMode) => !isBotanicalStillLifeOutputId(outputMode.id),
+  );
+  const botanicalOutputModes = activeOutputModes.filter((outputMode) =>
+    isBotanicalStillLifeOutputId(outputMode.id),
+  );
+  const visibleOutputModes =
+    workspaceMode === "botanical"
+      ? botanicalOutputModes
+      : textOutputModes.length > 0
+        ? textOutputModes
+        : activeOutputModes;
   const activeBotanicalForms = catalog ? getActiveBotanicalForms(catalog) : [];
   const botanicalCategoryCounts = new Map<BotanicalCategoryId, number>();
   activeBotanicalForms.forEach((form) => {
@@ -466,6 +478,37 @@ export function App() {
     ? getActiveStructuralMaterialModes(catalog)
     : [];
 
+  function switchWorkspace(nextMode: WorkspaceMode) {
+    setWorkspaceMode(nextMode);
+    if (nextMode === "text") {
+      if (isBotanicalStillLifeOutputId(outputModeId)) {
+        setOutputModeId(
+          textOutputModes.find((outputMode) => outputMode.id === "four_panel_storyboard")
+            ?.id ??
+            textOutputModes[0]?.id ??
+            activeOutputModes[0]?.id ??
+            outputModeId,
+        );
+      }
+      void fetchElementAssets().then(setElementAssets);
+      return;
+    }
+
+    if (nextMode === "botanical") {
+      setMode("generate");
+      setCustomPromptId("none");
+      if (!isBotanicalStillLifeOutputId(outputModeId)) {
+        setOutputModeId(
+          botanicalOutputModes.find(
+            (outputMode) => outputMode.id === "botanical_still_life_5_pure",
+          )?.id ??
+            botanicalOutputModes[0]?.id ??
+            outputModeId,
+        );
+      }
+    }
+  }
+
   useEffect(() => {
     if (!catalog) return;
     const activeIds = new Set(getActiveBotanicalForms(catalog).map((form) => form.id));
@@ -476,6 +519,20 @@ export function App() {
       current.filter((id) => activeIds.has(id)),
     );
   }, [catalog, selectedBotanicalFormId]);
+
+  useEffect(() => {
+    if (!catalog || visibleOutputModes.length === 0) return;
+    if (!visibleOutputModes.some((outputMode) => outputMode.id === outputModeId)) {
+      setOutputModeId(
+        visibleOutputModes.find((outputMode) => outputMode.id === "four_panel_storyboard")
+          ?.id ??
+          visibleOutputModes.find(
+            (outputMode) => outputMode.id === "botanical_still_life_5_pure",
+          )?.id ??
+          visibleOutputModes[0].id,
+      );
+    }
+  }, [catalog, outputModeId, visibleOutputModes]);
 
   const prompt = useMemo(() => {
     if (
@@ -616,12 +673,7 @@ export function App() {
     return (
       <ReferenceWorkspace
         catalog={catalog}
-        onWorkspaceMode={(nextMode) => {
-          setWorkspaceMode(nextMode);
-          if (nextMode === "text") {
-            void fetchElementAssets().then(setElementAssets);
-          }
-        }}
+        onWorkspaceMode={switchWorkspace}
       />
     );
   }
@@ -904,11 +956,25 @@ export function App() {
         </header>
 
         <div className="workspace-tabs" role="tablist" aria-label="提示词工作区">
-          <button type="button" className="active">
+          <button
+            type="button"
+            className={workspaceMode === "text" ? "active" : ""}
+            onClick={() => switchWorkspace("text")}
+          >
             文生图
           </button>
-          <button type="button" onClick={() => setWorkspaceMode("reference")}>
+          <button
+            type="button"
+            onClick={() => switchWorkspace("reference")}
+          >
             参考图任务
+          </button>
+          <button
+            type="button"
+            className={workspaceMode === "botanical" ? "active" : ""}
+            onClick={() => switchWorkspace("botanical")}
+          >
+            插花灵感实验室
           </button>
         </div>
 
@@ -936,21 +1002,23 @@ export function App() {
             <section className="panel">
               <div className="panel-title">
                 <Layers3 aria-hidden="true" />
-                <h2>组合</h2>
+                <h2>{workspaceMode === "botanical" ? "插花灵感实验室" : "组合"}</h2>
               </div>
 
-              <SelectField
-                label="用户自定义"
-                value={customPromptId}
-                onChange={setCustomPromptId}
-              >
-                <option value="none">无</option>
-                {activeCustomPrompts.map((customPrompt) => (
-                  <option key={customPrompt.id} value={customPrompt.id}>
-                    {customPrompt.displayName}
-                  </option>
-                ))}
-              </SelectField>
+              {workspaceMode === "text" && (
+                <SelectField
+                  label="用户自定义"
+                  value={customPromptId}
+                  onChange={setCustomPromptId}
+                >
+                  <option value="none">无</option>
+                  {activeCustomPrompts.map((customPrompt) => (
+                    <option key={customPrompt.id} value={customPrompt.id}>
+                      {customPrompt.displayName}
+                    </option>
+                  ))}
+                </SelectField>
+              )}
 
               <SelectField
                 label="风格"
@@ -1067,19 +1135,19 @@ export function App() {
               </SelectField>
 
               <SelectField
-                label="输出方式"
+                label={workspaceMode === "botanical" ? "实验室模式" : "输出方式"}
                 value={outputModeId}
                 onChange={setOutputModeId}
                 disabled={isCustomMode}
               >
-                {activeOutputModes.map((outputMode) => (
+                {visibleOutputModes.map((outputMode) => (
                   <option key={outputMode.id} value={outputMode.id}>
                     {outputMode.displayName}
                   </option>
                 ))}
               </SelectField>
 
-              {!isCustomMode && isBotanicalStillLifeOutputId(outputModeId) && (
+              {workspaceMode === "botanical" && !isCustomMode && (
                 <div className="botanical-controls">
                   {outputModeId === "botanical_still_life_5_pure" && (
                     <p className="technical-mode-note">
@@ -1228,16 +1296,18 @@ export function App() {
               )}
             </section>
 
-            <TextElementSelector
-              assets={elementAssets}
-              selections={elementSelections}
-              usageMode={elementUsageMode}
-              disabled={isCustomMode}
-              onSelectionsChange={setElementSelections}
-              onUsageModeChange={setElementUsageMode}
-              onReroll={() => setElementRandomToken((value) => value + 1)}
-              onManage={() => setWorkspaceMode("reference")}
-            />
+            {workspaceMode === "text" && (
+              <TextElementSelector
+                assets={elementAssets}
+                selections={elementSelections}
+                usageMode={elementUsageMode}
+                disabled={isCustomMode}
+                onSelectionsChange={setElementSelections}
+                onUsageModeChange={setElementUsageMode}
+                onReroll={() => setElementRandomToken((value) => value + 1)}
+                onManage={() => switchWorkspace("reference")}
+              />
+            )}
 
           </>
         ) : (

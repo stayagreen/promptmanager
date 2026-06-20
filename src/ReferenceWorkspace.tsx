@@ -52,7 +52,7 @@ import {
 } from "./utils/api";
 import { downloadTextFile } from "./utils/download";
 
-type WorkspaceMode = "text" | "reference";
+type WorkspaceMode = "text" | "reference" | "botanical";
 
 export function ReferenceWorkspace({
   catalog,
@@ -939,6 +939,13 @@ function WorkspaceTabs({
         onClick={() => onChange("reference")}
       >
         参考图任务
+      </button>
+      <button
+        type="button"
+        className={active === "botanical" ? "active" : ""}
+        onClick={() => onChange("botanical")}
+      >
+        插花灵感实验室
       </button>
     </div>
   );
