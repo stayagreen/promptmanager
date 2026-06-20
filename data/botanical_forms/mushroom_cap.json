@@ -1,0 +1,17 @@
+{
+  "id": "mushroom_cap",
+  "displayName": "蘑菇伞盖",
+  "englishName": "Mushroom Cap",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use mushroom cap as the primary plant form: smooth umbrella cap, underside gill rhythm, short grounded stem, and naturally lampshade-like profile.",
+  "translationPrompt": "Translate it into a parchment, porcelain, plaster, or frosted glass dome shade with subtle ribbed underside and warm downward light.",
+  "placementPrompt": "Best for table lamps, bedside lamps, low pendants, or quiet home still-life scenes.",
+  "avoidPrompt": [
+    "generic mushroom lamp",
+    "fairy-tale mushroom",
+    "cartoon forest decor",
+    "red toadstool cliché"
+  ],
+  "enabled": true,
+  "sortOrder": 87
+}

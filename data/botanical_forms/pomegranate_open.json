@@ -1,0 +1,17 @@
+{
+  "id": "pomegranate_open",
+  "displayName": "石榴开口",
+  "englishName": "Opened Pomegranate",
+  "family": "Fruit Form Family",
+  "formPrompt": "Use opened pomegranate as the primary plant form: rounded shell, crown-like calyx, clustered jewel seed cavities, and a warm organic interior.",
+  "translationPrompt": "Translate it into a ceramic or copper shell with small warm perforated seed lights inside, avoiding literal fruit props.",
+  "placementPrompt": "Best for table lamp cores, pendant bodies, wall-light centers, or jewel-like detail motifs.",
+  "avoidPrompt": [
+    "literal fruit bowl",
+    "food photography",
+    "bloody seed texture",
+    "cheap red ornament"
+  ],
+  "enabled": true,
+  "sortOrder": 69
+}

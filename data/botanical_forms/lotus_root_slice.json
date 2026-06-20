@@ -1,0 +1,17 @@
+{
+  "id": "lotus_root_slice",
+  "displayName": "莲藕切片",
+  "englishName": "Lotus Root Slice",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use lotus root slice as the primary plant form: round pale disk, organic circular holes, crisp edge, and calm perforated geometry.",
+  "translationPrompt": "Translate it into a perforated porcelain, plaster, or metal diffuser disk with warm light passing through the lotus-root holes.",
+  "placementPrompt": "Best for wall sconces, table lamps, ceiling medallion lights, or graphic pendant details.",
+  "avoidPrompt": [
+    "literal food slice",
+    "kitchen decor",
+    "random holes",
+    "flat coin shape"
+  ],
+  "enabled": true,
+  "sortOrder": 84
+}

@@ -1,0 +1,17 @@
+{
+  "id": "garden_rose_cup",
+  "displayName": "花园玫瑰",
+  "englishName": "Garden Rose Cup",
+  "family": "Large Layered Flower Shade Family",
+  "formPrompt": "Use a garden rose cup as the primary plant form: large cupped bloom, many soft nested petals, rounded outer silhouette, and a romantic but controlled shade volume.",
+  "translationPrompt": "Translate it into layered parchment, silk, porcelain, or frosted glass petal rings around a warm hidden diffuser, avoiding a generic rose lamp.",
+  "placementPrompt": "Best for decorative table lamps, soft wall lights, romantic minimal pendants, or close-up shade details.",
+  "avoidPrompt": [
+    "generic red rose lamp",
+    "Valentine decoration",
+    "fake fabric rose",
+    "overly sentimental bouquet"
+  ],
+  "enabled": true,
+  "sortOrder": 65
+}

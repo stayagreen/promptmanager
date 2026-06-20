@@ -1,0 +1,17 @@
+{
+  "id": "citrus_segment",
+  "displayName": "柑橘瓣",
+  "englishName": "Citrus Segment",
+  "family": "Fruit Form Family",
+  "formPrompt": "Use citrus segment as the primary plant form: translucent crescent wedge, fine internal membranes, juicy but clean geometry, and a glowing amber edge.",
+  "translationPrompt": "Translate it into crescent-shaped liuli, resin, acrylic, or frosted glass diffusers with fine rib lines and soft warm light.",
+  "placementPrompt": "Best for pendant clusters, playful sconces, table lamp shade details, or modular chandelier petals.",
+  "avoidPrompt": [
+    "food photography",
+    "literal orange slice",
+    "neon fruit lamp",
+    "sticky wet surface"
+  ],
+  "enabled": true,
+  "sortOrder": 72
+}

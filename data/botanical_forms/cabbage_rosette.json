@@ -1,0 +1,17 @@
+{
+  "id": "cabbage_rosette",
+  "displayName": "卷心菜玫瑰",
+  "englishName": "Cabbage Rosette",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use cabbage rosette as the primary plant form: broad overlapping leaves, rounded rosette core, curled edges, and layered shade-like volume.",
+  "translationPrompt": "Translate it into layered parchment, porcelain, fabric, or thin metal leaf diffusers with warm light seeping between layers.",
+  "placementPrompt": "Best for large table lamps, soft pendants, wall sconces, or organic minimalist shades.",
+  "avoidPrompt": [
+    "literal cabbage",
+    "food prop",
+    "cheap vegetable lamp",
+    "dirty green color cast"
+  ],
+  "enabled": true,
+  "sortOrder": 78
+}

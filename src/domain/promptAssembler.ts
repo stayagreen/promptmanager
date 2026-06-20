@@ -365,6 +365,7 @@ export function buildPrompt(
         buildOutputModeSection(outputMode),
         buildPureLightingTypeSection(lightingType),
         buildBotanicalStillLifeSection(outputMode, lightingType, botanicalForm),
+        buildBotanicalMaterialControlSection(outputMode, request),
         elementSection,
         buildPureBotanicalFinalQualitySection(),
         buildGlobalProhibitionSection(catalog, outputMode),
@@ -377,6 +378,7 @@ export function buildPrompt(
         lightingType.typePrompt,
         style.stylePrompt,
         buildBotanicalStillLifeSection(outputMode, lightingType, botanicalForm),
+        buildBotanicalMaterialControlSection(outputMode, request),
         buildStructuralMaterialSection(style, structuralMaterialMode, request),
         elementSection,
         buildInspirationSection(style),
@@ -433,7 +435,17 @@ export function buildPrompt(
         : isTechnicalOutput
         ? `摄影风格：${photographyProfile.displayName}（技术类不参与）`
         : `摄影风格：${photographyProfile.displayName}`,
-      botanicalForm ? `花型：${botanicalForm.displayName}` : "",
+      botanicalForm ? `植物形态：${botanicalForm.displayName}` : "",
+      isBotanicalStillLifeOutput(outputMode)
+        ? request.botanicalMaterialMode === "specified"
+          ? `植物材质：${[
+              request.selectedBotanicalMaterials,
+              request.customBotanicalMaterial,
+            ]
+              .filter(Boolean)
+              .join("；") || "指定模式（未填写，回退系统随机）"}`
+          : "植物材质：系统随机"
+        : "",
       ...resolvedElements.map((asset) => `附加元素：${asset.displayName}`),
       "通用：角色定位",
       "通用：主体优先",
@@ -522,6 +534,82 @@ Selected lighting type: ${lightingType.englishName}.
 Use only this selected lighting type. Preserve its practical mounting, scale, support, base, canopy, arm, bracket, or suspension logic as appropriate.
 
 In pure MD mode, the selected lighting type is allowed to shape the object, but interior style, mood style, luxury editorial language, and generic product-catalog language must not override the mobile still-life look.`;
+}
+
+function buildBotanicalMaterialControlSection(
+  outputMode: OutputModeModule,
+  request: PromptBuildRequest,
+): string {
+  if (!isBotanicalStillLifeOutput(outputMode)) return "";
+
+  const selectedMaterials = request.selectedBotanicalMaterials?.trim() ?? "";
+  const customMaterial = request.customBotanicalMaterial?.trim() ?? "";
+
+  if (
+    request.botanicalMaterialMode === "specified" &&
+    (selectedMaterials || customMaterial)
+  ) {
+    return `PLANT MATERIAL CONTROL
+
+Use the following user-selected materials as the priority material language for the botanical lamp. Keep the chosen material palette consistent across all five images.
+
+Selected materials:
+
+${selectedMaterials || "No preset material selected."}
+
+Custom material direction:
+
+${customMaterial || "No custom material direction."}
+
+Translate these materials into a realistic lighting product: diffuser, lampshade, petal layer, vein rib, joint, support, base, canopy, bracket, cable detail, or decorative insert as appropriate.
+
+Do not silently replace the selected materials with generic frosted glass. Glass may appear only if it was selected or if it is needed as a minor hidden diffuser for lighting safety.`;
+  }
+
+  return `PLANT MATERIAL RANDOMIZATION
+
+Do not default every plant-inspired lamp to frosted glass. For this run, internally choose two to four compatible materials and keep them consistent across all five images.
+
+Material pool:
+
+translucent DuPont Tyvek paper diffuser
+warm parchment paper shade
+xuan paper or rice-paper diffuser
+Japanese washi paper
+frosted glass
+translucent milky glass
+tea-brown glass
+smoky grey glass
+hand-cast liuli glass
+thin translucent acrylic
+diffused polycarbonate
+colored translucent resin
+warm white porcelain
+handmade ivory ceramic
+matte sculptural plaster
+thin alabaster stone
+travertine stone
+warm brushed brass
+soft patinated copper
+dark bronze
+brushed stainless steel
+anodized aluminum
+fine perforated metal mesh
+thin mother-of-pearl inlay
+translucent silk fabric
+layered organza diffuser
+fine rattan weave
+thin bamboo veneer
+dark walnut accent
+
+Material behavior:
+
+Paper materials should show soft fiber texture and warm diffusion, never look like cheap paper craft.
+Glass or liuli should show real thickness, uneven highlights, and controlled glow, never overexposed bloom.
+Metal should support, rib, reflect, perforate, or edge the form, never make the lamp feel heavy unless intentionally structural.
+Stone, ceramic, plaster, wood, rattan, bamboo, shell, or fabric should appear tactile and manufacturable.
+
+Avoid using glass as the only visible material unless the selected plant form truly requires a transparent diffuser.`;
 }
 
 function buildPureBotanicalFinalQualitySection(): string {
@@ -668,7 +756,7 @@ No specific botanical form was selected. Internally choose one enabled botanical
 
 This is the original V20 pure mobile still-life mode. The image quality and composition must stay closer to the old MD file than to the general style-combination system.
 
-Do not let any selected style, mood preset, luxury design language, interior decoration trend, or photography profile contaminate this mode. The image should feel like a real phone photo of one handmade botanical lamp in a quiet home setting, not a styled product campaign.
+Do not let any selected style, mood preset, luxury design language, interior decoration trend, or photography profile contaminate this mode. The image should feel like a real phone photo of one handmade plant-inspired lamp in a quiet home setting, not a styled product campaign.
 
 Core visual purity:
 
@@ -723,12 +811,12 @@ J. Lotus / Water Plant Family: lotus bud, lotus seed pod, water lily, papyrus, w
 
 ANTI-REPETITION LOCK
 
-Choose an uncommon botanical form for this run.
+Choose an uncommon plant form for this run.
 Avoid defaulting to lily, lotus, orchid, rose, tulip, or generic white flower silhouettes.
 Avoid repeating the same flower silhouette as the previous generation.
 Do not default to a blue glass base or blue vase-base language.
-Botanical inspiration must be recognizable through lamp structure, not through real flowers attached to the lamp.
-Across different runs, vary at least three of these: primary botanical family, shade outline, support line, base or mounting material, pod or petal detail, color temperature, light behavior, and still-life prop.
+Plant inspiration must be recognizable through lamp structure, not through real flowers, vegetables, fruits, leaves, or plant parts attached to the lamp.
+Across different runs, vary at least three of these: primary plant family, shade outline, support line, base or mounting material, pod, petal, fruit, leaf, or vegetable detail, color temperature, light behavior, and still-life prop.
 
 SAME LAMP IDENTITY CARD
 
@@ -736,7 +824,7 @@ Internally define one identity card before generation and reuse it across all fi
 
 Selected lighting type: ${lightingType.englishName}
 Botanical Design Family
-Primary flower form
+Primary plant form
 Secondary line botanical
 Overall scale
 Base, canopy, mounting, or grounding shape appropriate to ${lightingType.englishName}

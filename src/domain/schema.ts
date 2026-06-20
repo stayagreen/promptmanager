@@ -279,6 +279,9 @@ export type PromptBuildRequest = {
   selectedBotanicalFormId?: string;
   excludedBotanicalFormIds?: string[];
   botanicalRandomToken?: number;
+  botanicalMaterialMode?: "auto" | "specified";
+  selectedBotanicalMaterials?: string;
+  customBotanicalMaterial?: string;
 };
 
 export type PromptValidationResult = {

@@ -1,0 +1,17 @@
+{
+  "id": "grape_cluster",
+  "displayName": "葡萄串",
+  "englishName": "Grape Cluster",
+  "family": "Fruit Cluster Family",
+  "formPrompt": "Use grape cluster as the primary plant form: small rounded units, hanging tapering cluster, varied bead sizes, and elegant gravity-driven rhythm.",
+  "translationPrompt": "Translate it into restrained frosted glass, liuli, or resin bead diffusers suspended from a fine bronze or copper stem.",
+  "placementPrompt": "Best for pendant clusters, wall sconces, chandelier details, or small table lamp accents.",
+  "avoidPrompt": [
+    "Tuscan restaurant cliché",
+    "literal grapes",
+    "cheap bead curtain",
+    "too many glowing balls"
+  ],
+  "enabled": true,
+  "sortOrder": 75
+}

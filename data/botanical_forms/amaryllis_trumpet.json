@@ -1,0 +1,17 @@
+{
+  "id": "amaryllis_trumpet",
+  "displayName": "朱顶红",
+  "englishName": "Amaryllis Trumpet",
+  "family": "Large Flower Shade Family",
+  "formPrompt": "Use amaryllis as the primary plant form: large trumpet-like flower, thick sculptural petals, open star mouth, and strong elegant vertical presence.",
+  "translationPrompt": "Translate it into a generous trumpet diffuser made from frosted glass, parchment, porcelain, or translucent resin with a warm central core.",
+  "placementPrompt": "Best for table lamps, statement pendants, large wall lights, or hotel-style but still natural chandelier units.",
+  "avoidPrompt": [
+    "Christmas flower cliché",
+    "plastic trumpet flower",
+    "oversized fantasy bloom",
+    "generic lily lamp"
+  ],
+  "enabled": true,
+  "sortOrder": 62
+}

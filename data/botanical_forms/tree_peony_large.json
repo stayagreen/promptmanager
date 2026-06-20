@@ -1,0 +1,17 @@
+{
+  "id": "tree_peony_large",
+  "displayName": "大花芍药",
+  "englishName": "Large Tree Peony",
+  "family": "Large Layered Flower Shade Family",
+  "formPrompt": "Use large tree peony as the primary plant form: oversized soft petals, loose layered bowl, irregular handmade edges, and a generous shade-like volume.",
+  "translationPrompt": "Translate it into layered organza, porcelain, parchment, or milky glass petals around a hidden warm glow, keeping the object useful and not bouquet-like.",
+  "placementPrompt": "Best for large table lamp shades, soft pendants, bedroom sconces, or detail shots.",
+  "avoidPrompt": [
+    "wedding bouquet",
+    "cheap fake peony",
+    "overcrowded petals",
+    "ordinary white flower lamp"
+  ],
+  "enabled": true,
+  "sortOrder": 68
+}

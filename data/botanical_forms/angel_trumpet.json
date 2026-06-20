@@ -1,0 +1,17 @@
+{
+  "id": "angel_trumpet",
+  "displayName": "曼陀罗木花",
+  "englishName": "Angel Trumpet",
+  "family": "Large Hanging Flower Shade Family",
+  "formPrompt": "Use angel trumpet as the primary plant form: long downward trumpet bell, flared soft rim, hanging vertical posture, and naturally lampshade-like volume.",
+  "translationPrompt": "Translate it into a long downward parchment, frosted glass, or rice-paper trumpet diffuser with a hidden warm light deep inside.",
+  "placementPrompt": "Best for pendant lamps, wall sconces, bedside lamps, or cascading chandelier units.",
+  "avoidPrompt": [
+    "poison plant symbolism",
+    "Halloween flower",
+    "plastic hanging flower",
+    "overly fantasy trumpet"
+  ],
+  "enabled": true,
+  "sortOrder": 63
+}

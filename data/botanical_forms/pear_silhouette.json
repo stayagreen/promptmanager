@@ -1,0 +1,17 @@
+{
+  "id": "pear_silhouette",
+  "displayName": "梨形轮廓",
+  "englishName": "Pear Silhouette",
+  "family": "Fruit Form Family",
+  "formPrompt": "Use pear silhouette as the primary plant form: elegant tapered teardrop body, broad lower volume, narrow neck, and calm balanced outline.",
+  "translationPrompt": "Translate it into a pear-shaped paper, glass, ceramic, or alabaster diffuser with subtle metal cap and stable base.",
+  "placementPrompt": "Best for table lamps, pendant lamps, bedside lights, or simple sculptural fixtures.",
+  "avoidPrompt": [
+    "literal pear fruit",
+    "food prop",
+    "novelty fruit lamp",
+    "cartoon green pear"
+  ],
+  "enabled": true,
+  "sortOrder": 76
+}

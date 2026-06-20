@@ -1,0 +1,17 @@
+{
+  "id": "persimmon_calyx",
+  "displayName": "柿子蒂",
+  "englishName": "Persimmon Calyx",
+  "family": "Fruit Form Family",
+  "formPrompt": "Use persimmon calyx as the primary plant form: rounded fruit volume, flat star-shaped calyx cap, smooth warm skin, and quiet autumnal geometry.",
+  "translationPrompt": "Translate it into a rounded paper, ceramic, or glass diffuser with a star-shaped bronze cap or canopy detail.",
+  "placementPrompt": "Best for table lamps, small pendants, bedside lights, or warm home still-life lamps.",
+  "avoidPrompt": [
+    "literal orange fruit",
+    "harvest decoration",
+    "food prop",
+    "cartoon pumpkin confusion"
+  ],
+  "enabled": true,
+  "sortOrder": 71
+}

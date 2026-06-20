@@ -1,0 +1,17 @@
+{
+  "id": "chili_curve",
+  "displayName": "辣椒曲线",
+  "englishName": "Chili Pepper Curve",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use chili pepper curve as the primary plant form: long tapered curved body, glossy narrow silhouette, pointed tip, and lively directional movement.",
+  "translationPrompt": "Translate it into a slim curved metal, liuli, or resin shade with controlled warm line light, avoiding novelty food styling.",
+  "placementPrompt": "Best for wall lamps, reading lamps, line pendants, or playful but refined table lamps.",
+  "avoidPrompt": [
+    "literal chili pepper",
+    "restaurant novelty",
+    "bright red cartoon",
+    "food signage"
+  ],
+  "enabled": true,
+  "sortOrder": 82
+}

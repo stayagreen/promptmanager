@@ -1,0 +1,17 @@
+{
+  "id": "garlic_bulb",
+  "displayName": "蒜头瓣",
+  "englishName": "Garlic Bulb Cloves",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use garlic bulb cloves as the primary plant form: clustered ivory cloves, papery skin, rounded segmented bulb, and soft tactile geometry.",
+  "translationPrompt": "Translate it into grouped porcelain, rice-paper, or frosted resin diffusers held by a subtle brass or copper base.",
+  "placementPrompt": "Best for compact table lamps, pendant clusters, wall sconces, or small glowing core details.",
+  "avoidPrompt": [
+    "literal garlic decoration",
+    "kitchen novelty lamp",
+    "food photography",
+    "dirty papery texture"
+  ],
+  "enabled": true,
+  "sortOrder": 81
+}

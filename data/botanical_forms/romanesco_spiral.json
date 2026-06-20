@@ -1,0 +1,17 @@
+{
+  "id": "romanesco_spiral",
+  "displayName": "罗马花椰菜",
+  "englishName": "Romanesco Spiral",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use Romanesco as the primary plant form: fractal spiral cones, repeated pointed buds, mathematical natural rhythm, and sculptural green geometry.",
+  "translationPrompt": "Translate it into nested ceramic, resin, or perforated metal cone modules with controlled warm light between spiral ridges.",
+  "placementPrompt": "Best for experimental pendants, table lamps, wall art lights, or detail motifs.",
+  "avoidPrompt": [
+    "literal broccoli",
+    "food photography",
+    "alien object",
+    "overly complex fractal mess"
+  ],
+  "enabled": true,
+  "sortOrder": 77
+}

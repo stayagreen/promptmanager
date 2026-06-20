@@ -1,0 +1,17 @@
+{
+  "id": "starfruit_slice",
+  "displayName": "杨桃切片",
+  "englishName": "Starfruit Slice",
+  "family": "Fruit Form Family",
+  "formPrompt": "Use starfruit slice as the primary plant form: five-pointed soft star cross-section, translucent ridges, rounded edges, and playful geometric clarity.",
+  "translationPrompt": "Translate it into a five-ribbed glass, acrylic, or resin diffuser with soft internal glow and subtle rounded corners.",
+  "placementPrompt": "Best for wall lights, small pendants, decorative table lamps, or modular chandelier nodes.",
+  "avoidPrompt": [
+    "cartoon star",
+    "literal fruit slice",
+    "childlike neon shape",
+    "flat star icon"
+  ],
+  "enabled": true,
+  "sortOrder": 73
+}

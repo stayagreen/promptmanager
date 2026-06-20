@@ -1,0 +1,17 @@
+{
+  "id": "pumpkin_rib",
+  "displayName": "南瓜筋脉",
+  "englishName": "Pumpkin Rib",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use pumpkin rib structure as the primary plant form: rounded ribbed volume, segmented vertical grooves, stable squat silhouette, and warm harvest geometry.",
+  "translationPrompt": "Translate it into a ribbed paper, ceramic, glass, or resin diffuser with soft vertical shadows and a subtle metal cap.",
+  "placementPrompt": "Best for table lamps, pendants, bedside lamps, or warm quiet home scenes.",
+  "avoidPrompt": [
+    "Halloween pumpkin",
+    "jack-o-lantern",
+    "literal orange pumpkin",
+    "seasonal novelty decor"
+  ],
+  "enabled": true,
+  "sortOrder": 85
+}

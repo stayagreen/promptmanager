@@ -438,10 +438,26 @@ input:disabled {
   font-size: 13px;
 }
 
+.botanical-exclusion-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.botanical-exclusion-head button {
+  min-height: 28px;
+  padding: 4px 9px;
+  font-size: 12px;
+}
+
 .botanical-chip-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
   gap: 6px;
+  max-height: 170px;
+  overflow: auto;
+  padding-right: 2px;
 }
 
 .mini-check {
@@ -461,6 +477,13 @@ input:disabled {
   width: auto;
   min-height: auto;
   padding: 0;
+}
+
+.botanical-material-controls {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  gap: 10px;
 }
 
 .reference-main {
@@ -1721,6 +1744,11 @@ textarea {
   }
 
   .button-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .botanical-controls,
+  .botanical-material-controls {
     grid-template-columns: 1fr;
   }
 

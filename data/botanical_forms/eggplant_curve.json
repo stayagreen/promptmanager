@@ -1,0 +1,17 @@
+{
+  "id": "eggplant_curve",
+  "displayName": "茄子曲面",
+  "englishName": "Eggplant Curve",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use eggplant curve as the primary plant form: elongated glossy oval body, soft tapering neck, subtle calyx cap, and elegant curved volume.",
+  "translationPrompt": "Translate it into a smoky glass, liuli, resin, or ceramic elongated shade with a bronze calyx-like cap and warm internal diffusion.",
+  "placementPrompt": "Best for pendant lamps, table lamps, wall sconces, or sculptural detail shots.",
+  "avoidPrompt": [
+    "literal eggplant",
+    "food prop",
+    "novelty vegetable lamp",
+    "overly purple cartoon"
+  ],
+  "enabled": true,
+  "sortOrder": 86
+}

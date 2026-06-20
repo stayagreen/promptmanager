@@ -1,0 +1,17 @@
+{
+  "id": "hibiscus_bloom",
+  "displayName": "扶桑花",
+  "englishName": "Hibiscus Bloom",
+  "family": "Large Flower Shade Family",
+  "formPrompt": "Use hibiscus as the primary plant form: large open petals, soft wavy rim, strong central stamen, tropical but refined silhouette, and a wide lampshade-like opening.",
+  "translationPrompt": "Translate it into a broad translucent paper, porcelain, or liuli petal shade with a slender glowing stamen core and a restrained metal support.",
+  "placementPrompt": "Best for large table-lamp shades, wall sconces, pendant shades, or decorative chandelier flowers.",
+  "avoidPrompt": [
+    "flat tropical print",
+    "plastic Hawaiian flower",
+    "overly saturated resort decor",
+    "generic red flower lamp"
+  ],
+  "enabled": true,
+  "sortOrder": 61
+}

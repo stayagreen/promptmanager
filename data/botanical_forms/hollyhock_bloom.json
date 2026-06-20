@@ -1,0 +1,17 @@
+{
+  "id": "hollyhock_bloom",
+  "displayName": "蜀葵",
+  "englishName": "Hollyhock Bloom",
+  "family": "Large Open Flower Shade Family",
+  "formPrompt": "Use hollyhock as the primary plant form: large open saucer flower, soft crinkled petal rim, visible central throat, and tall garden-stem rhythm.",
+  "translationPrompt": "Translate it into a shallow open diffuser with parchment, thin porcelain, or translucent glass, supported by a slim vertical metal stem.",
+  "placementPrompt": "Best for wall sconces, table lamps, vertical lamps, or grouped chandelier blooms.",
+  "avoidPrompt": [
+    "flat saucer icon",
+    "cheap garden decor",
+    "fake flower stem",
+    "overly rustic cottage style"
+  ],
+  "enabled": true,
+  "sortOrder": 66
+}

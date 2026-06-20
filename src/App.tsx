@@ -130,6 +130,101 @@ function isBotanicalStillLifeOutputId(id: string): boolean {
   return botanicalStillLifeOutputIds.includes(id);
 }
 
+type BotanicalCategoryId =
+  | "large_flower"
+  | "small_flower"
+  | "leaf_branch"
+  | "vine_line"
+  | "seed_pod"
+  | "fruit"
+  | "vegetable"
+  | "water_grass";
+
+const botanicalCategoryOptions: Array<{
+  id: BotanicalCategoryId;
+  label: string;
+}> = [
+  { id: "large_flower", label: "大花灯罩类" },
+  { id: "small_flower", label: "小花/花簇类" },
+  { id: "leaf_branch", label: "叶片/枝条类" },
+  { id: "vine_line", label: "藤蔓/线条类" },
+  { id: "seed_pod", label: "种荚/果序类" },
+  { id: "fruit", label: "水果形态类" },
+  { id: "vegetable", label: "蔬菜形态类" },
+  { id: "water_grass", label: "水生/草本类" },
+];
+
+const botanicalMaterialOptions = [
+  { label: "杜邦纸", value: "translucent DuPont Tyvek paper diffuser" },
+  { label: "羊皮纸", value: "warm parchment paper shade" },
+  { label: "宣纸", value: "warm xuan paper diffuser" },
+  { label: "和纸", value: "Japanese washi paper diffuser" },
+  { label: "米纸", value: "warm rice-paper diffuser" },
+  { label: "磨砂玻璃", value: "frosted glass" },
+  { label: "乳白玻璃", value: "translucent milky glass" },
+  { label: "茶色玻璃", value: "tea-brown glass" },
+  { label: "烟灰玻璃", value: "smoky grey glass" },
+  { label: "琉璃", value: "hand-cast liuli glass" },
+  { label: "彩色树脂", value: "colored translucent resin" },
+  { label: "亚克力", value: "thin translucent acrylic" },
+  { label: "聚碳酸酯", value: "thin diffused polycarbonate" },
+  { label: "白瓷", value: "warm white porcelain" },
+  { label: "手工陶", value: "handmade ivory ceramic" },
+  { label: "石膏", value: "matte sculptural plaster" },
+  { label: "雪花石", value: "thin alabaster stone" },
+  { label: "洞石", value: "travertine stone" },
+  { label: "黄铜", value: "warm brushed brass" },
+  { label: "紫铜", value: "soft patinated copper" },
+  { label: "青铜", value: "dark bronze" },
+  { label: "不锈钢", value: "brushed stainless steel" },
+  { label: "铝", value: "anodized aluminum" },
+  { label: "金属网", value: "fine perforated metal mesh" },
+  { label: "贝母", value: "thin mother-of-pearl inlay" },
+  { label: "绢布", value: "translucent silk fabric" },
+  { label: "欧根纱", value: "layered organza diffuser" },
+  { label: "藤编", value: "fine rattan weave" },
+  { label: "竹皮", value: "thin bamboo veneer" },
+  { label: "胡桃木", value: "dark walnut base or accent" },
+];
+
+function getBotanicalCategory(form: BotanicalFormModule): BotanicalCategoryId {
+  const text = `${form.id} ${form.displayName} ${form.englishName} ${form.family}`.toLowerCase();
+  if (
+    /fruit|citrus|berry|apple|pear|peach|fig|pomegranate|persimmon|grape|melon|dragon|rambutan|lychee|starfruit/.test(
+      text,
+    )
+  ) {
+    return "fruit";
+  }
+  if (
+    /vegetable|cabbage|fennel|onion|garlic|pepper|chili|pumpkin|gourd|okra|eggplant|broccoli|romanesco|lotus root|mushroom|artichoke/.test(
+      text,
+    )
+  ) {
+    return "vegetable";
+  }
+  if (/lotus|water|reed|cattail|papyrus|lily pad|aquatic/.test(text)) {
+    return "water_grass";
+  }
+  if (/leaf|branch|fern|ginkgo|monstera|eucalyptus|olive|acanthus|begonia/.test(text)) {
+    return "leaf_branch";
+  }
+  if (/vine|tendril|line|scape|stem|willow|stalk/.test(text)) {
+    return "vine_line";
+  }
+  if (/pod|seed|cone|grain|plume|allium sphere|banksia|teasel|scabiosa/.test(text)) {
+    return "seed_pod";
+  }
+  if (
+    /magnolia|peony|protea|dahlia|lotus blossom|water lily|hibiscus|amaryllis|trumpet|canna|sunflower|hollyhock|rose|large|sculptural|architectural/.test(
+      text,
+    )
+  ) {
+    return "large_flower";
+  }
+  return "small_flower";
+}
+
 const metalOptions = [
   { label: "铁", value: "iron" },
   { label: "黑铁", value: "blackened iron" },
@@ -230,6 +325,13 @@ export function App() {
     string[]
   >([]);
   const [botanicalRandomToken, setBotanicalRandomToken] = useState(0);
+  const [botanicalExcludeCategory, setBotanicalExcludeCategory] =
+    useState<BotanicalCategoryId>("large_flower");
+  const [botanicalMaterialMode, setBotanicalMaterialMode] =
+    useState<"auto" | "specified">("auto");
+  const [selectedBotanicalMaterials, setSelectedBotanicalMaterials] =
+    useState("");
+  const [customBotanicalMaterial, setCustomBotanicalMaterial] = useState("");
 
   async function reloadCatalog() {
     try {
@@ -344,6 +446,17 @@ export function App() {
     : [];
   const activeOutputModes = catalog ? getActiveOutputModes(catalog) : [];
   const activeBotanicalForms = catalog ? getActiveBotanicalForms(catalog) : [];
+  const botanicalCategoryCounts = new Map<BotanicalCategoryId, number>();
+  activeBotanicalForms.forEach((form) => {
+    const category = getBotanicalCategory(form);
+    botanicalCategoryCounts.set(
+      category,
+      (botanicalCategoryCounts.get(category) ?? 0) + 1,
+    );
+  });
+  const visibleExclusionForms = activeBotanicalForms.filter(
+    (form) => getBotanicalCategory(form) === botanicalExcludeCategory,
+  );
   const activeCustomPrompts = catalog ? getActiveCustomPrompts(catalog) : [];
   const activeStructuralMaterialModes = catalog
     ? getActiveStructuralMaterialModes(catalog)
@@ -392,12 +505,17 @@ export function App() {
       selectedBotanicalFormId,
       excludedBotanicalFormIds,
       botanicalRandomToken,
+      botanicalMaterialMode,
+      selectedBotanicalMaterials,
+      customBotanicalMaterial,
     });
   }, [
     botanicalFormMode,
+    botanicalMaterialMode,
     botanicalRandomToken,
     catalog,
     customPromptId,
+    customBotanicalMaterial,
     emotionalToneId,
     elementAssets,
     elementRandomToken,
@@ -414,6 +532,7 @@ export function App() {
     selectedFinishes,
     selectedProcesses,
     selectedBotanicalFormId,
+    selectedBotanicalMaterials,
     connectionLanguage,
     shadeStrategy,
     allowedMaterials,
@@ -960,21 +1079,21 @@ export function App() {
                 <div className="botanical-controls">
                   {outputModeId === "botanical_still_life_5_pure" && (
                     <p className="technical-mode-note">
-                      原MD纯净版会忽略当前风格、情绪增强、摄影风格和结构材质，只保留灯具类型与花型库。
+                      原MD纯净版会忽略当前风格、情绪增强、摄影风格和结构材质，只保留灯具类型与植物灵感库。
                     </p>
                   )}
                   <SelectField
-                    label="花型模式"
+                    label="植物模式"
                     value={botanicalFormMode}
                     onChange={(value) =>
                       setBotanicalFormMode(value as "random" | "specified")
                     }
                   >
-                    <option value="random">随机花型</option>
-                    <option value="specified">指定花型</option>
+                    <option value="random">随机植物形态</option>
+                    <option value="specified">指定植物形态</option>
                   </SelectField>
                   <SelectField
-                    label="指定花型"
+                    label="指定植物形态"
                     value={selectedBotanicalFormId}
                     onChange={setSelectedBotanicalFormId}
                     disabled={botanicalFormMode !== "specified"}
@@ -986,10 +1105,44 @@ export function App() {
                       </option>
                     ))}
                   </SelectField>
+                  <SelectField
+                    label={`排除分类（已排除 ${excludedBotanicalFormIds.length} 项）`}
+                    value={botanicalExcludeCategory}
+                    onChange={(value) =>
+                      setBotanicalExcludeCategory(value as BotanicalCategoryId)
+                    }
+                    disabled={botanicalFormMode !== "random"}
+                  >
+                    {botanicalCategoryOptions.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.label}（{botanicalCategoryCounts.get(category.id) ?? 0}）
+                      </option>
+                    ))}
+                  </SelectField>
+                  <SelectField
+                    label="材质模式"
+                    value={botanicalMaterialMode}
+                    onChange={(value) =>
+                      setBotanicalMaterialMode(value as "auto" | "specified")
+                    }
+                  >
+                    <option value="auto">系统随机材质</option>
+                    <option value="specified">指定材质</option>
+                  </SelectField>
                   <div className="botanical-exclusions">
-                    <span>随机时排除</span>
+                    <div className="botanical-exclusion-head">
+                      <span>当前分类可排除</span>
+                      {excludedBotanicalFormIds.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => setExcludedBotanicalFormIds([])}
+                        >
+                          清空排除
+                        </button>
+                      )}
+                    </div>
                     <div className="botanical-chip-grid">
-                      {activeBotanicalForms.map((form) => (
+                      {visibleExclusionForms.map((form) => (
                         <label key={form.id} className="mini-check">
                           <input
                             type="checkbox"
@@ -1008,13 +1161,29 @@ export function App() {
                       ))}
                     </div>
                   </div>
+                  {botanicalMaterialMode === "specified" && (
+                    <div className="botanical-material-controls">
+                      <MultiSelectField
+                        label="指定材质"
+                        value={selectedBotanicalMaterials}
+                        options={botanicalMaterialOptions}
+                        onChange={setSelectedBotanicalMaterials}
+                      />
+                      <TextField
+                        label="自定义材质"
+                        value={customBotanicalMaterial}
+                        placeholder="例如：手揉杜邦纸、半透明贝母片、做旧紫铜网"
+                        onChange={setCustomBotanicalMaterial}
+                      />
+                    </div>
+                  )}
                   <button
                     type="button"
                     className="secondary"
                     disabled={botanicalFormMode !== "random"}
                     onClick={() => setBotanicalRandomToken((value) => value + 1)}
                   >
-                    重新随机花型
+                    重新随机植物
                   </button>
                 </div>
               )}
@@ -1341,7 +1510,7 @@ function ManagementView({
           className={section === "botanicalForms" ? "active" : ""}
           onClick={() => setSection("botanicalForms")}
         >
-          花型库
+          植物灵感库
         </button>
         <button
           type="button"
@@ -2552,7 +2721,7 @@ function BotanicalFormManager({
       isNew &&
       catalog.botanicalForms.some((form) => form.id === formToSave.id)
     ) {
-      window.alert("这个花型 ID 已存在，请换一个 ID。");
+      window.alert("这个植物形态 ID 已存在，请换一个 ID。");
       return;
     }
     const saved = await saveBotanicalForm(formToSave);
@@ -2565,7 +2734,7 @@ function BotanicalFormManager({
 
   async function handleDelete() {
     if (isNew) return;
-    if (!window.confirm(`确定删除花型：${draft.displayName}？`)) return;
+    if (!window.confirm(`确定删除植物形态：${draft.displayName}？`)) return;
     await deleteBotanicalForm(draft.id);
     await reloadCatalog();
     setSelectedId(catalog.botanicalForms[0]?.id ?? "");
@@ -2576,8 +2745,8 @@ function BotanicalFormManager({
   return (
     <section className="editor-panel">
       <EditorToolbar
-        title="花型库"
-        selectLabel="选择花型"
+        title="植物灵感库"
+        selectLabel="选择植物形态"
         selectedId={selectedId}
         onSelectedId={setSelectedId}
         items={catalog.botanicalForms.map((form) => ({
@@ -2611,7 +2780,7 @@ function BotanicalFormManager({
           onChange={(value) => setDraft({ ...draft, englishName: value })}
         />
         <TextField
-          label="花型家族"
+          label="植物家族/分类"
           value={draft.family}
           onChange={(value) => setDraft({ ...draft, family: value })}
         />
@@ -2631,7 +2800,7 @@ function BotanicalFormManager({
       </div>
 
       <TextareaField
-        label="花型特征（英文）"
+        label="植物形态特征（英文）"
         value={draft.formPrompt}
         onChange={(value) => setDraft({ ...draft, formPrompt: value })}
         translationText={translateToChineseReference(draft.formPrompt)}

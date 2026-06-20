@@ -1,0 +1,17 @@
+{
+  "id": "fennel_bulb",
+  "displayName": "茴香球茎",
+  "englishName": "Fennel Bulb",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use fennel bulb as the primary plant form: layered white bulb, vertical ribbed stems, fine feathery top lines, and clean sculptural base logic.",
+  "translationPrompt": "Translate it into ribbed porcelain or parchment diffuser layers with slender brass stems and a stable pale ceramic or stone base.",
+  "placementPrompt": "Best for table lamps, kitchen-adjacent refined pendants, sconces, or line-based botanical lamps.",
+  "avoidPrompt": [
+    "literal vegetable still life",
+    "food photography",
+    "rustic kitchen decor",
+    "messy green tops"
+  ],
+  "enabled": true,
+  "sortOrder": 79
+}

@@ -1,0 +1,17 @@
+{
+  "id": "sunflower_disc",
+  "displayName": "向日葵花盘",
+  "englishName": "Sunflower Disc",
+  "family": "Large Disc Flower Shade Family",
+  "formPrompt": "Use sunflower disc as the primary plant form: large round seed disk, radiating petal edge, strong graphic face, and warm structured geometry.",
+  "translationPrompt": "Translate it into a circular perforated brass, ceramic, or resin core with restrained petal reflectors around the edge and warm dotted light.",
+  "placementPrompt": "Best for wall lights, table lamps, ceiling medallion lights, or graphic pendant fixtures.",
+  "avoidPrompt": [
+    "cartoon sunflower",
+    "farmhouse cliché",
+    "bright yellow childish flower",
+    "flat sun icon"
+  ],
+  "enabled": true,
+  "sortOrder": 67
+}

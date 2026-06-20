@@ -1,0 +1,17 @@
+{
+  "id": "bitter_melon_ridge",
+  "displayName": "苦瓜脊纹",
+  "englishName": "Bitter Melon Ridge",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use bitter melon ridges as the primary plant form: elongated oval body, irregular raised bumps, deep organic grooves, and tactile shadow texture.",
+  "translationPrompt": "Translate it into a ribbed ceramic, resin, or perforated metal diffuser with controlled texture and warm light grazing across the ridges.",
+  "placementPrompt": "Best for textured table lamps, pendants, wall lights, or close-up material studies.",
+  "avoidPrompt": [
+    "literal bitter melon",
+    "food texture",
+    "disease-like bumps",
+    "overly grotesque surface"
+  ],
+  "enabled": true,
+  "sortOrder": 88
+}

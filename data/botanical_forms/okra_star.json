@@ -1,0 +1,17 @@
+{
+  "id": "okra_star",
+  "displayName": "秋葵星形",
+  "englishName": "Okra Star Cross-Section",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use okra cross-section as the primary plant form: soft five-pointed star outline, small seed chambers, rounded green ribs, and delicate organic geometry.",
+  "translationPrompt": "Translate it into a five-lobed ceramic, glass, or resin diffuser with tiny seed-like perforations and a warm inner glow.",
+  "placementPrompt": "Best for small pendants, wall lights, table lamp details, or modular chandelier nodes.",
+  "avoidPrompt": [
+    "literal okra slice",
+    "food macro photo",
+    "cartoon star",
+    "slimy texture"
+  ],
+  "enabled": true,
+  "sortOrder": 83
+}

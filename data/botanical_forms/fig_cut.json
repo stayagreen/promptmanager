@@ -1,0 +1,17 @@
+{
+  "id": "fig_cut",
+  "displayName": "无花果切面",
+  "englishName": "Cut Fig",
+  "family": "Fruit Form Family",
+  "formPrompt": "Use cut fig as the primary plant form: teardrop fruit outline, soft inner seed texture, muted plum and ivory interior, and organic oval geometry.",
+  "translationPrompt": "Translate it into a teardrop ceramic, liuli, or resin shade with subtle seed-like perforations and a warm muted inner glow.",
+  "placementPrompt": "Best for small pendants, table lamps, wall sconces, or fruit-inspired glowing cores.",
+  "avoidPrompt": [
+    "food still life",
+    "literal sliced fruit",
+    "sticky texture",
+    "overly purple fantasy glow"
+  ],
+  "enabled": true,
+  "sortOrder": 70
+}

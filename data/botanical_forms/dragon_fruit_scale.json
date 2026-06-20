@@ -1,0 +1,17 @@
+{
+  "id": "dragon_fruit_scale",
+  "displayName": "火龙果鳞片",
+  "englishName": "Dragon Fruit Scale",
+  "family": "Fruit Form Family",
+  "formPrompt": "Use dragon fruit skin scales as the primary plant form: layered triangular bracts, oval fruit body, rhythmic scale pattern, and bold organic armor.",
+  "translationPrompt": "Translate it into layered metal, paper, resin, or ceramic scales around an oval diffuser, using low-saturation color only.",
+  "placementPrompt": "Best for sculptural pendants, table lamps, floor lamps, or statement wall lights.",
+  "avoidPrompt": [
+    "literal dragon fruit",
+    "food-market prop",
+    "bright magenta plastic",
+    "fantasy dragon object"
+  ],
+  "enabled": true,
+  "sortOrder": 74
+}

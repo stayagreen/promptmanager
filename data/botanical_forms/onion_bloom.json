@@ -1,0 +1,17 @@
+{
+  "id": "onion_bloom",
+  "displayName": "洋葱剖面",
+  "englishName": "Onion Bloom",
+  "family": "Vegetable Form Family",
+  "formPrompt": "Use onion cross-section as the primary plant form: concentric translucent layers, papery skin edge, oval rings, and quiet internal geometry.",
+  "translationPrompt": "Translate it into layered parchment, acrylic, or milky glass rings with a warm hidden glow and a thin copper edge.",
+  "placementPrompt": "Best for table lamps, wall lights, pendant shades, or detail close-ups.",
+  "avoidPrompt": [
+    "literal sliced onion",
+    "food image",
+    "wet kitchen texture",
+    "novelty vegetable lamp"
+  ],
+  "enabled": true,
+  "sortOrder": 80
+}

@@ -1,0 +1,17 @@
+{
+  "id": "canna_lily",
+  "displayName": "美人蕉",
+  "englishName": "Canna Lily",
+  "family": "Large Folded Flower Shade Family",
+  "formPrompt": "Use canna lily as the primary plant form: large asymmetric paddle-like petals, folded tropical planes, upright gesture, and sculptural overlapping surfaces.",
+  "translationPrompt": "Translate it into folded metal, porcelain, or translucent resin shade planes with warm light washing along the petal folds.",
+  "placementPrompt": "Best for table lamps, floor lamps, statement sconces, or sculptural pendant lights.",
+  "avoidPrompt": [
+    "banana leaf confusion",
+    "flat tropical decor",
+    "too colorful resort style",
+    "literal flower arrangement"
+  ],
+  "enabled": true,
+  "sortOrder": 64
+}
