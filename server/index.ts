@@ -717,6 +717,7 @@ function normalizeBotanicalForm(
     displayName: input.displayName.trim(),
     englishName: input.englishName.trim(),
     family: input.family.trim(),
+    imageUrl: normalizeOptionalText(input.imageUrl),
     formPrompt: input.formPrompt.trim(),
     translationPrompt: input.translationPrompt.trim(),
     placementPrompt: normalizeOptionalText(input.placementPrompt),

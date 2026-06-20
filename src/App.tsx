@@ -332,6 +332,7 @@ export function App() {
   const [selectedBotanicalMaterials, setSelectedBotanicalMaterials] =
     useState("");
   const [customBotanicalMaterial, setCustomBotanicalMaterial] = useState("");
+  const [previewBotanicalFormId, setPreviewBotanicalFormId] = useState("");
 
   async function reloadCatalog() {
     try {
@@ -457,6 +458,12 @@ export function App() {
   const visibleExclusionForms = activeBotanicalForms.filter(
     (form) => getBotanicalCategory(form) === botanicalExcludeCategory,
   );
+  const selectedBotanicalFormPreview =
+    activeBotanicalForms.find((form) => form.id === selectedBotanicalFormId) ??
+    null;
+  const previewBotanicalForm =
+    activeBotanicalForms.find((form) => form.id === previewBotanicalFormId) ??
+    null;
   const activeCustomPrompts = catalog ? getActiveCustomPrompts(catalog) : [];
   const activeStructuralMaterialModes = catalog
     ? getActiveStructuralMaterialModes(catalog)
@@ -1105,6 +1112,12 @@ export function App() {
                       </option>
                     ))}
                   </SelectField>
+                  {botanicalFormMode === "specified" &&
+                    selectedBotanicalFormPreview && (
+                      <BotanicalSelectedPreview
+                        form={selectedBotanicalFormPreview}
+                      />
+                    )}
                   <SelectField
                     label={`排除分类（已排除 ${excludedBotanicalFormIds.length} 项）`}
                     value={botanicalExcludeCategory}
@@ -1143,21 +1156,21 @@ export function App() {
                     </div>
                     <div className="botanical-chip-grid">
                       {visibleExclusionForms.map((form) => (
-                        <label key={form.id} className="mini-check">
-                          <input
-                            type="checkbox"
-                            checked={excludedBotanicalFormIds.includes(form.id)}
-                            disabled={botanicalFormMode !== "random"}
-                            onChange={(event) =>
-                              setExcludedBotanicalFormIds((current) =>
-                                event.target.checked
-                                  ? [...current, form.id]
-                                  : current.filter((id) => id !== form.id),
-                              )
-                            }
-                          />
-                          <span>{form.displayName}</span>
-                        </label>
+                        <BotanicalChoiceChip
+                          key={form.id}
+                          form={form}
+                          checked={excludedBotanicalFormIds.includes(form.id)}
+                          disabled={botanicalFormMode !== "random"}
+                          active={previewBotanicalFormId === form.id}
+                          onHover={setPreviewBotanicalFormId}
+                          onChange={(checked) =>
+                            setExcludedBotanicalFormIds((current) =>
+                              checked
+                                ? [...current, form.id]
+                                : current.filter((id) => id !== form.id),
+                            )
+                          }
+                        />
                       ))}
                     </div>
                   </div>
@@ -1185,6 +1198,9 @@ export function App() {
                   >
                     重新随机植物
                   </button>
+                  {previewBotanicalForm && (
+                    <BotanicalFloatingPreview form={previewBotanicalForm} />
+                  )}
                 </div>
               )}
 
@@ -1570,6 +1586,79 @@ function ManagementView({
         <CommonPromptManager catalog={catalog} reloadCatalog={reloadCatalog} />
       )}
     </main>
+  );
+}
+
+function BotanicalChoiceChip({
+  form,
+  checked,
+  disabled,
+  active,
+  onHover,
+  onChange,
+}: {
+  form: BotanicalFormModule;
+  checked: boolean;
+  disabled: boolean;
+  active: boolean;
+  onHover: (id: string) => void;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <label
+      className={`mini-check botanical-choice ${active ? "previewing" : ""}`}
+      onMouseEnter={() => onHover(form.id)}
+      onMouseLeave={() => onHover("")}
+      onFocus={() => onHover(form.id)}
+      onBlur={() => onHover("")}
+    >
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(event) => onChange(event.target.checked)}
+      />
+      <span>{form.displayName}</span>
+      {form.imageUrl && (
+        <span className="botanical-image-dot" aria-label="有网络参考图" />
+      )}
+    </label>
+  );
+}
+
+function BotanicalSelectedPreview({ form }: { form: BotanicalFormModule }) {
+  return (
+    <div className="botanical-selected-preview">
+      {form.imageUrl ? (
+        <img src={form.imageUrl} alt={`${form.displayName}参考图`} loading="lazy" />
+      ) : (
+        <div className="botanical-selected-preview-empty">暂无网络图片链接</div>
+      )}
+      <div className="botanical-selected-preview-body">
+        <span>当前指定植物形态</span>
+        <strong>{form.displayName}</strong>
+        <small>{form.englishName}</small>
+      </div>
+    </div>
+  );
+}
+
+function BotanicalFloatingPreview({ form }: { form: BotanicalFormModule }) {
+  if (!form.imageUrl) {
+    return (
+      <div className="botanical-floating-preview empty">
+        <strong>{form.displayName}</strong>
+        <span>暂无网络图片链接</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="botanical-floating-preview">
+      <img src={form.imageUrl} alt={`${form.displayName}参考图`} loading="lazy" />
+      <strong>{form.displayName}</strong>
+      <span>{form.englishName}</span>
+    </div>
   );
 }
 
@@ -2789,6 +2878,12 @@ function BotanicalFormManager({
           value={draft.sortOrder}
           onChange={(value) => setDraft({ ...draft, sortOrder: value })}
         />
+        <TextField
+          label="网络图片链接"
+          value={draft.imageUrl ?? ""}
+          placeholder="https://..."
+          onChange={(value) => setDraft({ ...draft, imageUrl: value })}
+        />
       </div>
 
       <div className="checkbox-row">
@@ -3960,6 +4055,7 @@ function createEmptyBotanicalForm(): BotanicalFormModule {
     displayName: "",
     englishName: "",
     family: "",
+    imageUrl: "",
     formPrompt: "",
     translationPrompt: "",
     placementPrompt: "",

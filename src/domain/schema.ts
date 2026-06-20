@@ -101,6 +101,7 @@ export type BotanicalFormModule = {
   displayName: string;
   englishName: string;
   family: string;
+  imageUrl?: string;
   formPrompt: string;
   translationPrompt: string;
   placementPrompt: string;
