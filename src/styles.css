@@ -489,49 +489,117 @@ input:disabled {
   background: var(--teal);
 }
 
-.botanical-selected-preview {
-  grid-column: 1 / -1;
+.botanical-form-select {
+  position: relative;
+}
+
+.botanical-form-trigger {
+  justify-content: space-between;
+  width: 100%;
+  min-height: 42px;
+  border-color: var(--line-strong);
+  background: #ffffff;
+  color: var(--ink);
+  text-align: left;
+}
+
+.botanical-form-trigger span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.botanical-form-trigger:disabled {
+  background: #f2eee6;
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.botanical-form-popover {
+  position: absolute;
+  z-index: 80;
+  top: calc(100% + 6px);
+  left: 0;
   display: grid;
-  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+  grid-template-columns: minmax(210px, 0.92fr) minmax(220px, 1fr);
   gap: 12px;
-  min-height: 180px;
+  width: min(720px, calc(100vw - 48px));
   padding: 10px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #ffffff;
+  box-shadow: 0 18px 42px rgba(35, 31, 24, 0.18);
   color: var(--muted);
   font-size: 12px;
 }
 
-.botanical-selected-preview img {
+.botanical-form-options {
+  display: grid;
+  gap: 5px;
+  max-height: 320px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.botanical-form-options button {
+  display: grid;
+  justify-items: start;
+  gap: 2px;
+  min-height: 46px;
+  padding: 7px 9px;
+  border-color: var(--line);
+  background: #fbfaf6;
+  color: var(--ink);
+  text-align: left;
+}
+
+.botanical-form-options button:hover,
+.botanical-form-options button:focus,
+.botanical-form-options button.active {
+  border-color: var(--teal);
+  background: #e9f7f4;
+}
+
+.botanical-form-options small {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.botanical-form-preview {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.botanical-form-preview img {
   width: 100%;
-  height: 180px;
+  height: 230px;
   border-radius: 6px;
   object-fit: cover;
   background: #f3f0e8;
 }
 
-.botanical-selected-preview-body {
+.botanical-form-preview-body {
   display: grid;
-  align-content: center;
   gap: 4px;
   min-width: 0;
 }
 
-.botanical-selected-preview strong {
+.botanical-form-preview strong {
   color: var(--ink);
   font-size: 16px;
 }
 
-.botanical-selected-preview small {
+.botanical-form-preview small {
   color: var(--muted);
   overflow-wrap: anywhere;
 }
 
-.botanical-selected-preview-empty {
+.botanical-form-preview-empty,
+.botanical-form-preview.empty {
   display: grid;
   place-items: center;
-  min-height: 180px;
+  min-height: 230px;
   border-radius: 6px;
   background: #f3f0e8;
   color: var(--muted);
@@ -1852,7 +1920,7 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  .botanical-selected-preview {
+  .botanical-form-popover {
     grid-template-columns: 1fr;
   }
 

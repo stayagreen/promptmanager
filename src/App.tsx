@@ -458,9 +458,6 @@ export function App() {
   const visibleExclusionForms = activeBotanicalForms.filter(
     (form) => getBotanicalCategory(form) === botanicalExcludeCategory,
   );
-  const selectedBotanicalFormPreview =
-    activeBotanicalForms.find((form) => form.id === selectedBotanicalFormId) ??
-    null;
   const previewBotanicalForm =
     activeBotanicalForms.find((form) => form.id === previewBotanicalFormId) ??
     null;
@@ -1099,25 +1096,13 @@ export function App() {
                     <option value="random">随机植物形态</option>
                     <option value="specified">指定植物形态</option>
                   </SelectField>
-                  <SelectField
+                  <BotanicalFormSelect
                     label="指定植物形态"
                     value={selectedBotanicalFormId}
-                    onChange={setSelectedBotanicalFormId}
+                    forms={activeBotanicalForms}
                     disabled={botanicalFormMode !== "specified"}
-                  >
-                    <option value="">自动选择</option>
-                    {activeBotanicalForms.map((form) => (
-                      <option key={form.id} value={form.id}>
-                        {form.displayName} / {form.englishName}
-                      </option>
-                    ))}
-                  </SelectField>
-                  {botanicalFormMode === "specified" &&
-                    selectedBotanicalFormPreview && (
-                      <BotanicalSelectedPreview
-                        form={selectedBotanicalFormPreview}
-                      />
-                    )}
+                    onChange={setSelectedBotanicalFormId}
+                  />
                   <SelectField
                     label={`排除分类（已排除 ${excludedBotanicalFormIds.length} 项）`}
                     value={botanicalExcludeCategory}
@@ -1626,16 +1611,127 @@ function BotanicalChoiceChip({
   );
 }
 
-function BotanicalSelectedPreview({ form }: { form: BotanicalFormModule }) {
+function BotanicalFormSelect({
+  label,
+  value,
+  forms,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  forms: BotanicalFormModule[];
+  disabled?: boolean;
+  onChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [hoveredId, setHoveredId] = useState("");
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const selectedForm = forms.find((form) => form.id === value) ?? null;
+  const hoveredForm = forms.find((form) => form.id === hoveredId) ?? null;
+  const previewForm = hoveredForm ?? selectedForm ?? forms[0] ?? null;
+
+  useEffect(() => {
+    if (!open) return;
+
+    function handlePointerDown(event: MouseEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+        setHoveredId("");
+      }
+    }
+
+    document.addEventListener("mousedown", handlePointerDown);
+    return () => document.removeEventListener("mousedown", handlePointerDown);
+  }, [open]);
+
+  useEffect(() => {
+    if (disabled) {
+      setOpen(false);
+      setHoveredId("");
+    }
+  }, [disabled]);
+
   return (
-    <div className="botanical-selected-preview">
-      {form.imageUrl ? (
-        <img src={form.imageUrl} alt={`${form.displayName}参考图`} loading="lazy" />
-      ) : (
-        <div className="botanical-selected-preview-empty">暂无网络图片链接</div>
+    <div className="field botanical-form-select" ref={rootRef}>
+      <span>{label}</span>
+      <button
+        type="button"
+        className="botanical-form-trigger"
+        disabled={disabled}
+        onClick={() => setOpen((current) => !current)}
+      >
+        <span>
+          {selectedForm
+            ? `${selectedForm.displayName} / ${selectedForm.englishName}`
+            : "自动选择"}
+        </span>
+        <span aria-hidden="true">⌄</span>
+      </button>
+      {open && (
+        <div className="botanical-form-popover">
+          <div className="botanical-form-options">
+            <button
+              type="button"
+              className={!value ? "active" : ""}
+              onMouseEnter={() => setHoveredId("")}
+              onFocus={() => setHoveredId("")}
+              onClick={() => {
+                onChange("");
+                setOpen(false);
+                setHoveredId("");
+              }}
+            >
+              <span>自动选择</span>
+              <small>由系统随机挑选植物形态</small>
+            </button>
+            {forms.map((form) => (
+              <button
+                key={form.id}
+                type="button"
+                className={form.id === value ? "active" : ""}
+                onMouseEnter={() => setHoveredId(form.id)}
+                onFocus={() => setHoveredId(form.id)}
+                onClick={() => {
+                  onChange(form.id);
+                  setOpen(false);
+                  setHoveredId("");
+                }}
+              >
+                <span>{form.displayName}</span>
+                <small>{form.englishName}</small>
+              </button>
+            ))}
+          </div>
+          <BotanicalFormPreview form={previewForm} />
+        </div>
       )}
-      <div className="botanical-selected-preview-body">
-        <span>当前指定植物形态</span>
+    </div>
+  );
+}
+
+function BotanicalFormPreview({ form }: { form: BotanicalFormModule | null }) {
+  if (!form) {
+    return (
+      <div className="botanical-form-preview empty">
+        <strong>暂无植物形态</strong>
+      </div>
+    );
+  }
+
+  return (
+    <div className="botanical-form-preview">
+      {form.imageUrl ? (
+        <img
+          src={form.imageUrl}
+          alt={`${form.displayName}参考图`}
+          loading="lazy"
+        />
+      ) : (
+        <div className="botanical-form-preview-empty">暂无网络图片链接</div>
+      )}
+      <div className="botanical-form-preview-body">
+        <span>当前指向植物形态</span>
         <strong>{form.displayName}</strong>
         <small>{form.englishName}</small>
       </div>
