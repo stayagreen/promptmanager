@@ -7,6 +7,7 @@ import {
   FileImage,
   History,
   ImagePlus,
+  Library,
   Loader2,
   PackageCheck,
   Plus,
@@ -35,6 +36,7 @@ import type {
   CatalogData,
   ElementReferenceAsset,
   HistoryCheckpoint,
+  ReferenceBrandModule,
   ReferenceConsistencyLevel,
   ReferenceProductProject,
 } from "./domain/schema";
@@ -42,10 +44,13 @@ import {
   deleteCheckpoint,
   deleteProductImage,
   deleteProductProject,
+  deleteReferenceBrand,
   fetchHistory,
   fetchElementAssets,
   fetchProductProjects,
+  fetchReferenceBrands,
   restoreCheckpoint,
+  saveReferenceBrand,
   saveProductProject,
   translateText,
   uploadProductImage,
@@ -92,6 +97,7 @@ export function ReferenceWorkspace({
   );
   const [history, setHistory] = useState<HistoryCheckpoint[]>([]);
   const [elementAssets, setElementAssets] = useState<ElementReferenceAsset[]>([]);
+  const [referenceBrands, setReferenceBrands] = useState<ReferenceBrandModule[]>([]);
   const [elementRandomToken, setElementRandomToken] = useState(0);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -99,6 +105,10 @@ export function ReferenceWorkspace({
   const ratios = getActiveRatios(catalog);
   const photographyProfiles = getActivePhotographyProfiles(catalog);
   const selectedTask = referenceTasks.find((task) => task.id === taskId);
+  const selectedReferenceBrand =
+    draft?.referenceBrandId && draft.referenceBrandId !== "none"
+      ? referenceBrands.find((brand) => brand.id === draft.referenceBrandId)
+      : undefined;
 
   async function reloadProjects(preferredId?: string) {
     const next = await fetchProductProjects();
@@ -117,6 +127,7 @@ export function ReferenceWorkspace({
   useEffect(() => {
     void reloadProjects();
     void fetchElementAssets().then(setElementAssets);
+    void fetchReferenceBrands().then(setReferenceBrands);
   }, []);
 
   useEffect(() => {
@@ -153,6 +164,7 @@ export function ReferenceWorkspace({
       allowProps,
       allowCableCleanup,
       additionalRequirements,
+      referenceBrand: selectedReferenceBrand,
       elementAssets,
       elementRandomToken,
     });
@@ -173,6 +185,7 @@ export function ReferenceWorkspace({
     ratioId,
     ratios,
     sceneStyleId,
+    selectedReferenceBrand,
     styles,
     taskId,
   ]);
@@ -429,6 +442,36 @@ export function ReferenceWorkspace({
                 onChange={(value) => setDraft({ ...draft, productCode: value })}
               />
               <Select
+                label="品牌"
+                value={draft.referenceBrandId || "none"}
+                onChange={(value) =>
+                  setDraft({ ...draft, referenceBrandId: value })
+                }
+              >
+                <option value="none">无品牌</option>
+                {draft.referenceBrandId !== "none" &&
+                  draft.referenceBrandId &&
+                  !referenceBrands.some(
+                    (brand) => brand.id === draft.referenceBrandId,
+                  ) && (
+                    <option value={draft.referenceBrandId}>
+                      {referenceBrands.length === 0
+                        ? "正在加载当前品牌..."
+                        : "当前品牌不存在"}
+                    </option>
+                  )}
+                {referenceBrands
+                  .filter(
+                    (brand) =>
+                      brand.enabled || brand.id === draft.referenceBrandId,
+                  )
+                  .map((brand) => (
+                    <option key={brand.id} value={brand.id}>
+                      {brand.displayName}{brand.enabled ? "" : "（已停用）"}
+                    </option>
+                  ))}
+              </Select>
+              <Select
                 label="灯具类型"
                 value={draft.lightingTypeId}
                 onChange={(value) => setDraft({ ...draft, lightingTypeId: value })}
@@ -619,6 +662,13 @@ export function ReferenceWorkspace({
 
             <DimensionEditor draft={draft} onChange={setDraft} />
 
+            <ReferenceBrandPanel
+              project={draft}
+              brands={referenceBrands}
+              onProjectChange={setDraft}
+              onBrandsChange={setReferenceBrands}
+            />
+
             <ElementReferencePanel
               project={draft}
               assets={elementAssets}
@@ -722,6 +772,340 @@ export function ReferenceWorkspace({
         )}
       </main>
     </div>
+  );
+}
+
+function ReferenceBrandPanel({
+  project,
+  brands,
+  onProjectChange,
+  onBrandsChange,
+}: {
+  project: ReferenceProductProject;
+  brands: ReferenceBrandModule[];
+  onProjectChange: (project: ReferenceProductProject) => void;
+  onBrandsChange: (brands: ReferenceBrandModule[]) => void;
+}) {
+  const [libraryOpen, setLibraryOpen] = useState(false);
+  const [brandDraft, setBrandDraft] = useState<ReferenceBrandModule | null>(null);
+  const [brandIsNew, setBrandIsNew] = useState(false);
+  const [history, setHistory] = useState<HistoryCheckpoint[]>([]);
+  const [status, setStatus] = useState("");
+
+  const selectedBrand =
+    project.referenceBrandId === "none"
+      ? undefined
+      : brands.find((brand) => brand.id === project.referenceBrandId);
+  const selectableBrands = brands.filter(
+    (brand) => brand.enabled || brand.id === project.referenceBrandId,
+  );
+
+  async function reloadBrands(preferredId?: string) {
+    const next = await fetchReferenceBrands();
+    onBrandsChange(next);
+    if (preferredId) {
+      const selected = next.find((brand) => brand.id === preferredId);
+      if (selected) {
+        setBrandDraft(structuredClone(selected));
+        setBrandIsNew(false);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!brandDraft?.id || brandIsNew) {
+      setHistory([]);
+      return;
+    }
+    void fetchHistory("reference_brands", brandDraft.id).then(setHistory);
+  }, [brandDraft?.id, brandIsNew, brands]);
+
+  async function handleSaveBrand() {
+    if (!brandDraft) return;
+    if (!/^[a-z0-9_]+$/.test(brandDraft.id)) {
+      window.alert("品牌 ID 只能使用小写英文字母、数字和下划线。");
+      return;
+    }
+    if (!brandDraft.displayName.trim() || !brandDraft.brandName.trim()) {
+      window.alert("请填写品牌显示名和品牌名称。");
+      return;
+    }
+    if (brandIsNew && brands.some((brand) => brand.id === brandDraft.id)) {
+      window.alert("这个品牌 ID 已存在。");
+      return;
+    }
+    const saved = await saveReferenceBrand(brandDraft);
+    await reloadBrands(saved.id);
+    onProjectChange({ ...project, referenceBrandId: saved.id });
+    setStatus(`已保存品牌：${saved.displayName}`);
+  }
+
+  async function handleDeleteBrand() {
+    if (!brandDraft || brandIsNew) return;
+    if (!window.confirm(`确定删除品牌“${brandDraft.displayName}”吗？`)) return;
+    await deleteReferenceBrand(brandDraft.id);
+    if (project.referenceBrandId === brandDraft.id) {
+      onProjectChange({ ...project, referenceBrandId: "none" });
+    }
+    setBrandDraft(null);
+    await reloadBrands();
+    setStatus("品牌已删除，删除前版本保留在检查点中。");
+  }
+
+  return (
+    <section className="reference-settings-band reference-brand-band">
+      <div className="reference-brand-heading">
+        <div>
+          <p className="eyebrow">Brand</p>
+          <h2>品牌设置</h2>
+        </div>
+        <button type="button" onClick={() => setLibraryOpen((value) => !value)}>
+          <Library aria-hidden="true" />
+          {libraryOpen ? "收起品牌库" : "管理品牌库"}
+        </button>
+      </div>
+
+      <div className="reference-brand-grid">
+        <Select
+          label="当前品牌"
+          value={project.referenceBrandId || "none"}
+          onChange={(value) =>
+            onProjectChange({ ...project, referenceBrandId: value })
+          }
+        >
+          <option value="none">无品牌</option>
+          {project.referenceBrandId !== "none" &&
+            project.referenceBrandId &&
+            !selectableBrands.some((brand) => brand.id === project.referenceBrandId) && (
+              <option value={project.referenceBrandId}>
+                {brands.length === 0 ? "正在加载当前品牌..." : "当前品牌不存在"}
+              </option>
+            )}
+          {selectableBrands.map((brand) => (
+            <option key={brand.id} value={brand.id}>
+              {brand.displayName}{brand.enabled ? "" : "（已停用）"}
+            </option>
+          ))}
+        </Select>
+        <div className="brand-preview">
+          {project.referenceBrandId === "none" ? (
+            <>
+              <strong>本次生成不写入品牌</strong>
+              <span>10 图提示词会禁止品牌名、Logo、水印和品牌字段。</span>
+            </>
+          ) : selectedBrand ? (
+            <>
+              <strong>{selectedBrand.brandName}</strong>
+              <span>图内品牌标识：{selectedBrand.brandMark || selectedBrand.brandName}</span>
+            </>
+          ) : (
+            <>
+              <strong>当前品牌不可用</strong>
+              <span>请重新选择一个启用品牌，或切换为无品牌。</span>
+            </>
+          )}
+        </div>
+      </div>
+
+      {libraryOpen && (
+        <div className="element-library reference-brand-library">
+          <div className="element-library-sidebar">
+            <button
+              type="button"
+              className="primary"
+              onClick={() => {
+                setBrandDraft(createEmptyBrand());
+                setBrandIsNew(true);
+                setStatus("");
+              }}
+            >
+              <Plus aria-hidden="true" />
+              新建品牌
+            </button>
+            {brands.map((brand) => (
+              <button
+                type="button"
+                key={brand.id}
+                className={brandDraft?.id === brand.id ? "active" : ""}
+                onClick={() => {
+                  setBrandDraft(structuredClone(brand));
+                  setBrandIsNew(false);
+                  setStatus("");
+                }}
+              >
+                {brand.displayName}
+              </button>
+            ))}
+          </div>
+
+          <div className="element-library-editor">
+            {!brandDraft ? (
+              <div className="element-empty">选择一个品牌编辑，或新建品牌。</div>
+            ) : (
+              <>
+                <div className="element-editor-grid">
+                  <label className="field">
+                    <span>品牌 ID</span>
+                    <input
+                      value={brandDraft.id}
+                      disabled={!brandIsNew}
+                      onChange={(event) =>
+                        setBrandDraft({ ...brandDraft, id: event.target.value })
+                      }
+                    />
+                  </label>
+                  <label className="field">
+                    <span>显示名</span>
+                    <input
+                      value={brandDraft.displayName}
+                      onChange={(event) =>
+                        setBrandDraft({
+                          ...brandDraft,
+                          displayName: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+                  <label className="field">
+                    <span>品牌名称</span>
+                    <input
+                      value={brandDraft.brandName}
+                      onChange={(event) =>
+                        setBrandDraft({
+                          ...brandDraft,
+                          brandName: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+                  <label className="field">
+                    <span>图内品牌标识</span>
+                    <input
+                      value={brandDraft.brandMark}
+                      placeholder="例如：HOIKEI"
+                      onChange={(event) =>
+                        setBrandDraft({
+                          ...brandDraft,
+                          brandMark: event.target.value,
+                        })
+                      }
+                    />
+                  </label>
+                  <label className="field">
+                    <span>排序</span>
+                    <input
+                      type="number"
+                      value={brandDraft.sortOrder ?? ""}
+                      onChange={(event) =>
+                        setBrandDraft({
+                          ...brandDraft,
+                          sortOrder:
+                            event.target.value === ""
+                              ? undefined
+                              : Number(event.target.value),
+                        })
+                      }
+                    />
+                  </label>
+                  <label className="checkbox-field">
+                    <input
+                      type="checkbox"
+                      checked={brandDraft.enabled}
+                      onChange={(event) =>
+                        setBrandDraft({
+                          ...brandDraft,
+                          enabled: event.target.checked,
+                        })
+                      }
+                    />
+                    <span>启用品牌</span>
+                  </label>
+                </div>
+
+                <label className="field">
+                  <span>品牌视觉规则（英文，写入 10 图提示词）</span>
+                  <textarea
+                    className="compact-textarea"
+                    value={brandDraft.artDirectionPrompt}
+                    placeholder="Use a restrained premium home brand style..."
+                    onChange={(event) =>
+                      setBrandDraft({
+                        ...brandDraft,
+                        artDirectionPrompt: event.target.value,
+                      })
+                    }
+                  />
+                </label>
+
+                <div className="element-editor-actions">
+                  <button type="button" className="primary" onClick={() => void handleSaveBrand()}>
+                    <Save aria-hidden="true" />
+                    保存品牌
+                  </button>
+                  {!brandIsNew && (
+                    <button type="button" className="danger" onClick={() => void handleDeleteBrand()}>
+                      <Trash2 aria-hidden="true" />
+                      删除品牌
+                    </button>
+                  )}
+                </div>
+                {status && <p className="save-status">{status}</p>}
+
+                {!brandIsNew && (
+                  <div className="element-history">
+                    <div className="panel-title">
+                      <History aria-hidden="true" />
+                      <h3>品牌检查点</h3>
+                    </div>
+                    {history.length === 0 ? (
+                      <p className="helper-text">修改并保存后会自动保留旧版本。</p>
+                    ) : (
+                      history.slice(0, 8).map((checkpoint) => (
+                        <div key={checkpoint.id}>
+                          <span>{new Date(checkpoint.createdAt).toLocaleString("zh-CN")}</span>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                if (!window.confirm("恢复这个品牌检查点？")) return;
+                                await restoreCheckpoint(
+                                  "reference_brands",
+                                  brandDraft.id,
+                                  checkpoint.id,
+                                );
+                                await reloadBrands(brandDraft.id);
+                              }}
+                            >
+                              恢复
+                            </button>
+                            <button
+                              type="button"
+                              className="danger"
+                              onClick={async () => {
+                                await deleteCheckpoint(
+                                  "reference_brands",
+                                  brandDraft.id,
+                                  checkpoint.id,
+                                );
+                                setHistory(
+                                  await fetchHistory("reference_brands", brandDraft.id),
+                                );
+                              }}
+                            >
+                              删除
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -1028,6 +1412,7 @@ function createEmptyProject(): ReferenceProductProject {
     id: "",
     title: "",
     productCode: "",
+    referenceBrandId: "none",
     lightingTypeId: "",
     notes: "",
     images: [],
@@ -1038,6 +1423,18 @@ function createEmptyProject(): ReferenceProductProject {
     savedPrompts: [],
     createdAt: now,
     updatedAt: now,
+  };
+}
+
+function createEmptyBrand(): ReferenceBrandModule {
+  return {
+    id: "",
+    displayName: "",
+    brandName: "",
+    brandMark: "",
+    artDirectionPrompt: "",
+    enabled: true,
+    sortOrder: undefined,
   };
 }
 

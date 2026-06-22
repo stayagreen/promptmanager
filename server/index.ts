@@ -16,12 +16,14 @@ import {
   deleteStyle,
   deleteProductImage,
   deleteProductProject,
+  deleteReferenceBrand,
   getProductImagePath,
   getElementAssetImagePath,
   listHistory,
   loadCatalog,
   loadElementAssets,
   loadProductProjects,
+  loadReferenceBrands,
   restoreHistoryCheckpoint,
   saveCommonPrompt,
   saveBotanicalForm,
@@ -37,6 +39,7 @@ import {
   saveStyle,
   saveProductImage,
   saveProductProject,
+  saveReferenceBrand,
 } from "./dataStore";
 import { translateToChinese } from "./translator";
 import type {
@@ -54,6 +57,7 @@ import type {
   OutputModeModule,
   PhotographyProfileModule,
   RatioModule,
+  ReferenceBrandModule,
   ReferenceDimension,
   ReferenceDimensionMode,
   ReferenceProductImage,
@@ -311,6 +315,32 @@ app.delete(
   "/api/custom-prompts/:id",
   asyncHandler(async (request, response) => {
     await deleteCustomPrompt(request.params.id);
+    response.json({ ok: true });
+  }),
+);
+
+app.get(
+  "/api/reference-brands",
+  asyncHandler(async (_request, response) => {
+    response.json(await loadReferenceBrands());
+  }),
+);
+
+app.put(
+  "/api/reference-brands/:id",
+  asyncHandler(async (request, response) => {
+    const brand = normalizeReferenceBrand({
+      ...request.body,
+      id: request.params.id,
+    });
+    response.json(await saveReferenceBrand(brand));
+  }),
+);
+
+app.delete(
+  "/api/reference-brands/:id",
+  asyncHandler(async (request, response) => {
+    await deleteReferenceBrand(request.params.id);
     response.json({ ok: true });
   }),
 );
@@ -743,6 +773,24 @@ function normalizeCustomPrompt(
   };
 }
 
+function normalizeReferenceBrand(
+  input: Partial<ReferenceBrandModule>,
+): ReferenceBrandModule {
+  requireText(input.id, "id");
+  requireText(input.displayName, "displayName");
+  requireText(input.brandName, "brandName");
+
+  return {
+    id: input.id.trim(),
+    displayName: input.displayName.trim(),
+    brandName: input.brandName.trim(),
+    brandMark: normalizeOptionalText(input.brandMark),
+    artDirectionPrompt: normalizeOptionalText(input.artDirectionPrompt),
+    enabled: input.enabled ?? true,
+    sortOrder: normalizeOptionalNumber(input.sortOrder),
+  };
+}
+
 function normalizeProductProject(
   input: Partial<ReferenceProductProject>,
 ): ReferenceProductProject {
@@ -754,6 +802,7 @@ function normalizeProductProject(
     id: input.id.trim(),
     title: input.title.trim(),
     productCode: normalizeOptionalText(input.productCode),
+    referenceBrandId: normalizeReferenceBrandId(input.referenceBrandId),
     lightingTypeId: normalizeOptionalText(input.lightingTypeId),
     notes: normalizeOptionalText(input.notes),
     images: normalizeProductImages(input.images),
@@ -765,6 +814,14 @@ function normalizeProductProject(
     createdAt: normalizeOptionalText(input.createdAt) || now,
     updatedAt: now,
   };
+}
+
+function normalizeReferenceBrandId(value: unknown): string {
+  const id = normalizeOptionalText(value) || "none";
+  if (id === "none" || /^[a-z0-9_]+$/.test(id)) {
+    return id;
+  }
+  return "none";
 }
 
 function normalizeElementAsset(
@@ -964,6 +1021,7 @@ function parseHistoryKind(kind: string): ModuleHistoryKind {
   if (kind === "structural-material-modes") return "structural_material_modes";
   if (kind === "custom-prompts") return "custom_prompts";
   if (kind === "product-projects") return "product_projects";
+  if (kind === "reference-brands") return "reference_brands";
   if (kind === "element-assets") return "element_assets";
   if (kind === "common-prompts") return "common";
   throw new Error(`Unknown history kind: ${kind}`);

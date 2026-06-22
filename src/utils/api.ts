@@ -12,6 +12,7 @@ import type {
   OutputModeModule,
   PhotographyProfileModule,
   RatioModule,
+  ReferenceBrandModule,
   ReferenceProductImage,
   ReferenceProductProject,
   StyleModule,
@@ -144,6 +145,23 @@ export async function saveCustomPrompt(
 
 export async function deleteCustomPrompt(id: string): Promise<void> {
   await request(`/api/custom-prompts/${id}`, { method: "DELETE" });
+}
+
+export async function fetchReferenceBrands(): Promise<ReferenceBrandModule[]> {
+  return request<ReferenceBrandModule[]>("/api/reference-brands");
+}
+
+export async function saveReferenceBrand(
+  brand: ReferenceBrandModule,
+): Promise<ReferenceBrandModule> {
+  return request<ReferenceBrandModule>(`/api/reference-brands/${brand.id}`, {
+    method: "PUT",
+    body: JSON.stringify(brand),
+  });
+}
+
+export async function deleteReferenceBrand(id: string): Promise<void> {
+  await request(`/api/reference-brands/${id}`, { method: "DELETE" });
 }
 
 export async function fetchProductProjects(): Promise<ReferenceProductProject[]> {
@@ -292,6 +310,7 @@ function historyPath(kind: ModuleHistoryKind): string {
   if (kind === "structural_material_modes") return "structural-material-modes";
   if (kind === "custom_prompts") return "custom-prompts";
   if (kind === "product_projects") return "product-projects";
+  if (kind === "reference_brands") return "reference-brands";
   if (kind === "element_assets") return "element-assets";
   if (kind === "common") return "common-prompts";
   return kind;

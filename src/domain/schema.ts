@@ -139,6 +139,16 @@ export type ReferenceDimension = {
   value: string;
 };
 
+export type ReferenceBrandModule = {
+  id: string;
+  displayName: string;
+  brandName: string;
+  brandMark: string;
+  artDirectionPrompt: string;
+  enabled: boolean;
+  sortOrder?: number;
+};
+
 export type ElementAssetCategory =
   | "flower"
   | "animal"
@@ -199,6 +209,7 @@ export type ReferenceProductProject = {
   id: string;
   title: string;
   productCode: string;
+  referenceBrandId: string;
   lightingTypeId: string;
   notes: string;
   images: ReferenceProductImage[];
@@ -243,6 +254,7 @@ export type ModuleHistoryKind =
   | "structural_material_modes"
   | "custom_prompts"
   | "product_projects"
+  | "reference_brands"
   | "element_assets"
   | "common";
 

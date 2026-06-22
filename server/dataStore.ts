@@ -15,6 +15,7 @@ import type {
   OutputModeModule,
   PhotographyProfileModule,
   RatioModule,
+  ReferenceBrandModule,
   ReferenceProductImage,
   ReferenceProductProject,
   StyleModule,
@@ -33,6 +34,7 @@ const botanicalFormsDir = join(dataDir, "botanical_forms");
 const structuralMaterialModesDir = join(dataDir, "structural_material_modes");
 const customPromptsDir = join(dataDir, "custom_prompts");
 const productProjectsDir = join(dataDir, "product_projects");
+const referenceBrandsDir = join(dataDir, "reference_brands");
 const elementAssetsDir = join(dataDir, "element_assets");
 const commonDir = join(dataDir, "common");
 const historyDir = join(dataDir, "history");
@@ -353,9 +355,43 @@ export async function loadProductProjects(): Promise<ReferenceProductProject[]> 
     .filter((project): project is ReferenceProductProject => project !== null)
     .map((project) => ({
       ...project,
+      referenceBrandId: project.referenceBrandId ?? "none",
       elementSelections: project.elementSelections ?? [],
     }))
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+}
+
+export async function loadReferenceBrands(): Promise<ReferenceBrandModule[]> {
+  await mkdir(referenceBrandsDir, { recursive: true });
+  const brands = await readJsonDirectory<ReferenceBrandModule>(referenceBrandsDir);
+  return sortModules(
+    brands.map((brand) => ({
+      ...brand,
+      enabled: brand.enabled ?? true,
+    })),
+  );
+}
+
+export async function saveReferenceBrand(
+  brand: ReferenceBrandModule,
+): Promise<ReferenceBrandModule> {
+  assertSafeId(brand.id);
+  await writeJsonFileWithCheckpoint(
+    "reference_brands",
+    brand.id,
+    join(referenceBrandsDir, `${brand.id}.json`),
+    brand,
+  );
+  return brand;
+}
+
+export async function deleteReferenceBrand(id: string): Promise<void> {
+  assertSafeId(id);
+  await deleteJsonFileWithCheckpoint(
+    "reference_brands",
+    id,
+    join(referenceBrandsDir, `${id}.json`),
+  );
 }
 
 export async function loadElementAssets(): Promise<ElementReferenceAsset[]> {
@@ -740,6 +776,16 @@ export async function restoreHistoryCheckpoint(
     return;
   }
 
+  if (moduleKind === "reference_brands") {
+    await restoreJsonSnapshot(
+      moduleKind,
+      moduleId,
+      join(referenceBrandsDir, `${moduleId}.json`),
+      checkpoint.snapshot as ReferenceBrandModule,
+    );
+    return;
+  }
+
   if (moduleKind === "element_assets") {
     await restoreJsonSnapshot(
       moduleKind,
@@ -771,6 +817,7 @@ async function ensureDataDirectories(): Promise<void> {
     mkdir(structuralMaterialModesDir, { recursive: true }),
     mkdir(customPromptsDir, { recursive: true }),
     mkdir(productProjectsDir, { recursive: true }),
+    mkdir(referenceBrandsDir, { recursive: true }),
     mkdir(elementAssetsDir, { recursive: true }),
     mkdir(commonDir, { recursive: true }),
     mkdir(historyDir, { recursive: true }),

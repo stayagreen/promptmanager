@@ -753,6 +753,50 @@ input:disabled {
   align-items: start;
 }
 
+.reference-brand-band {
+  display: grid;
+  gap: 16px;
+}
+
+.reference-brand-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.reference-brand-heading h2 {
+  margin: 0;
+}
+
+.reference-brand-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.6fr) minmax(260px, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.brand-preview {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  min-height: 74px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfaf6;
+}
+
+.brand-preview span {
+  color: var(--muted);
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+
+.reference-brand-library {
+  min-height: 360px;
+}
+
 .reference-warning {
   margin: 14px 0 0;
   border-left: 3px solid var(--amber);
@@ -1803,6 +1847,7 @@ textarea {
   .editor-grid,
   .editor-translation-grid,
   .reference-dimension-grid,
+  .reference-brand-grid,
   .reference-archive-grid,
   .element-control-grid,
   .element-editor-grid {

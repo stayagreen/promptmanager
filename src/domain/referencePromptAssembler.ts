@@ -3,6 +3,7 @@ import type {
   PhotographyProfileModule,
   ProductElementSelection,
   RatioModule,
+  ReferenceBrandModule,
   ReferenceConsistencyLevel,
   ReferenceProductProject,
   StyleModule,
@@ -40,6 +41,7 @@ export type ReferencePromptOptions = {
   allowProps: boolean;
   allowCableCleanup: boolean;
   additionalRequirements: string;
+  referenceBrand?: ReferenceBrandModule;
   elementAssets: ElementReferenceAsset[];
   elementRandomToken: number;
 };
@@ -97,10 +99,10 @@ export const referenceTasks: ReferenceTask[] = [
   },
   {
     id: "hoikei_ecommerce_10",
-    displayName: "HOIKEI 电商上架10图",
+    displayName: "品牌电商上架10图",
     mixedRatios: true,
     prompt:
-      "Create a complete HOIKEI 海奇家居 e-commerce listing package as 10 independent images generated sequentially from image 1 through image 10. Never combine them into one canvas, collage, grid, contact sheet, long image, nine-grid, or ten-grid. After completing each independent image, continue automatically to the next until all 10 are complete.",
+      "Create a complete e-commerce listing package as 10 independent images generated sequentially from image 1 through image 10. Never combine them into one canvas, collage, grid, contact sheet, long image, nine-grid, or ten-grid. After completing each independent image, continue automatically to the next until all 10 are complete.",
   },
   {
     id: "xiaohongshu_cover",
@@ -178,7 +180,7 @@ export function buildReferencePrompt(
 
   const promptText =
     options.taskId === "hoikei_ecommerce_10"
-      ? buildHoikeiEcommerce10Prompt(
+      ? buildBrandedEcommerce10Prompt(
           project,
           options,
           task,
@@ -220,7 +222,7 @@ export function buildReferencePrompt(
   };
 }
 
-function buildHoikeiEcommerce10Prompt(
+function buildBrandedEcommerce10Prompt(
   project: ReferenceProductProject,
   options: ReferencePromptOptions,
   task: ReferenceTask,
@@ -228,6 +230,7 @@ function buildHoikeiEcommerce10Prompt(
   photography: string,
   elementSection: string,
 ): string {
+  const brandCopy = buildReferenceBrandCopy(options.referenceBrand);
   const skuSource = options.additionalRequirements.trim()
     ? `USER-PROVIDED SKU AND PRODUCT INFORMATION\n\n${options.additionalRequirements.trim()}`
     : "SKU INFORMATION RULE\n\nUse only specifications visible in the reference images or recorded in the product archive. If size, material, bulb base, wattage, or head quantity is unknown, leave a clean editable placeholder or mark it as pending confirmation. Never fabricate an unverified specification.";
@@ -241,42 +244,40 @@ function buildHoikeiEcommerce10Prompt(
     "Use all supplied reference images as the product truth source. Preserve the exact same lamp across all 10 outputs: silhouette, structure, proportions, lamp-head count, shade shape, materials, finishes, colors, canopy, connectors, mounting logic, hardware language, controls, and visible cables. Do not redesign, beautify into another product, simplify, add parts, remove parts, or substitute a similar lamp, except for the exact supplemental element integration explicitly authorized below.",
     consistencyPrompts.strict,
     `TASK\n\n${task.prompt}`,
-    "BRAND AND ART DIRECTION",
-    "Brand: HOIKEI 海奇家居.",
-    "Use a restrained minimal-luxury brand style: clean composition, generous negative space, precise alignment, premium material rendering, white, warm off-white, light warm grey, and soft neutral backgrounds. Avoid cheap marketplace styling, promotional clutter, loud icons, red-yellow sale graphics, and excessive copy. A small restrained HOIKEI 海奇家居 brand mark is allowed only where specified below and must never overpower the lamp.",
+    brandCopy.section,
     options.sceneStyle
-      ? `SCENE DIRECTION\n\nFor lifestyle and atmosphere images only, use ${options.sceneStyle.englishName} for the surrounding interior, furniture, palette, and mood. Never restyle or redesign the lamp itself. White-background, SKU, and dimension pages must remain neutral and brand-consistent.`
+      ? `SCENE DIRECTION\n\nFor lifestyle and atmosphere images only, use ${options.sceneStyle.englishName} for the surrounding interior, furniture, palette, and mood. Never restyle or redesign the lamp itself. White-background, SKU, and dimension pages must remain ${brandCopy.neutralPageRule}.`
       : "",
     "10-INDEPENDENT-IMAGE SEQUENCE",
     `IMAGE 1 — MAIN HERO 1 — 1:1
-One independent square image. Complete product hero view on pure white, warm off-white, or a minimal neutral background. Centered or refined asymmetrical composition, clear complete silhouette, premium soft contact shadow. A small HOIKEI 海奇家居 mark is optional. No long marketing copy.
+One independent square image. Complete product hero view on pure white, warm off-white, or a minimal neutral background. Centered or refined asymmetrical composition, clear complete silhouette, premium soft contact shadow. ${brandCopy.optionalMark} No long marketing copy.
 
 IMAGE 2 — MAIN HERO 2 — 1:1
-One independent square lifestyle hero image. Extend a realistic premium interior from the reference context while keeping the exact lamp sharply dominant. Clean, restrained, high-end atmosphere. A small HOIKEI 海奇家居 mark is optional. No long marketing copy.
+One independent square lifestyle hero image. Extend a realistic premium interior from the reference context while keeping the exact lamp sharply dominant. Clean, restrained, high-end atmosphere. ${brandCopy.optionalMark} No long marketing copy.
 
 IMAGE 3 — MAIN HERO 3 — 1:1
-One independent square detail hero image. Show truthful material, hardware, glass, wood, canopy, and connection details that are actually supported by the references. Premium commercial close-up photography. A small HOIKEI 海奇家居 mark is optional.
+One independent square detail hero image. Show truthful material, hardware, glass, wood, canopy, and connection details that are actually supported by the references. Premium commercial close-up photography. ${brandCopy.optionalMark}
 
 IMAGE 4 — MAIN HERO 4 — 1:1
-One independent square hero-angle image. Use an accurate 45-degree or similarly dynamic product view to emphasize hierarchy, silhouette, structure, proportion, and design character. A small HOIKEI 海奇家居 mark is optional.
+One independent square hero-angle image. Use an accurate 45-degree or similarly dynamic product view to emphasize hierarchy, silhouette, structure, proportion, and design character. ${brandCopy.optionalMark}
 
 IMAGE 5 — REUSABLE SKU PAGE — 1:1
-One independent square reusable SKU layout. Preserve a large clear product display area and a structured specification area that can support additional variants later. Include only necessary fields: 品牌 HOIKEI 海奇家居, 尺寸, 材质, 灯泡规格, 瓦数, 数量. Use verified or explicitly estimated information according to the dimension rules below. Keep typography clean, sparse, aligned, and premium.
+One independent square reusable SKU layout. Preserve a large clear product display area and a structured specification area that can support additional variants later. Include only necessary fields: ${brandCopy.skuFields}. Use verified or explicitly estimated information according to the dimension rules below. Keep typography clean, sparse, aligned, and premium.
 
 IMAGE 6 — DETAIL COVER — 3:4
-One independent vertical detail-page cover based on a front or complete scene view. Minimal-luxury layout, little or no text, optional small HOIKEI 海奇家居 mark.
+One independent vertical detail-page cover based on a front or complete scene view. Minimal-luxury layout, little or no text. ${brandCopy.optionalMark}
 
 IMAGE 7 — CRAFT DETAIL — 3:4
-One independent vertical macro detail page emphasizing real craftsmanship, materials, glass, hardware, joints, and finishes. The product must remain recognizable. Little or no text, optional small brand mark.
+One independent vertical macro detail page emphasizing real craftsmanship, materials, glass, hardware, joints, and finishes. The product must remain recognizable. Little or no text. ${brandCopy.optionalMark}
 
 IMAGE 8 — STRUCTURE AND ANGLE — 3:4
-One independent vertical angle view emphasizing accurate construction, form, proportion, mounting logic, and design language. Little or no text, optional small brand mark.
+One independent vertical angle view emphasizing accurate construction, form, proportion, mounting logic, and design language. Little or no text. ${brandCopy.optionalMark}
 
 IMAGE 9 — ILLUMINATED ATMOSPHERE — 3:4
-One independent vertical light-on atmosphere page. Show realistic light behavior, premium spatial mood, and truthful interaction between light and material. Keep the exact product sharply identifiable. Little or no text, optional small brand mark.
+One independent vertical light-on atmosphere page. Show realistic light behavior, premium spatial mood, and truthful interaction between light and material. Keep the exact product sharply identifiable. Little or no text. ${brandCopy.optionalMark}
 
 IMAGE 10 — DIMENSION DETAIL PAGE — 3:4
-One independent vertical e-commerce dimension page on a white or light minimal background. Show a clear front view and side view when appropriate, with professional readable measurement relationships. Necessary dimension labels and a small HOIKEI 海奇家居 mark are allowed. This is an e-commerce size explanation page, not a dense engineering drawing.`,
+One independent vertical e-commerce dimension page on a white or light minimal background. Show a clear front view and side view when appropriate, with professional readable measurement relationships. ${brandCopy.dimensionTextRule} This is an e-commerce size explanation page, not a dense engineering drawing.`,
     `ALLOWED PRESENTATION CHANGES\n\n${permissions.join("\n")}`,
     photography,
     elementSection,
@@ -285,7 +286,7 @@ One independent vertical e-commerce dimension page on a white or light minimal b
     "PHOTOGRAPHY AND QUALITY",
     "Ultra-realistic premium lighting product photography, realistic optical behavior, clean exposure, sharp product focus, highly detailed materials, luxury e-commerce visual quality, and social-media-ready presentation. Scene backgrounds may be slightly defocused but must remain believable and secondary. No CGI render look, no cheap marketplace feel, no fantasy glow, no fake materials, and no unrelated product design.",
     "TEXT CONTROL",
-    "Images 1, 2, 3, 4, 6, 7, 8, and 9: use no long marketing copy; only a small restrained HOIKEI 海奇家居 mark is optionally allowed. Image 5 may contain the required SKU fields. Image 10 may contain necessary dimension labels. Do not create fake brand names, fake certifications, gibberish, watermarks, or dense promotional text.",
+    brandCopy.textControl,
     "FINAL EXECUTION CHECK",
     "Generate exactly 10 separate image files in order. Images 1-5 are 1:1. Images 6-10 are 3:4. Image 5 is the reusable SKU page. Image 10 is the dimension page. Never place multiple numbered images on one canvas. The reference images define the single unchanged product identity for every output.",
     "USAGE NOTE",
@@ -294,6 +295,43 @@ One independent vertical e-commerce dimension page on a white or light minimal b
     .filter(Boolean)
     .join("\n\n")
     .trim();
+}
+
+function buildReferenceBrandCopy(brand: ReferenceBrandModule | undefined) {
+  if (!brand) {
+    return {
+      section:
+        "BRAND SETTING\n\nNo brand is selected for this product archive. Keep the full 10-image package neutral, premium, and unbranded. Do not render any brand name, logo, watermark, shop name, certification mark, slogan, account name, or brand-like readable text.",
+      optionalMark:
+        "No brand mark, logo, shop name, watermark, or readable brand text.",
+      skuFields: "尺寸, 材质, 灯泡规格, 瓦数, 数量",
+      dimensionTextRule:
+        "Necessary dimension labels are allowed, but no brand mark, logo, shop name, watermark, or brand-like text is allowed.",
+      neutralPageRule: "neutral and unbranded",
+      textControl:
+        "Images 1, 2, 3, 4, 6, 7, 8, and 9: use no long marketing copy and keep them fully unbranded. Image 5 may contain the required SKU fields, but must not include a brand field. Image 10 may contain necessary dimension labels only. Do not create fake brand names, fake certifications, gibberish, watermarks, logos, or dense promotional text.",
+    };
+  }
+
+  const brandName = brand.brandName.trim() || brand.displayName.trim();
+  const brandMark = brand.brandMark.trim() || brandName;
+  const artDirection =
+    brand.artDirectionPrompt.trim() ||
+    "Use a restrained premium home brand style: clean composition, generous negative space, precise alignment, premium material rendering, quiet neutral backgrounds, and no cheap marketplace styling.";
+
+  return {
+    section: [
+      "BRAND AND ART DIRECTION",
+      `Brand: ${brandName}.`,
+      `In-image brand marks must use exactly: ${brandMark}. Do not invent alternate brand names, misspellings, slogans, certification marks, shop names, or account names.`,
+      artDirection,
+    ].join("\n\n"),
+    optionalMark: `A small restrained ${brandMark} mark is optional.`,
+    skuFields: `品牌 ${brandMark}, 尺寸, 材质, 灯泡规格, 瓦数, 数量`,
+    dimensionTextRule: `Necessary dimension labels and a small restrained ${brandMark} mark are allowed.`,
+    neutralPageRule: "neutral and brand-consistent",
+    textControl: `Images 1, 2, 3, 4, 6, 7, 8, and 9: use no long marketing copy; only a small restrained ${brandMark} mark is optionally allowed. Image 5 may contain the required SKU fields. Image 10 may contain necessary dimension labels. Do not create fake brand names, fake certifications, gibberish, watermarks, or dense promotional text.`,
+  };
 }
 
 function buildElementReferenceSection(
